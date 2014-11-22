@@ -1,5 +1,8 @@
-// $header-color = #adbdd6
-// $background-color = #e4e8ef
+// Can't use this until libsass supports SASS 3.4
+// @import 'csstyle/csstyle.scss';
+
+$header-color: #adbdd6;
+$background-color: #e4e8ef;
 
 * {
   padding: 0;

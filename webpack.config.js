@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = {
   entry: './client/app/index.jsx',
 
@@ -12,10 +14,10 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.es6\.js$/,       loader: '6to5-loader'                           },
-      { test: /\.jsx$/,           loader: '6to5-loader'                           },
-      { test: /\.scss$/,          loader: 'style-loader!css-loader!sass-loader' },
-      { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192'                 }
+      { test: /\.es6\.js$/,       loader: '6to5'           },
+      { test: /\.jsx$/,           loader: '6to5'           },
+      { test: /\.scss$/,          loader: 'style!css!sass?outputStyle=expand&includePaths[]=' + path.resolve(__dirname, './node_modules') },
+      { test: /\.(png|jpg|gif)$/, loader: 'url?limit=8192' }
     ]
   }
 };
