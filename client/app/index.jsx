@@ -1,21 +1,23 @@
-/**
- * @jsx React.DOM
- */
-
 var React = window.React = require('react');
+var Data = require('./data');
+require('./style');
 
 var App = React.createClass({
 
-  render: function() {
+  render() {
     return (
-      <div className="row">
-        <div className="small-12 column">
-          <h1>Hello Visualizations</h1>
+      <div>
+        <header>Data Visualizations</header>
+        <div id="pictures">Pictures</div>
+        <div>
+          <Data/>
         </div>
+        Picture
+        Cheet Sheet
       </div>
     );
   }
 
 });
 
-React.renderComponent(<App/>, document.body);
+React.render(<App/>, document.body);

@@ -1,5 +1,4 @@
 module.exports = {
-
   entry: './client/app/index.jsx',
 
   output: {
@@ -7,15 +6,16 @@ module.exports = {
     filename: 'bundle.js'
   },
 
-  module: {
-    loaders: [
-      { test: /\.jsx$/,           loader: 'jsx-loader?harmony'                    },
-      { test: /\.styl$/,          loader: 'style-loader!css-loader!stylus-loader' },
-      { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192'                 }
-    ]
+  resolve: {
+    extensions: ['', '.js', '.es6.js', '.json', '.jsx', 'index.jsx', 'index.js', '.scss']
   },
 
-  resolve: {
-    extensions: ['', '.js', '.json', '.jsx', 'index.jsx', 'index.js', '.styl']
+  module: {
+    loaders: [
+      { test: /\.es6\.js$/,       loader: '6to5-loader'                           },
+      { test: /\.jsx$/,           loader: '6to5-loader'                           },
+      { test: /\.scss$/,          loader: 'style-loader!css-loader!sass-loader' },
+      { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192'                 }
+    ]
   }
 };

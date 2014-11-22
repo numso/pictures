@@ -4,8 +4,7 @@
   "description": "",
   "repository": "",
   "scripts": {
-    "start": "node --harmony server/app.js",
-    "lr": "node scripts/live-reload.js"
+    "start": "node --harmony scripts/live-reload.js"
   },
   "author": "Dallin Osmun",
   "license": "MIT",
@@ -14,13 +13,18 @@
     "bluebird": "^2.3.4",
     "css-loader": "^0.9.0",
     "gulp-livereload": "^2.1.1",
-    "jsx-loader": "^0.11.0",
     "lodash": "^2.4.1",
     "moment": "^2.8.3",
     "node-watch": "^0.3.4",
-    "react": "^0.11.2",
+    "react": "^0.12.1",
     "style-loader": "^0.8.0",
-    "stylus-loader": "^0.4.0",
     "url-loader": "^0.5.5"
+  },
+  "dependencies": {
+    "6to5": "^1.13.1",
+    "6to5-loader": "^0.2.3",
+    "csstyle": "^1.1.0",
+    "sass-loader": "^0.3.1",
+    "webpack": "^1.4.13"
   }
 }
