@@ -37,16 +37,16 @@ var Data = React.createClass({
     });
 
     return (
-      <div className="data-container">
-        <header>Data</header>
+      <div>
+        <div className="header">Data</div>
+        <div className="container">
+          <div id="scalars">
+            {s}
+            <span onClick={this.createNew} className="tag --create">+</span>
+          </div>
 
-        <div id="scalars">
-          {s}
-          <span onClick={this.createNew} className="create-new">+</span>
+          <div id="arrays"></div>
         </div>
-
-        <div id="arrays"></div>
-
       </div>
     );
         // <pre>{JSON.stringify(this.state, null, 2)}</pre>
@@ -118,10 +118,10 @@ var ContentEditable2 = React.createClass({
 var ContentEditable = React.createClass({
 
   render() {
-    return <b
+    return <span className="tag"
         onBlur={this.emitChange}
         contentEditable
-        dangerouslySetInnerHTML={{__html: this.props.html}}></b>;
+        dangerouslySetInnerHTML={{__html: this.props.html}}></span>;
   },
 
   shouldComponentUpdate(nextProps) {
