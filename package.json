@@ -1,0 +1,26 @@
+{
+  "name": "ddv",
+  "version": "0.0.0",
+  "description": "",
+  "repository": "",
+  "scripts": {
+    "start": "node --harmony server/app.js",
+    "lr": "node scripts/live-reload.js"
+  },
+  "author": "Dallin Osmun",
+  "license": "MIT",
+  "devDependencies": {
+    "axios": "^0.4.1",
+    "bluebird": "^2.3.4",
+    "css-loader": "^0.9.0",
+    "gulp-livereload": "^2.1.1",
+    "jsx-loader": "^0.11.0",
+    "lodash": "^2.4.1",
+    "moment": "^2.8.3",
+    "node-watch": "^0.3.4",
+    "react": "^0.11.2",
+    "style-loader": "^0.8.0",
+    "stylus-loader": "^0.4.0",
+    "url-loader": "^0.5.5"
+  }
+}
