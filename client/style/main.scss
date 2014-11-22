@@ -1,13 +1,24 @@
-// Can't use this until libsass supports SASS 3.4
-// @import 'csstyle/csstyle.scss';
+@import 'csstyle/csstyle.scss';
+
+@import './test';
+@import './test2';
 
 $header-color: #adbdd6;
 $background-color: #e4e8ef;
+
+@include component(button) {
+  background: blue;
+
+  @include option(action) {
+    background: green;
+  }
+}
 
 * {
   padding: 0;
   margin: 0;
   font-family: sans-serif;
+  color: blue;
 }
 
 // #pictures

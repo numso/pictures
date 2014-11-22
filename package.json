@@ -4,7 +4,8 @@
   "description": "",
   "repository": "",
   "scripts": {
-    "start": "node --harmony scripts/live-reload.js"
+    "lr": "node --harmony scripts/live-reload.js",
+    "sass": "sass -I ./node_modules --scss --watch ./client/style/main.scss:./client/build/bundle.css"
   },
   "author": "Dallin Osmun",
   "license": "MIT",

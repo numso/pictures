@@ -1,6 +1,5 @@
 var React = window.React = require('react');
 var Data = require('./data');
-require('./style');
 
 var App = React.createClass({
 

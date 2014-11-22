@@ -19,10 +19,12 @@ I've seen quite a few of Bret Victor's videos and they always blow me away. I wa
 
 Make sure you have node installed. Optionally, you can install a live-reload plugin in your browser.
 
+ - `gem install sass`
  - `npm install -g webpack`
  - `npm install`
  - `webpack -w`
- - optional: `npm start` (this starts live reload)
+ - `npm run sass`
+ - optional: `npm run lr` (this starts live reload)
 
 ## Todo
 
