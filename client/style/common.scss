@@ -18,8 +18,7 @@
 }
 
 @include component(container) {
-  // background-color: #e4e8ef;
-  background-color: blue;
+  background-color: #e4e8ef;
 
   @include option(pictures) {
     box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset;

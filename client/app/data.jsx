@@ -53,7 +53,7 @@ var Data = React.createClass({
 
     return (
       <div className="data">
-        <div className="header">Data - test</div>
+        <div className="header">Data</div>
         <div className="container --data">
           <div id="scalars">
             {s}
