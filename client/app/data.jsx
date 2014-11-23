@@ -1,51 +1,71 @@
 var React = require('react');
+var _ = require('lodash');
 
 var Data = React.createClass({
 
   getInitialState() {
     return {
       scalars: [
-        { label: 'Panels',     value: 600 },
-        { label: 'KW / Panel', value: 0.2 }
+        { label: 'parameter', value: 1 }
       ],
-      arrays: []
+      arrays: [
+        { label: 'item', value: [1, 2, 3, 4, 5] },
+      ]
     };
   },
 
-  createNew() {
-    this.state.scalars.push({});
-    this.setState({ scalars: this.state.scalars });
+  createNew(type) {
+    var value = type === 'arrays' ? { value: [] } : {};
+    this.state[type].push(value);
+    this.setState({ [type]: this.state[type] });
   },
 
-  onTitleChange(i, newText) {
-    this.state.scalars[i].label = newText;
-    this.setState({ scalars: this.state.scalars });
+  onTitleChange(i, type, newText) {
+    this.state[type][i].label = newText;
+    this.setState({ [type]: this.state[type] });
   },
 
 
-  onValueChange(i, newText) {
-    this.state.scalars[i].value = newText;
-    this.setState({ scalars: this.state.scalars });
+  onValueChange(i, type, newText) {
+    this.state[type][i].value = newText;
+    this.setState({ [type]: this.state[type] });
   },
 
   render() {
     var s = this.state.scalars.map((item, i) => {
       return <Scalar label={item.label}
                      value={item.value}
-                     onTitleChange={this.onTitleChange.bind(this, i)}
-                     onValueChange={this.onValueChange.bind(this, i)}/>
+                     onTitleChange={this.onTitleChange.bind(this, i, 'scalars')}
+                     onValueChange={this.onValueChange.bind(this, i, 'scalars')}/>
     });
 
+    var a = this.state.arrays.map((item, i) => {
+      return <Scalar label={item.label}
+                     value={item.value}
+                     onTitleChange={this.onTitleChange.bind(this, i, 'arrays')}
+                     onValueChange={this.onValueChange.bind(this, i, 'arrays')}/>
+    });
+
+    var max = this.state.arrays.reduce((memo, item) => {
+      return Math.max(memo, item.value.length);
+    }, 0);
+    var indices = _.range(1, max + 1);
+
     return (
-      <div>
+      <div className="data">
         <div className="header">Data</div>
-        <div className="container">
+        <div className="container --data">
           <div id="scalars">
             {s}
-            <span onClick={this.createNew} className="tag --create">+</span>
+            <span onClick={this.createNew.bind(this, 'scalars')} className="tag --create">+</span>
           </div>
 
-          <div id="arrays"></div>
+
+          <div style={{marginLeft: 60}}>{indices.map(function (i) { return <div className="data__indice">{i}</div>; })}</div>
+          <div id="arrays">
+            {a}
+            <span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span>
+          </div>
         </div>
       </div>
     );

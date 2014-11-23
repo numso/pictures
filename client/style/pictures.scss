@@ -1,0 +1,42 @@
+@include component(picture) {
+  margin: 20px;
+  display: inline-block;
+  background-color: white;
+  width: 220px;
+  height: 150px;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3);
+
+  @include option(big) {
+    width: 720px;
+    height: 900px;
+  }
+}
+
+@include component(newpicture) {
+  background-color: #d7dce5;
+  border-radius: 100px;
+  padding: 20px;
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border: 1px solid #888;
+  position: relative;
+  vertical-align: top;
+  margin-top: 70px;
+  cursor: pointer;
+
+  @include part(content) {
+    color: #888;
+    position: relative;
+    top: -9px;
+    left: -5px;
+  }
+}
+
+.newpicture:hover {
+  background-color: #c2cad8;
+}
+
+.newpicture:active {
+  background-color: #afb8c8;
+}

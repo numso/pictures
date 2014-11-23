@@ -28,5 +28,6 @@ Make sure you have node installed. Optionally, you can install a live-reload plu
 
 ## Todo
 
- - [ ] Setup basic styles and layout
+ - [x] Setup basic styles and layout
+ - [ ] Refactor layout styles to flexbox maybe?
  - [ ] Starting off with the "Data" section
