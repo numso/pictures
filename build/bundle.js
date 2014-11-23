@@ -133,23 +133,22 @@
 
 
 	  getInitialState: function () {
+	    var scalars = [{ label: "parameter", value: "1" }, { label: "foo", value: "7 + 8" }, { label: "bar", value: "20 / 4" }, { label: "baz", value: "foo + bar" }];
+	    this.evaluateScalars(scalars);
 	    return {
-	      scalars: [{ label: "parameter", value: "1" }, { label: "foo", value: "7 + 8" }, { label: "bar", value: "20 / 4" }, { label: "baz", value: "foo + bar" }],
+	      scalars: scalars,
 	      arrays: [{ label: "item", value: [1, 2, 3, 4, 5] }]
 	    };
 	  },
 
-	  componentDidMount: function () {
-	    this.evaluateScalars();
-	  },
-
-	  evaluateScalars: function () {
+	  evaluateScalars: function (scalars) {
+	    if (scalars === undefined) scalars = this.state.scalars;
 	    var ctx = {};
-	    _.each(this.state.scalars, function (item) {
+	    _.each(scalars, function (item) {
 	      ctx[item.label] = item.value;
 	    });
 	    var data = evaluator.check(ctx);
-	    _.each(this.state.scalars, function (item) {
+	    _.each(scalars, function (item) {
 	      item.evaluated = data[item.label];
 	    });
 	  },
@@ -186,18 +185,11 @@
 	    })({}));
 	  },
 
-	  switchState: function () {
-	    this.setState({
-	      showEvaluated: !this.state.showEvaluated
-	    });
-	  },
-
 	  render: function () {
 	    var _this4 = this;
 	    var s = this.state.scalars.map(function (item, i) {
 	      return React.createElement(Scalar, {
-	        label: item.label,
-	        value: _this4.state.showEvaluated ? item.evaluated : item.value,
+	        item: item,
 	        onTitleChange: _this4.onTitleChange.bind(_this4, i, "scalars"),
 	        onValueChange: _this4.onValueChange.bind(_this4, i, "scalars")
 	      });
@@ -205,8 +197,7 @@
 
 	    var a = this.state.arrays.map(function (item, i) {
 	      return React.createElement(Scalar, {
-	        label: item.label,
-	        value: item.value,
+	        item: item,
 	        onTitleChange: _this4.onTitleChange.bind(_this4, i, "arrays"),
 	        onValueChange: _this4.onValueChange.bind(_this4, i, "arrays")
 	      });
@@ -220,9 +211,8 @@
 	    return (React.createElement("div", {
 	      className: "data"
 	    }, React.createElement("div", {
-	      className: "header",
-	      onClick: this.switchState
-	    }, "Data (click me)"), React.createElement("div", {
+	      className: "header"
+	    }, "Data"), React.createElement("div", {
 	      className: "container --data"
 	    }, React.createElement("div", {
 	      id: "scalars"
@@ -259,11 +249,33 @@
 	  displayName: "Scalar",
 
 
+	  getInitialState: function () {
+	    return {
+	      isHovered: false,
+	      isActive: false
+	    };
+	  },
+
 	  getDefaultProps: function () {
 	    return {
-	      label: "",
-	      value: null
+	      item: { label: "" }
 	    };
+	  },
+
+	  onMouseEnter: function () {
+	    this.setState({ isHovered: true });
+	  },
+
+	  onMouseLeave: function () {
+	    this.setState({ isHovered: false });
+	  },
+
+	  onFocus: function () {
+	    this.setState({ isActive: true });
+	  },
+
+	  onBlur: function () {
+	    this.setState({ isActive: false });
 	  },
 
 	  onTitleChange: function (e) {
@@ -275,12 +287,20 @@
 	  },
 
 	  render: function () {
-	    return (React.createElement("div", null, React.createElement(ContentEditable, {
+	    var showVal = this.state.isHovered || this.state.isActive;
+	    var classes = "scalar" + (this.state.isActive ? " active" : "");
+	    return (React.createElement("div", {
+	      className: classes,
+	      onMouseEnter: this.onMouseEnter,
+	      onMouseLeave: this.onMouseLeave,
+	      onFocus: this.onFocus,
+	      onBlur: this.onBlur
+	    }, React.createElement(ContentEditable, {
 	      onChange: this.onTitleChange,
-	      html: this.props.label
+	      html: this.props.item.label
 	    }), React.createElement(ContentEditable2, {
 	      onChange: this.onValueChange,
-	      html: this.props.value
+	      text: showVal ? this.props.item.value : this.props.item.evaluated
 	    })));
 	  }
 
@@ -299,20 +319,21 @@
 	      onInput: this.emitChange,
 	      onBlur: this.emitChange,
 	      contentEditable: true,
-	      dangerouslySetInnerHTML: { __html: this.props.html }
+	      dangerouslySetInnerHTML: { __html: this.props.text }
 	    });
 	  },
 
 	  shouldComponentUpdate: function (nextProps) {
-	    return nextProps.html !== this.getDOMNode().innerHTML;
+	    return nextProps.text !== this.getDOMNode().innerText;
 	  },
 
 	  emitChange: function () {
-	    var html = this.getDOMNode().innerHTML;
-	    if (this.props.onChange && html !== this.lastHtml) {
-	      this.props.onChange({ target: { value: html } });
+	    var text = this.getDOMNode().innerText || "";
+	    text = text.trim();
+	    if (this.props.onChange && text !== this.lastText) {
+	      this.props.onChange({ target: { value: text } });
 	    }
-	    this.lastHtml = html;
+	    this.lastText = text;
 	  }
 	});
 
@@ -445,9 +466,7 @@
 	exports.injected = function (ctx, data) {
 	  _.each(ctx, function (val, key) {
 	    try {
-	      console.log("trying");
 	      data[key] = eval("with(data){" + val + "}");
-	      console.log(data[key]);
 	    } catch (e) {}
 	  });
 	  return data;

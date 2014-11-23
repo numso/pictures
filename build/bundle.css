@@ -105,6 +105,11 @@
 .data__indice:last-of-type {
   border-right: 1px solid; }
 
+.scalar:hover,
+.scalar.active {
+  background: whitesmoke;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
+
 .cheatsheet__section {
   margin-bottom: 20px; }
 .cheatsheet__title {
