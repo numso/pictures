@@ -195,7 +195,7 @@
 	      className: "data"
 	    }, React.createElement("div", {
 	      className: "header"
-	    }, "Data - test"), React.createElement("div", {
+	    }, "Data"), React.createElement("div", {
 	      className: "container --data"
 	    }, React.createElement("div", {
 	      id: "scalars"
@@ -13450,7 +13450,7 @@
 	var ReactPropTypeLocationNames = __webpack_require__(46);
 
 	var deprecated = __webpack_require__(27);
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 
 	/**
 	 * Collection of methods that allow declaration and validation of props that are
@@ -13806,9 +13806,9 @@
 
 	var ReactElement = __webpack_require__(13);
 	var ReactInstanceHandles = __webpack_require__(18);
-	var ReactMarkupChecksum = __webpack_require__(86);
+	var ReactMarkupChecksum = __webpack_require__(87);
 	var ReactServerRenderingTransaction =
-	  __webpack_require__(87);
+	  __webpack_require__(88);
 
 	var instantiateReactComponent = __webpack_require__(47);
 	var invariant = __webpack_require__(36);
@@ -14671,7 +14671,7 @@
 
 	"use strict";
 
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 
 	/**
 	 * Similar to invariant but only logs a warning if the condition is not met.
@@ -15787,7 +15787,7 @@
 	"use strict";
 
 	var assign = __webpack_require__(26);
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 	var invariant = __webpack_require__(36);
 	var joinClasses = __webpack_require__(93);
 	var warning = __webpack_require__(34);
@@ -18205,7 +18205,7 @@
 
 	var EventConstants = __webpack_require__(35);
 
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
 
@@ -18267,7 +18267,7 @@
 	"use strict";
 
 	var ReactDOMIDOperations = __webpack_require__(111);
-	var ReactMarkupChecksum = __webpack_require__(86);
+	var ReactMarkupChecksum = __webpack_require__(87);
 	var ReactMount = __webpack_require__(20);
 	var ReactPerf = __webpack_require__(22);
 	var ReactReconcileTransaction = __webpack_require__(112);
@@ -18393,7 +18393,7 @@
 	var Transaction = __webpack_require__(92);
 
 	var assign = __webpack_require__(26);
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 
 	var RESET_BATCHED_UPDATES = {
 	  initialize: emptyFunction,
@@ -20757,6 +20757,44 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
+	 * @providesModule emptyFunction
+	 */
+
+	function makeEmptyFunction(arg) {
+	  return function() {
+	    return arg;
+	  };
+	}
+
+	/**
+	 * This function accepts and discards inputs; it has no side effects. This is
+	 * primarily useful idiomatically for overridable function endpoints which
+	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+	 */
+	function emptyFunction() {}
+
+	emptyFunction.thatReturns = makeEmptyFunction;
+	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+	emptyFunction.thatReturnsThis = function() { return this; };
+	emptyFunction.thatReturnsArgument = function(arg) { return arg; };
+
+	module.exports = emptyFunction;
+
+
+/***/ },
+/* 87 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
 	 * @providesModule ReactMarkupChecksum
 	 */
 
@@ -20798,7 +20836,7 @@
 
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20821,7 +20859,7 @@
 	var Transaction = __webpack_require__(92);
 
 	var assign = __webpack_require__(26);
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 
 	/**
 	 * Provides a `CallbackQueue` queue for collecting `onDOMReady` callbacks
@@ -20912,44 +20950,6 @@
 	PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 	module.exports = ReactServerRenderingTransaction;
-
-
-/***/ },
-/* 88 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule emptyFunction
-	 */
-
-	function makeEmptyFunction(arg) {
-	  return function() {
-	    return arg;
-	  };
-	}
-
-	/**
-	 * This function accepts and discards inputs; it has no side effects. This is
-	 * primarily useful idiomatically for overridable function endpoints which
-	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-	 */
-	function emptyFunction() {}
-
-	emptyFunction.thatReturns = makeEmptyFunction;
-	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-	emptyFunction.thatReturnsThis = function() { return this; };
-	emptyFunction.thatReturnsArgument = function(arg) { return arg; };
-
-	module.exports = emptyFunction;
 
 
 /***/ },
@@ -21709,7 +21709,7 @@
 
 	"use strict";
 
-	var hyphenate = __webpack_require__(136);
+	var hyphenate = __webpack_require__(138);
 
 	var msPattern = /^ms-/;
 
@@ -21756,8 +21756,8 @@
 	var EventPluginRegistry = __webpack_require__(100);
 	var EventPluginUtils = __webpack_require__(7);
 
-	var accumulateInto = __webpack_require__(137);
-	var forEachAccumulated = __webpack_require__(138);
+	var accumulateInto = __webpack_require__(136);
+	var forEachAccumulated = __webpack_require__(137);
 	var invariant = __webpack_require__(36);
 
 	/**
@@ -22408,8 +22408,8 @@
 	var EventConstants = __webpack_require__(35);
 	var EventPluginHub = __webpack_require__(99);
 
-	var accumulateInto = __webpack_require__(137);
-	var forEachAccumulated = __webpack_require__(138);
+	var accumulateInto = __webpack_require__(136);
+	var forEachAccumulated = __webpack_require__(137);
 
 	var PropagationPhases = EventConstants.PropagationPhases;
 	var getListener = EventPluginHub.getListener;
@@ -22605,7 +22605,7 @@
 	var PooledClass = __webpack_require__(37);
 
 	var assign = __webpack_require__(26);
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 	var getEventTarget = __webpack_require__(118);
 
 	/**
@@ -23613,8 +23613,8 @@
 
 	var ReactBrowserEventEmitter = __webpack_require__(54);
 
-	var accumulateInto = __webpack_require__(137);
-	var forEachAccumulated = __webpack_require__(138);
+	var accumulateInto = __webpack_require__(136);
+	var forEachAccumulated = __webpack_require__(137);
 	var invariant = __webpack_require__(36);
 
 	function remove(event) {
@@ -23829,7 +23829,7 @@
 	 * @typechecks
 	 */
 
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 
 	/**
 	 * Upstream version of event listener. Does not take into account specific
@@ -24934,43 +24934,6 @@
 /* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule hyphenate
-	 * @typechecks
-	 */
-
-	var _uppercasePattern = /([A-Z])/g;
-
-	/**
-	 * Hyphenates a camelcased string, for example:
-	 *
-	 *   > hyphenate('backgroundColor')
-	 *   < "background-color"
-	 *
-	 * For CSS style names, use `hyphenateStyleName` instead which works properly
-	 * with all vendor prefixes, including `ms`.
-	 *
-	 * @param {string} string
-	 * @return {string}
-	 */
-	function hyphenate(string) {
-	  return string.replace(_uppercasePattern, '-$1').toLowerCase();
-	}
-
-	module.exports = hyphenate;
-
-
-/***/ },
-/* 137 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(process) {/**
 	 * Copyright 2014, Facebook, Inc.
 	 * All rights reserved.
@@ -25037,7 +25000,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30)))
 
 /***/ },
-/* 138 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25069,6 +25032,43 @@
 	};
 
 	module.exports = forEachAccumulated;
+
+
+/***/ },
+/* 138 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule hyphenate
+	 * @typechecks
+	 */
+
+	var _uppercasePattern = /([A-Z])/g;
+
+	/**
+	 * Hyphenates a camelcased string, for example:
+	 *
+	 *   > hyphenate('backgroundColor')
+	 *   < "background-color"
+	 *
+	 * For CSS style names, use `hyphenateStyleName` instead which works properly
+	 * with all vendor prefixes, including `ms`.
+	 *
+	 * @param {string} string
+	 * @return {string}
+	 */
+	function hyphenate(string) {
+	  return string.replace(_uppercasePattern, '-$1').toLowerCase();
+	}
+
+	module.exports = hyphenate;
 
 
 /***/ },
@@ -25821,7 +25821,7 @@
 	var ExecutionEnvironment = __webpack_require__(29);
 
 	var createNodesFromMarkup = __webpack_require__(148);
-	var emptyFunction = __webpack_require__(88);
+	var emptyFunction = __webpack_require__(86);
 	var getMarkupWrap = __webpack_require__(149);
 	var invariant = __webpack_require__(36);
 
