@@ -1,0 +1,35 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/dallin/.nvm/v0.11.14/bin/node',
+1 verbose cli   '/Users/dallin/.nvm/v0.11.14/bin/npm',
+1 verbose cli   'run',
+1 verbose cli   'lr' ]
+2 info using npm@2.0.0
+3 info using node@v0.11.14
+4 verbose run-script [ 'prelr', 'lr', 'postlr' ]
+5 info prelr ddv@0.0.0
+6 info lr ddv@0.0.0
+7 verbose unsafe-perm in lifecycle true
+8 info ddv@0.0.0 Failed to exec lr script
+9 verbose stack Error: Exit status 1
+9 verbose stack     at ChildProcess.<anonymous> (/Users/dallin/.nvm/v0.11.14/lib/node_modules/npm/lib/utils/lifecycle.js:212:16)
+9 verbose stack     at ChildProcess.emit (events.js:110:17)
+9 verbose stack     at maybeClose (child_process.js:1000:16)
+9 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:1072:5)
+10 verbose pkgid ddv@0.0.0
+11 verbose cwd /Users/dallin/code/bret-victor/drawing-dynamic-visualizations
+12 error Darwin 13.4.0
+13 error argv "/Users/dallin/.nvm/v0.11.14/bin/node" "/Users/dallin/.nvm/v0.11.14/bin/npm" "run" "lr"
+14 error node v0.11.14
+15 error npm  v2.0.0
+16 error code ELIFECYCLE
+17 error ddv@0.0.0 lr: `node --harmony scripts/live-reload.js`
+17 error Exit status 1
+18 error Failed at the ddv@0.0.0 lr script.
+18 error This is most likely a problem with the ddv package,
+18 error not with npm itself.
+18 error Tell the author that this fails on your system:
+18 error     node --harmony scripts/live-reload.js
+18 error You can get their info via:
+18 error     npm owner ls ddv
+18 error There is likely additional logging output above.
+19 verbose exit [ 1, true ]

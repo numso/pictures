@@ -28,7 +28,7 @@
   .container.\--pictures {
     box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
   .container.\--data {
-    height: 300px; }
+    min-height: 300px; }
 
 .tag {
   background-color: #abbbd9;
