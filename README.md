@@ -1,4 +1,5 @@
 # Drawing Dynamic Visualizations
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/numso/pictures?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Based on [Drawing Dynamic Visualizations](http://vimeo.com/66085662) by Bret Victor.
 
