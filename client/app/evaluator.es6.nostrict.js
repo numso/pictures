@@ -42,9 +42,7 @@ exports.simple = function (ctx, data) {
 exports.injected = function (ctx, data) {
   _.each(ctx, function (val, key) {
     try {
-      console.log('trying');
       data[key] = eval('with(data){' + val + '}');
-      console.log(data[key]);
     } catch (e) {}
   });
   return data;

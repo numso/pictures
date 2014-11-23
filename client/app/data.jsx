@@ -6,30 +6,28 @@ var evaluator = require('./evaluator');
 var Data = React.createClass({
 
   getInitialState() {
+    var scalars = [
+      { label: 'parameter', value: '1' },
+      { label: 'foo', value: '7 + 8' },
+      { label: 'bar', value: '20 / 4' },
+      { label: 'baz', value: 'foo + bar' }
+    ];
+    this.evaluateScalars(scalars);
     return {
-      scalars: [
-        { label: 'parameter', value: '1' },
-        { label: 'foo', value: '7 + 8' },
-        { label: 'bar', value: '20 / 4' },
-        { label: 'baz', value: 'foo + bar' }
-      ],
+      scalars: scalars,
       arrays: [
         { label: 'item', value: [1, 2, 3, 4, 5] },
       ]
     };
   },
 
-  componentDidMount: function() {
-    this.evaluateScalars();
-  },
-
-  evaluateScalars() {
+  evaluateScalars(scalars=this.state.scalars) {
     var ctx = {};
-    _.each(this.state.scalars, function (item) {
+    _.each(scalars, function (item) {
       ctx[item.label] = item.value;
     });
     var data = evaluator.check(ctx);
-    _.each(this.state.scalars, function (item) {
+    _.each(scalars, function (item) {
       item.evaluated = data[item.label];
     });
   },
@@ -54,23 +52,15 @@ var Data = React.createClass({
     this.setState({ [type]: this.state[type] });
   },
 
-  switchState() {
-    this.setState({
-      showEvaluated: !this.state.showEvaluated
-    });
-  },
-
   render() {
     var s = this.state.scalars.map((item, i) => {
-      return <Scalar label={item.label}
-                     value={this.state.showEvaluated ? item.evaluated : item.value}
+      return <Scalar item={item}
                      onTitleChange={this.onTitleChange.bind(this, i, 'scalars')}
                      onValueChange={this.onValueChange.bind(this, i, 'scalars')}/>
     });
 
     var a = this.state.arrays.map((item, i) => {
-      return <Scalar label={item.label}
-                     value={item.value}
+      return <Scalar item={item}
                      onTitleChange={this.onTitleChange.bind(this, i, 'arrays')}
                      onValueChange={this.onValueChange.bind(this, i, 'arrays')}/>
     });
@@ -82,7 +72,7 @@ var Data = React.createClass({
 
     return (
       <div className="data">
-        <div className="header" onClick={this.switchState}>Data (click me)</div>
+        <div className="header">Data</div>
         <div className="container --data">
           <div id="scalars">
             {s}
@@ -114,11 +104,33 @@ module.exports = Data;
 
 var Scalar = React.createClass({
 
+  getInitialState: function() {
+    return {
+      isHovered: false,
+      isActive: false
+    };
+  },
+
   getDefaultProps() {
     return {
-      label: '',
-      value: null
+      item: { label: '' }
     };
+  },
+
+  onMouseEnter() {
+    this.setState({ isHovered: true });
+  },
+
+  onMouseLeave() {
+    this.setState({ isHovered: false });
+  },
+
+  onFocus() {
+    this.setState({ isActive: true });
+  },
+
+  onBlur() {
+    this.setState({ isActive: false });
   },
 
   onTitleChange(e) {
@@ -130,10 +142,12 @@ var Scalar = React.createClass({
   },
 
   render() {
+    var showVal = this.state.isHovered || this.state.isActive;
+    var classes = "scalar" + (this.state.isActive ? ' active': '');
     return (
-      <div>
-        <ContentEditable onChange={this.onTitleChange} html={this.props.label}/>
-        <ContentEditable2 onChange={this.onValueChange} html={this.props.value}/>
+      <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
+        <ContentEditable onChange={this.onTitleChange} html={this.props.item.label}/>
+        <ContentEditable2 onChange={this.onValueChange} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
       </div>
     );
   }
@@ -151,19 +165,20 @@ var ContentEditable2 = React.createClass({
         onInput={this.emitChange}
         onBlur={this.emitChange}
         contentEditable
-        dangerouslySetInnerHTML={{__html: this.props.html}}></span>;
+        dangerouslySetInnerHTML={{__html: this.props.text}}></span>;
   },
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.html !== this.getDOMNode().innerHTML;
+    return nextProps.text !== this.getDOMNode().innerText;
   },
 
   emitChange() {
-    var html = this.getDOMNode().innerHTML;
-    if (this.props.onChange && html !== this.lastHtml) {
-      this.props.onChange({ target: { value: html } });
+    var text = this.getDOMNode().innerText || '';
+    text = text.trim();
+    if (this.props.onChange && text !== this.lastText) {
+      this.props.onChange({ target: { value: text } });
     }
-    this.lastHtml = html;
+    this.lastText = text;
   }
 });
 
