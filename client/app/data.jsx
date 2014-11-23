@@ -23,11 +23,11 @@ var Data = React.createClass({
 
   evaluateScalars(scalars=this.state.scalars) {
     var ctx = {};
-    _.each(scalars, function (item) {
+    _.each(scalars, (item) => {
       ctx[item.label] = item.value;
     });
     var data = evaluator.check(ctx);
-    _.each(scalars, function (item) {
+    _.each(scalars, (item) => {
       item.evaluated = data[item.label];
     });
   },
@@ -80,7 +80,7 @@ var Data = React.createClass({
           </div>
 
 
-          <div style={{marginLeft: 60}}>{indices.map(function (i) { return <div className="data__indice">{i}</div>; })}</div>
+          <div style={{marginLeft: 60}}>{indices.map((i) => { return <div className="data__indice">{i}</div>; })}</div>
           <div id="arrays">
             {a}
             <span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span>
@@ -104,7 +104,7 @@ module.exports = Data;
 
 var Scalar = React.createClass({
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       isHovered: false,
       isActive: false
@@ -134,11 +134,11 @@ var Scalar = React.createClass({
   },
 
   onTitleChange(e) {
-    this.props.onTitleChange(e.target.value);
+    this.props.onTitleChange(e);
   },
 
   onValueChange(e) {
-    this.props.onValueChange(e.target.value);
+    this.props.onValueChange(e);
   },
 
   render() {
@@ -146,8 +146,8 @@ var Scalar = React.createClass({
     var classes = "scalar" + (this.state.isActive ? ' active': '');
     return (
       <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
-        <ContentEditable onChange={this.onTitleChange} html={this.props.item.label}/>
-        <ContentEditable2 onChange={this.onValueChange} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
+        <ContentEditable onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
+        <ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
       </div>
     );
   }
@@ -158,48 +158,32 @@ var Scalar = React.createClass({
 
 
 
-var ContentEditable2 = React.createClass({
-
-  render() {
-    return <span
-        onInput={this.emitChange}
-        onBlur={this.emitChange}
-        contentEditable
-        dangerouslySetInnerHTML={{__html: this.props.text}}></span>;
-  },
-
-  shouldComponentUpdate(nextProps) {
-    return nextProps.text !== this.getDOMNode().innerText;
-  },
-
-  emitChange() {
-    var text = this.getDOMNode().innerText || '';
-    text = text.trim();
-    if (this.props.onChange && text !== this.lastText) {
-      this.props.onChange({ target: { value: text } });
-    }
-    this.lastText = text;
-  }
-});
-
 var ContentEditable = React.createClass({
 
-  render() {
-    return <span className="tag"
-        onBlur={this.emitChange}
-        contentEditable
-        dangerouslySetInnerHTML={{__html: this.props.html}}></span>;
-  },
-
   shouldComponentUpdate(nextProps) {
-    return nextProps.html !== this.getDOMNode().innerHTML;
+    return !(nextProps.isEditting && this.props.isEditting);
   },
 
   emitChange() {
-    var html = this.getDOMNode().innerHTML;
-    if (this.props.onChange && html !== this.lastHtml) {
-      this.props.onChange({ target: { value: html } });
+    var text = (this.getDOMNode().innerText || '').trim();
+    if (this.props.onChange) this.props.onChange(text);
+  },
+
+  onKeyDown(e) {
+    if (e.keyCode === 13) {
+      setTimeout(() => {
+        this.getDOMNode().blur();
+      });
     }
-    this.lastHtml = html;
+  },
+
+  render() {
+    return <span className={this.props.className}
+                 onKeyDown={this.onKeyDown}
+                 onInput={this.emitChange}
+                 onBlur={this.emitChange}
+                 contentEditable
+                 dangerouslySetInnerHTML={{__html: this.props.text}}></span>;
   }
+
 });
