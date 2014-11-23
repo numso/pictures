@@ -1,17 +1,37 @@
 var React = require('react');
 var _ = require('lodash');
 
+var evaluator = require('./evaluator');
+
 var Data = React.createClass({
 
   getInitialState() {
     return {
       scalars: [
-        { label: 'parameter', value: 1 }
+        { label: 'parameter', value: '1' },
+        { label: 'foo', value: '7 + 8' },
+        { label: 'bar', value: '20 / 4' },
+        { label: 'baz', value: 'foo + bar' }
       ],
       arrays: [
         { label: 'item', value: [1, 2, 3, 4, 5] },
       ]
     };
+  },
+
+  componentDidMount: function() {
+    this.evaluateScalars();
+  },
+
+  evaluateScalars() {
+    var ctx = {};
+    _.each(this.state.scalars, function (item) {
+      ctx[item.label] = item.value;
+    });
+    var data = evaluator.check(ctx);
+    _.each(this.state.scalars, function (item) {
+      item.evaluated = data[item.label];
+    });
   },
 
   createNew(type) {
@@ -25,16 +45,25 @@ var Data = React.createClass({
     this.setState({ [type]: this.state[type] });
   },
 
-
   onValueChange(i, type, newText) {
     this.state[type][i].value = newText;
+
+    if (type === 'scalars') {
+      this.evaluateScalars();
+    }
     this.setState({ [type]: this.state[type] });
+  },
+
+  switchState() {
+    this.setState({
+      showEvaluated: !this.state.showEvaluated
+    });
   },
 
   render() {
     var s = this.state.scalars.map((item, i) => {
       return <Scalar label={item.label}
-                     value={item.value}
+                     value={this.state.showEvaluated ? item.evaluated : item.value}
                      onTitleChange={this.onTitleChange.bind(this, i, 'scalars')}
                      onValueChange={this.onValueChange.bind(this, i, 'scalars')}/>
     });
@@ -53,7 +82,7 @@ var Data = React.createClass({
 
     return (
       <div className="data">
-        <div className="header">Data</div>
+        <div className="header" onClick={this.switchState}>Data (click me)</div>
         <div className="container --data">
           <div id="scalars">
             {s}
@@ -67,9 +96,12 @@ var Data = React.createClass({
             <span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span>
           </div>
         </div>
+        <div className="header">Results</div>
+        <div className="container --data">
+          <pre>{JSON.stringify(this.state, null, 2)}</pre>
+        </div>
       </div>
     );
-        // <pre>{JSON.stringify(this.state, null, 2)}</pre>
   }
 
 });
