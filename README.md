@@ -2,7 +2,7 @@
 
 Based on [Drawing Dynamic Visualizations](http://vimeo.com/66085662) by Bret Victor.
 
-Hosted at [pictures.DallinOsmun.com](pictures.dallinosmun.com)
+Hosted at [pictures.DallinOsmun.com](http://pictures.dallinosmun.com)
 
 I've seen quite a few of Bret Victor's videos and they always blow me away. I want to explore and come up with my own creative tools. I've decided to recreate one of his tools to help me more fully grasp the concepts he explains. Right now I'm stuck in old programming paradigms and I need help to open up my mind. There's no better way to understand something than to create it yourself.
 
