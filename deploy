@@ -1,1 +1,16 @@
+#!/bin/bash
+
+cp -r client/build/ release/
+cp client/index.html release/
 git checkout gh-pages
+
+rm -rf build/
+rm index.html
+mv release/ build/
+mv build/index.html index.html
+
+# git add -A .
+# git commit -m "push release"
+# git push origin gh-pages
+
+# git checkout master
