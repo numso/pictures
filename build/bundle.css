@@ -24,7 +24,7 @@
   padding: 2px 0; }
 
 .container {
-  background-color: #e4e8ef; }
+  background-color: blue; }
   .container.\--pictures {
     box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
   .container.\--data {
