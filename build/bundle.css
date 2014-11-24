@@ -96,11 +96,12 @@
 
 .data__indice {
   display: inline-block;
-  background-color: #ccc;
   font-size: 12px;
   width: 40px;
   border-left: 1px solid;
   text-align: center; }
+  .data__indice.\--header {
+    background-color: #ccc; }
 
 .data__indice:last-of-type {
   border-right: 1px solid; }
