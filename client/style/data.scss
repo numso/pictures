@@ -2,11 +2,14 @@
 
   @include part(indice) {
     display: inline-block;
-    background-color: #ccc;
     font-size: 12px;
     width: 40px;
     border-left: 1px solid;
     text-align: center;
+
+    @include option(header) {
+      background-color: #ccc;
+    }
   }
 }
 

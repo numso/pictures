@@ -6,19 +6,25 @@ var evaluator = require('./evaluator');
 var Data = React.createClass({
 
   getInitialState() {
-    var scalars = [
-      { label: 'parameter', value: '1' },
-      { label: 'foo', value: '7 + 8' },
-      { label: 'bar', value: '20 / 4' },
-      { label: 'baz', value: 'foo + bar' }
-    ];
-    this.evaluateScalars(scalars);
-    return {
-      scalars: scalars,
+    // var state = {
+    //   scalars: [{ label: 'parameter', value: '1' }],
+    //   arrays: [{ label: 'item', value: '[1,2,3,4,5]' }]
+    // };
+    var state = {
+      scalars: [
+        { label: 'parameter', value: '1' },
+        { label: 'foo', value: '7 + 8' },
+        { label: 'bar', value: '20 / 4' },
+        { label: 'baz', value: 'foo + bar' }
+      ],
       arrays: [
-        { label: 'item', value: [1, 2, 3, 4, 5] },
+        { label: 'item', value: JSON.stringify([1, 2, 3, 4, 5]) },
+        { label: 'test', value: 'item.map(function (a){ return a * 2; });' },
       ]
     };
+    this.evaluateScalars(state.scalars);
+    this.evaluateArrays(state.arrays);
+    return state;
   },
 
   evaluateScalars(scalars=this.state.scalars) {
@@ -28,6 +34,17 @@ var Data = React.createClass({
     });
     var data = evaluator.check(ctx);
     _.each(scalars, (item) => {
+      item.evaluated = data[item.label];
+    });
+  },
+
+  evaluateArrays(arrays=this.state.arrays) {
+    var ctx = {};
+    _.each(arrays, (item) => {
+      ctx[item.label] = item.value;
+    });
+    var data = evaluator.check(ctx);
+    _.each(arrays, (item) => {
       item.evaluated = data[item.label];
     });
   },
@@ -46,9 +63,9 @@ var Data = React.createClass({
   onValueChange(i, type, newText) {
     this.state[type][i].value = newText;
 
-    if (type === 'scalars') {
-      this.evaluateScalars();
-    }
+    if (type === 'scalars') this.evaluateScalars();
+    else this.evaluateArrays();
+
     this.setState({ [type]: this.state[type] });
   },
 
@@ -60,13 +77,13 @@ var Data = React.createClass({
     });
 
     var a = this.state.arrays.map((item, i) => {
-      return <Scalar item={item}
+      return <Arrayy item={item}
                      onTitleChange={this.onTitleChange.bind(this, i, 'arrays')}
                      onValueChange={this.onValueChange.bind(this, i, 'arrays')}/>
     });
 
     var max = this.state.arrays.reduce((memo, item) => {
-      return Math.max(memo, item.value.length);
+      return Math.max(memo, (item.evaluated || []).length);
     }, 0);
     var indices = _.range(1, max + 1);
 
@@ -80,7 +97,7 @@ var Data = React.createClass({
           </div>
 
 
-          <div style={{marginLeft: 60}}>{indices.map((i) => { return <div className="data__indice">{i}</div>; })}</div>
+          <div style={{marginLeft: 60}}>{indices.map((i) => { return <div className="data__indice --header">{i}</div>; })}</div>
           <div id="arrays">
             {a}
             <span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span>
@@ -98,6 +115,68 @@ var Data = React.createClass({
 
 module.exports = Data;
 
+
+
+
+
+var Arrayy = React.createClass({
+
+  getInitialState() {
+    return {
+      isHovered: false,
+      isActive: false
+    };
+  },
+
+  getDefaultProps() {
+    return {
+      item: { label: '' }
+    };
+  },
+
+  onMouseEnter() {
+    this.setState({ isHovered: true });
+  },
+
+  onMouseLeave() {
+    this.setState({ isHovered: false });
+  },
+
+  onFocus() {
+    this.setState({ isActive: true });
+  },
+
+  onBlur() {
+    this.setState({ isActive: false });
+  },
+
+  onTitleChange(e) {
+    this.props.onTitleChange(e);
+  },
+
+  onValueChange(e) {
+    this.props.onValueChange(e);
+  },
+
+  render() {
+    var showVal = this.state.isHovered || this.state.isActive;
+    var classes = "scalar" + (this.state.isActive ? ' active': '');
+    return (
+      <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
+        <ContentEditable onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
+        {showVal ?
+          <ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={this.props.item.value}/> :
+          <span>
+            {(this.props.item.evaluated || []).map((item) => {
+              return <div className="data__indice">{item}</div>
+            })}
+          </span>
+        }
+      </div>
+    );
+  }
+
+});
 
 
 
