@@ -19,6 +19,8 @@ deployment:
       - mv build/index.html index.html
       - git status
       - git add -A .
+      - git config --global user.email "circleci@dallinosmun.com"
+      - git config --global user.name "Circle CI Build"
       - git commit -m "push release"
       - git push origin gh-pages
 
