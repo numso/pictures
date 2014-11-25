@@ -105,7 +105,7 @@ var Data = React.createClass({
         </div>
         <div className="header">Results</div>
         <div className="container --data">
-          <pre>{JSON.stringify(this.state, null, 2)}</pre>
+          <pre>{JSON.stringify(this.state, 2, 2)}</pre>
         </div>
       </div>
     );

@@ -5,6 +5,11 @@
 
 var _ = require('lodash');
 
+// maybe use something like this to stop people from messing up?
+var PREAMBLE = "var window={}; var document={}; var alert = function() {};";
+// still need to protect users from: this
+// update: meh, giving up. let the user mess up if they want. I'll shove this code in a webworker later
+
 /*
  * Evaluator.simple
  * Just evaluates Javascript. Doesn't inject anything. The `errors` flag
@@ -32,7 +37,7 @@ var _ = require('lodash');
 exports.simple = function (ctx, data) {
   _.each(ctx, function (val, key) {
     try {
-      data[key] = eval(val);
+      data[key] = eval(PREAMBLE + val);
     } catch (e) {}
   });
   return data;
@@ -42,7 +47,7 @@ exports.simple = function (ctx, data) {
 exports.injected = function (ctx, data) {
   _.each(ctx, function (val, key) {
     try {
-      data[key] = eval('with(data){' + val + '}');
+      data[key] = eval(PREAMBLE + 'with(data){' + val + '}');
     } catch (e) {}
   });
   return data;
