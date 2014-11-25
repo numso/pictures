@@ -73,7 +73,7 @@
 	      className: "header"
 	    }, "Measurements"), React.createElement("div", {
 	      className: "container --data"
-	    }, "measurements here"))), React.createElement("div", {
+	    }, "measurements go here"))), React.createElement("div", {
 	      style: { display: "inline-block", paddingTop: 20 }
 	    }, React.createElement("div", {
 	      style: { display: "inline-block", verticalAlign: "top" }
