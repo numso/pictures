@@ -1,0 +1,20 @@
+
+# git add -A .
+# git commit -m "push release"
+# git push origin gh-pages
+
+# git checkout master
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - cp -r client/build/ release/
+      - cp client/index.html release/
+      - git checkout gh-pages
+      - git status
+      - rm -rf build/
+      - rm index.html
+      - mv release/ build/
+      - mv build/index.html index.html
+      - git status
