@@ -27,7 +27,7 @@ var App = React.createClass({
 
           <div>
             <div className="header">Measurements</div>
-            <div className="container --data">measurements here</div>
+            <div className="container --data">measurements go here</div>
           </div>
         </div>
 
