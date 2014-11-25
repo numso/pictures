@@ -1,3 +1,8 @@
+general:
+  branches:
+    only:
+      - master
+
 dependencies:
   post:
     - npm install -g webpack
