@@ -1,10 +1,3 @@
-
-# git add -A .
-# git commit -m "push release"
-# git push origin gh-pages
-
-# git checkout master
-
 dependencies:
   post:
     - npm install -g webpack
@@ -25,6 +18,9 @@ deployment:
       - mv release/ build/
       - mv build/index.html index.html
       - git status
+      - git add -A .
+      - git commit -m "push release"
+      - git push origin gh-pages
 
 notify:
   webhooks:
