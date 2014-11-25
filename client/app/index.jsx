@@ -22,7 +22,7 @@ var App = React.createClass({
 
           <div>
             <div className="header">Steps</div>
-            <div className="container --data">steps here</div>
+            <div className="container --data">steps go here</div>
           </div>
 
           <div>
