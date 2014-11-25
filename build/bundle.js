@@ -57,7 +57,7 @@
 	  render: function () {
 	    return (React.createElement("div", null, React.createElement("div", {
 	      className: "header"
-	    }, "TEST - Pictures"), React.createElement("div", {
+	    }, "Pictures"), React.createElement("div", {
 	      className: "container --pictures"
 	    }, React.createElement(Picture, null), React.createElement(Picture, null), React.createElement(Picture, null), React.createElement("div", {
 	      className: "newpicture"
