@@ -5,6 +5,13 @@
 
 # git checkout master
 
+dependencies:
+  post:
+    - npm install -g webpack
+    - gem install sass
+    - webpack
+    - sass -I ./node_modules --scss ./client/style/main.scss ./client/build/bundle.css
+
 deployment:
   hub:
     branch: master
