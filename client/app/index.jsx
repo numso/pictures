@@ -7,7 +7,7 @@ var App = React.createClass({
   render() {
     return (
       <div>
-        <div className="header">Pictures</div>
+        <div className="header">TEST - Pictures</div>
         <div className="container --pictures">
           <Picture/>
           <Picture/>
