@@ -25,3 +25,7 @@ deployment:
       - mv release/ build/
       - mv build/index.html index.html
       - git status
+
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/8f3a8803babef75bec16
