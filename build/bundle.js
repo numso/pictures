@@ -69,7 +69,7 @@
 	      className: "header"
 	    }, "Steps"), React.createElement("div", {
 	      className: "container --data"
-	    }, "steps here")), React.createElement("div", null, React.createElement("div", {
+	    }, "steps go here")), React.createElement("div", null, React.createElement("div", {
 	      className: "header"
 	    }, "Measurements"), React.createElement("div", {
 	      className: "container --data"
