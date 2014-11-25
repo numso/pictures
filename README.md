@@ -33,15 +33,18 @@ Make sure you have node installed. Optionally, you can install a live-reload plu
 
 <marquee>**BETTER STYLING FOR DATA SECTION!!!**</marquee>
 
+(the above should be a marquee. but github strips it out...)
+
  - [x] Setup basic styles and layout
  - [ ] Refactor layout styles to flexbox maybe?
  - [ ] Starting off with the "Data" section
    - [x] Get basic elements in
-   - [ ] Put IDs on data elements, reference all by id instead of by label
-   - [ ] Evaluate arrays and scalars in the same context
-   - [ ] Use Regex to pull out any 'tagged items'
+   - [x] Put IDs on data elements, reference all by id instead of by label
+   - [ ] Should IDs be wrapped in {} for easier regex / discovery / manipulation ?
+   - [x] Evaluate arrays and scalars in the same context
+   - [x] Use Regex to pull out any 'tagged items'
    - [ ] Switch out `with(ctx)` for `fn.call(ctx)`. Put `use strict` back in
-   - [ ] Create new evaluators for array items (see note below)
+   - [x] Create new evaluators for array items (see note below)
    - [ ] `Feature` Ability to change numbers by clicking and draging them
    - [ ] `Feature` See tags as a GUI element in equation
    - [ ] `Feature` Ability to drag / drop tags into the equation

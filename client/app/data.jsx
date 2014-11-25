@@ -3,6 +3,24 @@ var _ = require('lodash');
 
 var evaluator = require('./evaluator');
 
+function getArr(item) {
+  if (item && _.isArray(item)) return item;
+  return [];
+}
+
+var GLOBALS = {
+  arrays: 1,
+  scalars: 1
+};
+function getID(type) {
+  return type[0] + '_1_' + GLOBALS[type]++;
+}
+
+function giveInitialIDs(state) {
+  _.each(state.scalars, (item) => { item.id = getID('scalars'); });
+  _.each(state.arrays, (item) => { item.id = getID('arrays'); });
+}
+
 var Data = React.createClass({
 
   getInitialState() {
@@ -11,46 +29,41 @@ var Data = React.createClass({
     //   arrays: [{ label: 'item', value: '[1,2,3,4,5]' }]
     // };
     var state = {
-      scalars: [
-        { label: 'parameter', value: '1' },
-        { label: 'foo', value: '7 + 8' },
-        { label: 'bar', value: '20 / 4' },
-        { label: 'baz', value: 'foo + bar' }
+      "scalars": [
+        { label: 'panels', value: '600', },
+        { label: 'kW / panel', value: '0.2', },
+        { label: 'power in kW', value: 's_1_1 * s_1_2', }
       ],
-      arrays: [
-        { label: 'item', value: JSON.stringify([1, 2, 3, 4, 5]) },
-        { label: 'test', value: 'item.map(function (a){ return a * 2; });' },
+      'arrays': [
+        { label: 'sun hours', value: '[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]', },
+        { label: 'energy in kWh', value: 's_1_3 * a_1_1', },
+        { label: 'energy in MWh', value: 'a_1_2 / 1000' }
       ]
     };
-    this.evaluateScalars(state.scalars);
-    this.evaluateArrays(state.arrays);
+    giveInitialIDs(state);
+    this.evaluate(state);
     return state;
   },
 
-  evaluateScalars(scalars=this.state.scalars) {
+  evaluate(state=this.state) {
     var ctx = {};
-    _.each(scalars, (item) => {
-      ctx[item.label] = item.value;
+    _.each(state.scalars, (item) => {
+      ctx[item.id] = item.value;
+    });
+    _.each(state.arrays, (item) => {
+      ctx[item.id] = item.value;
     });
     var data = evaluator.check(ctx);
-    _.each(scalars, (item) => {
-      item.evaluated = data[item.label];
+    _.each(state.scalars, (item) => {
+      item.evaluated = data[item.id];
     });
-  },
-
-  evaluateArrays(arrays=this.state.arrays) {
-    var ctx = {};
-    _.each(arrays, (item) => {
-      ctx[item.label] = item.value;
-    });
-    var data = evaluator.check(ctx);
-    _.each(arrays, (item) => {
-      item.evaluated = data[item.label];
+    _.each(state.arrays, (item) => {
+      item.evaluated = data[item.id];
     });
   },
 
   createNew(type) {
-    var value = type === 'arrays' ? { value: [] } : {};
+    var value = { id: getID(type) };
     this.state[type].push(value);
     this.setState({ [type]: this.state[type] });
   },
@@ -62,10 +75,7 @@ var Data = React.createClass({
 
   onValueChange(i, type, newText) {
     this.state[type][i].value = newText;
-
-    if (type === 'scalars') this.evaluateScalars();
-    else this.evaluateArrays();
-
+    this.evaluate();
     this.setState({ [type]: this.state[type] });
   },
 
@@ -83,7 +93,7 @@ var Data = React.createClass({
     });
 
     var max = this.state.arrays.reduce((memo, item) => {
-      return Math.max(memo, (item.evaluated || []).length);
+      return Math.max(memo, getArr(item.evaluated).length);
     }, 0);
     var indices = _.range(1, max + 1);
 
@@ -97,7 +107,7 @@ var Data = React.createClass({
           </div>
 
 
-          <div style={{marginLeft: 60}}>{indices.map((i) => { return <div className="data__indice --header">{i}</div>; })}</div>
+          <div style={{marginLeft: 140}}>{indices.map((i) => { return <div className="data__indice --header">{i}</div>; })}</div>
           <div id="arrays">
             {a}
             <span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span>
@@ -166,8 +176,8 @@ var Arrayy = React.createClass({
         <ContentEditable onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
         {showVal ?
           <ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={this.props.item.value}/> :
-          <span>
-            {(this.props.item.evaluated || []).map((item) => {
+          <span className="foobar" >
+            {getArr(this.props.item.evaluated).map((item) => {
               return <div className="data__indice">{item}</div>
             })}
           </span>

@@ -37,22 +37,69 @@ var PREAMBLE = "var window={}; var document={}; var alert = function() {};";
 exports.simple = function (ctx, data) {
   _.each(ctx, function (val, key) {
     try {
-      data[key] = eval(PREAMBLE + val);
+      var result = eval(PREAMBLE + val);
+      if (key[0] === 'a' && !_.isArray(result)) {
+        // ahhh, didn't work
+      } else {
+        data[key] = result;
+      }
     } catch (e) {}
   });
   return data;
 };
 
 
-exports.injected = function (ctx, data) {
+// Evaluates expressions, but tries to inject known values into them
+exports.injected = function (ctx, data, max) {
   _.each(ctx, function (val, key) {
     try {
-      data[key] = eval(PREAMBLE + 'with(data){' + val + '}');
+      var result = eval(PREAMBLE + 'with(data){' + val + '}');
+      if (key[0] === 'a' && !_.isArray(result)) {
+        result = evaluateArray(data, val, max);
+        if (_.isArray(result)) data[key] = result;
+      } else {
+        data[key] = result;
+      }
     } catch (e) {}
   });
   return data;
 };
 
+
+
+
+
+
+function evaluateArray(data, expr, max) {
+  var arr = [];
+  for (var i = 0; i < max; i++) {
+    var newExpr = expr.replace(/(a_\d*_\d*)/g, '$&[' + i + ']')
+    arr[i] = eval(PREAMBLE + 'with(data){' + newExpr + '}')
+  }
+  return arr;
+}
+
+function getCodesAt(i) {
+  // Possible Input: {a-1} + {a-2} * {s-1} / 1000
+  // Read as: array1 + array2 * scalar1 / 1000
+  // convert this to `this.array1[${i}] + this.array2[${i}] * this.scalar1 / 1000`
+}
+
+function getArrayMax(data) {
+  return _.reduce(data, function (memo, item, key) {
+    if (key[0] !== 'a') return memo;
+    return Math.max(memo, item.length);
+  }, 0);
+}
+
+
+
+
+
+
+
+
+// strip out the already evaluated expresions from the "to-evaluate" object
 exports.strip = function (obj1, obj2) {
   var keys = _.keys(obj1);
   _.each(keys, function (key) {
@@ -65,10 +112,11 @@ exports.strip = function (obj1, obj2) {
 exports.check = function (ctx) {
   var data = exports.simple(ctx, {});
   ctx = exports.strip(ctx, data);
+  var max = getArrayMax(data);
 
   var working = true;
   while (working) {
-    data = exports.injected(ctx, data);
+    data = exports.injected(ctx, data, max);
     var len1 = _.keys(ctx).length;
     ctx = exports.strip(ctx, data);
     var len2 = _.keys(ctx).length;

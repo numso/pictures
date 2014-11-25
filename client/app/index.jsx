@@ -17,7 +17,7 @@ var App = React.createClass({
           </div>
         </div>
 
-        <div style={{ width: 400, display: 'inline-block', verticalAlign: 'top' }}>
+        <div style={{ width: 800, display: 'inline-block', verticalAlign: 'top' }}>
           <Data/>
 
           <div>
