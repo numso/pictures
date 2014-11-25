@@ -106,10 +106,17 @@
 .data__indice:last-of-type {
   border-right: 1px solid; }
 
+.scalar {
+  position: relative; }
+
 .scalar:hover,
 .scalar.active {
   background: whitesmoke;
   box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
+
+.foobar {
+  position: absolute;
+  left: 140px; }
 
 .cheatsheet__section {
   margin-bottom: 20px; }

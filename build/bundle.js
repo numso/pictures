@@ -64,8 +64,31 @@
 	    }, React.createElement("span", {
 	      className: "newpicture__content"
 	    }, "+"))), React.createElement("div", {
-	      style: { width: 400, display: "inline-block", verticalAlign: "top" }
-	    }, React.createElement(Data, null), React.createElement("div", null, React.createElement("div", {
+	      style: { width: 800, display: "inline-block", verticalAlign: "top" }
+	    }, React.createElement("div", null, React.createElement("div", {
+	      className: "header"
+	    }, "Instructions (this is all WIP)"), React.createElement("div", {
+	      className: "container --data",
+	      style: { minHeight: 10 }
+	    }, React.createElement("div", {
+	      style: { padding: 10 }
+	    }, React.createElement("p", {
+	      style: { padding: 5 }
+	    }, "The equations below accept valid Javascript."), React.createElement("p", {
+	      style: { padding: 5 }
+	    }, "Arrays and Scalars are in the same context."), React.createElement("p", {
+	      style: { padding: 5 }
+	    }, "You must reference other pieces of data by their ID."), React.createElement("p", {
+	      style: { padding: 5 }
+	    }, "Format: z_#1_#2"), React.createElement("p", {
+	      style: { padding: 5, paddingLeft: 40 }
+	    }, "z = a or s (array,scalar)"), React.createElement("p", {
+	      style: { padding: 5, paddingLeft: 40 }
+	    }, "#1 = image number (always 1)"), React.createElement("p", {
+	      style: { padding: 5, paddingLeft: 40 }
+	    }, "#2 = variable number (from 1 on)"), React.createElement("p", {
+	      style: { padding: 5 }
+	    }, "Examples: s_1_3 or a_1_1")))), React.createElement(Data, null), React.createElement("div", null, React.createElement("div", {
 	      className: "header"
 	    }, "Steps"), React.createElement("div", {
 	      className: "container --data"
@@ -128,6 +151,28 @@
 
 	var evaluator = __webpack_require__(4);
 
+	function getArr(item) {
+	  if (item && _.isArray(item)) return item;
+	  return [];
+	}
+
+	var GLOBALS = {
+	  arrays: 1,
+	  scalars: 1
+	};
+	function getID(type) {
+	  return type[0] + "_1_" + GLOBALS[type]++;
+	}
+
+	function giveInitialIDs(state) {
+	  _.each(state.scalars, function (item) {
+	    item.id = getID("scalars");
+	  });
+	  _.each(state.arrays, function (item) {
+	    item.id = getID("arrays");
+	  });
+	}
+
 	var Data = React.createClass({
 	  displayName: "Data",
 
@@ -138,41 +183,35 @@
 	    //   arrays: [{ label: 'item', value: '[1,2,3,4,5]' }]
 	    // };
 	    var state = {
-	      scalars: [{ label: "parameter", value: "1" }, { label: "foo", value: "7 + 8" }, { label: "bar", value: "20 / 4" }, { label: "baz", value: "foo + bar" }],
-	      arrays: [{ label: "item", value: JSON.stringify([1, 2, 3, 4, 5]) }, { label: "test", value: "item.map(function (a){ return a * 2; });" }]
+	      scalars: [{ label: "panels", value: "600" }, { label: "kW / panel", value: "0.2" }, { label: "power in kW", value: "s_1_1 * s_1_2" }],
+	      arrays: [{ label: "sun hours", value: "[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]" }, { label: "energy in kWh", value: "s_1_3 * a_1_1" }, { label: "energy in MWh", value: "a_1_2 / 1000" }]
 	    };
-	    this.evaluateScalars(state.scalars);
-	    this.evaluateArrays(state.arrays);
+	    giveInitialIDs(state);
+	    this.evaluate(state);
 	    return state;
 	  },
 
-	  evaluateScalars: function (scalars) {
-	    if (scalars === undefined) scalars = this.state.scalars;
+	  evaluate: function (state) {
+	    if (state === undefined) state = this.state;
 	    var ctx = {};
-	    _.each(scalars, function (item) {
-	      ctx[item.label] = item.value;
+	    _.each(state.scalars, function (item) {
+	      ctx[item.id] = item.value;
+	    });
+	    _.each(state.arrays, function (item) {
+	      ctx[item.id] = item.value;
 	    });
 	    var data = evaluator.check(ctx);
-	    _.each(scalars, function (item) {
-	      item.evaluated = data[item.label];
+	    _.each(state.scalars, function (item) {
+	      item.evaluated = data[item.id];
 	    });
-	  },
-
-	  evaluateArrays: function (arrays) {
-	    if (arrays === undefined) arrays = this.state.arrays;
-	    var ctx = {};
-	    _.each(arrays, function (item) {
-	      ctx[item.label] = item.value;
-	    });
-	    var data = evaluator.check(ctx);
-	    _.each(arrays, function (item) {
-	      item.evaluated = data[item.label];
+	    _.each(state.arrays, function (item) {
+	      item.evaluated = data[item.id];
 	    });
 	  },
 
 	  createNew: function (type) {
 	    var _this = this;
-	    var value = type === "arrays" ? { value: [] } : {};
+	    var value = { id: getID(type) };
 	    this.state[type].push(value);
 	    this.setState((function (_ref) {
 	      _ref[type] = _this.state[type];
@@ -192,9 +231,7 @@
 	  onValueChange: function (i, type, newText) {
 	    var _this3 = this;
 	    this.state[type][i].value = newText;
-
-	    if (type === "scalars") this.evaluateScalars();else this.evaluateArrays();
-
+	    this.evaluate();
 	    this.setState((function (_ref3) {
 	      _ref3[type] = _this3.state[type];
 	      return _ref3;
@@ -220,7 +257,7 @@
 	    });
 
 	    var max = this.state.arrays.reduce(function (memo, item) {
-	      return Math.max(memo, (item.evaluated || []).length);
+	      return Math.max(memo, getArr(item.evaluated).length);
 	    }, 0);
 	    var indices = _.range(1, max + 1);
 
@@ -236,7 +273,7 @@
 	      onClick: this.createNew.bind(this, "scalars"),
 	      className: "tag --create"
 	    }, "+")), React.createElement("div", {
-	      style: { marginLeft: 60 }
+	      style: { marginLeft: 140 }
 	    }, indices.map(function (i) {
 	      return React.createElement("div", {
 	        className: "data__indice --header"
@@ -320,7 +357,9 @@
 	      onChange: this.onValueChange,
 	      isEditting: this.state.isActive,
 	      text: this.props.item.value
-	    }) : React.createElement("span", null, (this.props.item.evaluated || []).map(function (item) {
+	    }) : React.createElement("span", {
+	      className: "foobar"
+	    }, getArr(this.props.item.evaluated).map(function (item) {
 	      return React.createElement("div", {
 	        className: "data__indice"
 	      }, item);
@@ -533,22 +572,63 @@
 	exports.simple = function (ctx, data) {
 	  _.each(ctx, function (val, key) {
 	    try {
-	      data[key] = eval(PREAMBLE + val);
+	      var result = eval(PREAMBLE + val);
+	      if (key[0] === "a" && !_.isArray(result)) {} else {
+	        data[key] = result;
+	      }
 	    } catch (e) {}
 	  });
 	  return data;
 	};
 
 
-	exports.injected = function (ctx, data) {
+	// Evaluates expressions, but tries to inject known values into them
+	exports.injected = function (ctx, data, max) {
 	  _.each(ctx, function (val, key) {
 	    try {
-	      data[key] = eval(PREAMBLE + "with(data){" + val + "}");
+	      var result = eval(PREAMBLE + "with(data){" + val + "}");
+	      if (key[0] === "a" && !_.isArray(result)) {
+	        result = evaluateArray(data, val, max);
+	        if (_.isArray(result)) data[key] = result;
+	      } else {
+	        data[key] = result;
+	      }
 	    } catch (e) {}
 	  });
 	  return data;
 	};
 
+
+
+
+
+
+	function evaluateArray(data, expr, max) {
+	  var arr = [];
+	  for (var i = 0; i < max; i++) {
+	    var newExpr = expr.replace(/(a_\d*_\d*)/g, "$&[" + i + "]");
+	    arr[i] = eval(PREAMBLE + "with(data){" + newExpr + "}");
+	  }
+	  return arr;
+	}
+
+	function getCodesAt(i) {}
+
+	function getArrayMax(data) {
+	  return _.reduce(data, function (memo, item, key) {
+	    if (key[0] !== "a") return memo;
+	    return Math.max(memo, item.length);
+	  }, 0);
+	}
+
+
+
+
+
+
+
+
+	// strip out the already evaluated expresions from the "to-evaluate" object
 	exports.strip = function (obj1, obj2) {
 	  var keys = _.keys(obj1);
 	  _.each(keys, function (key) {
@@ -561,10 +641,11 @@
 	exports.check = function (ctx) {
 	  var data = exports.simple(ctx, {});
 	  ctx = exports.strip(ctx, data);
+	  var max = getArrayMax(data);
 
 	  var working = true;
 	  while (working) {
-	    data = exports.injected(ctx, data);
+	    data = exports.injected(ctx, data, max);
 	    var len1 = _.keys(ctx).length;
 	    ctx = exports.strip(ctx, data);
 	    var len2 = _.keys(ctx).length;
