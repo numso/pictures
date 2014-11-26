@@ -353,6 +353,15 @@
 	    });
 	  },
 
+	  dragStart: function (text) {
+	    var key = this.props.item.id;
+	    if (text) {
+	      key += "_" + text;
+	      key = key.replace("a", "ar");
+	    }
+	    event.dataTransfer.setData("text/plain", key);
+	  },
+
 	  render: function () {
 	    var _this5 = this;
 	    var showVal = this.state.isHovered || this.state.isActive;
@@ -380,6 +389,8 @@
 	      onFocus: this.onFocus,
 	      onBlur: this.onBlur
 	    }, React.createElement(ContentEditable, {
+	      draggable: "true",
+	      onDragStart: this.dragStart.bind(this, ""),
 	      onChange: this.onTitleChange,
 	      isEditting: this.state.isActive,
 	      text: this.props.item.label,
@@ -391,7 +402,9 @@
 	      className: "test-box"
 	    }, stats.map(function (stat) {
 	      return (React.createElement("div", null, React.createElement("div", {
-	        className: "tag"
+	        className: "tag",
+	        draggable: "true",
+	        onDragStart: _this5.dragStart.bind(_this5, stat.name)
 	      }, stat.name, " ", _this5.props.item.label), React.createElement("span", null, evaluator.round(stat.code(_this5.props.item.evaluated)))));
 	    })), showVal ? React.createElement(ContentEditable, {
 	      onChange: this.onValueChange,
@@ -452,6 +465,10 @@
 	    this.props.onValueChange(e);
 	  },
 
+	  dragStart: function () {
+	    event.dataTransfer.setData("text/plain", this.props.item.id);
+	  },
+
 	  render: function () {
 	    var showVal = this.state.isHovered || this.state.isActive;
 	    var classes = "scalar" + (this.state.isActive ? " active" : "");
@@ -462,6 +479,8 @@
 	      onFocus: this.onFocus,
 	      onBlur: this.onBlur
 	    }, React.createElement(ContentEditable, {
+	      draggable: "true",
+	      onDragStart: this.dragStart,
 	      onChange: this.onTitleChange,
 	      isEditting: this.state.isActive,
 	      text: this.props.item.label,
@@ -507,6 +526,8 @@
 	      onKeyDown: this.onKeyDown,
 	      onInput: this.emitChange,
 	      onBlur: this.emitChange,
+	      draggable: this.props.draggable,
+	      onDragStart: this.props.onDragStart,
 	      contentEditable: true,
 	      dangerouslySetInnerHTML: { __html: this.props.text }
 	    });
