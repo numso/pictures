@@ -88,7 +88,9 @@
 	      style: { padding: 5, paddingLeft: 40 }
 	    }, "#2 = variable number (from 1 on)"), React.createElement("p", {
 	      style: { padding: 5 }
-	    }, "Examples: s_1_3 or a_1_1")))), React.createElement(Data, null), React.createElement("div", null, React.createElement("div", {
+	    }, "Examples: s_1_3 or a_1_1"), React.createElement("p", {
+	      style: { padding: 5 }
+	    }, "Can also use: ar_1_1_max, ar_1_1_min, ar_1_1_avg, ar_1_1_len, ar_1_1_sum")))), React.createElement(Data, null), React.createElement("div", null, React.createElement("div", {
 	      className: "header"
 	    }, "Steps"), React.createElement("div", {
 	      className: "container --data"
@@ -183,8 +185,14 @@
 	    //   arrays: [{ label: 'item', value: '[1,2,3,4,5]' }]
 	    // };
 	    var state = {
-	      scalars: [{ label: "panels", value: "600" }, { label: "kW / panel", value: "0.2" }, { label: "power in kW", value: "s_1_1 * s_1_2" }],
-	      arrays: [{ label: "sun hours", value: "[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]" }, { label: "energy in kWh", value: "s_1_3 * a_1_1" }, { label: "energy in MWh", value: "a_1_2 / 1000" }]
+	      scalars: [{ label: "panels", value: "600" },
+	      // { label: 'kW / panel', value: '0.2', },
+	      // { label: 'power in kW', value: 's_1_1 * s_1_2', },
+	      { label: "max in array 1", value: "ar_1_1_max" }],
+	      arrays: [{ label: "sun hours", value: "[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]" },
+	      // { label: 'energy in kWh', value: 's_1_3 * a_1_1', },
+	      // { label: 'energy in MWh', value: 'a_1_2 / 1000' },
+	      { label: "foo", value: "a_1_1 / ar_1_1_max" }]
 	    };
 	    giveInitialIDs(state);
 	    this.evaluate(state);
@@ -339,9 +347,32 @@
 	    this.props.onValueChange(e);
 	  },
 
+	  showStuff: function () {
+	    this.setState({
+	      showBox: !this.state.showBox
+	    });
+	  },
+
 	  render: function () {
+	    var _this5 = this;
 	    var showVal = this.state.isHovered || this.state.isActive;
 	    var classes = "scalar" + (this.state.isActive ? " active" : "");
+
+	    var stats = [{ name: "min", code: function (arr) {
+	        return Math.min.apply(this, arr);
+	      } }, { name: "avg", code: function (arr) {
+	        return arr.reduce(function (memo, num) {
+	          return memo + num;
+	        }, 0) / arr.length;
+	      } }, { name: "max", code: function (arr) {
+	        return Math.max.apply(this, arr);
+	      } }, { name: "sum of", code: function (arr) {
+	        return arr.reduce(function (memo, num) {
+	          return memo + num;
+	        }, 0);
+	      } }, { name: "# of", code: function (arr) {
+	        return arr.length;
+	      } }];
 	    return (React.createElement("div", {
 	      className: classes,
 	      onMouseEnter: this.onMouseEnter,
@@ -353,7 +384,16 @@
 	      isEditting: this.state.isActive,
 	      text: this.props.item.label,
 	      className: "tag"
-	    }), showVal ? React.createElement(ContentEditable, {
+	    }), React.createElement("span", {
+	      className: "tag__arrow",
+	      onClick: this.showStuff
+	    }), this.state.showBox && React.createElement("div", {
+	      className: "test-box"
+	    }, stats.map(function (stat) {
+	      return (React.createElement("div", null, React.createElement("div", {
+	        className: "tag"
+	      }, stat.name, " ", _this5.props.item.label), React.createElement("span", null, evaluator.round(stat.code(_this5.props.item.evaluated)))));
+	    })), showVal ? React.createElement(ContentEditable, {
 	      onChange: this.onValueChange,
 	      isEditting: this.state.isActive,
 	      text: this.props.item.value
@@ -453,10 +493,10 @@
 	  },
 
 	  onKeyDown: function (e) {
-	    var _this5 = this;
+	    var _this6 = this;
 	    if (e.keyCode === 13) {
 	      setTimeout(function () {
-	        _this5.getDOMNode().blur();
+	        _this6.getDOMNode().blur();
 	      });
 	    }
 	  },
@@ -612,15 +652,17 @@
 	  return arr;
 	}
 
-	function getCodesAt(i) {}
-
 	function getArrayMax(data) {
 	  return _.reduce(data, function (memo, item, key) {
 	    if (key[0] !== "a") return memo;
+	    if (key[1] !== "_") return memo;
 	    return Math.max(memo, item.length);
 	  }, 0);
 	}
 
+	exports.round = function (item) {
+	  return Math.round(item * 1000) / 1000;
+	};
 
 
 
@@ -632,10 +674,26 @@
 	exports.strip = function (obj1, obj2) {
 	  var keys = _.keys(obj1);
 	  _.each(keys, function (key) {
-	    if (key in obj2) delete obj1[key];
+	    if (key in obj2) {
+	      delete obj1[key];
+	      if (key[0] === "a" && key[1] === "_") addTransforms(obj2, key);
+	    }
 	  });
 	  return obj1;
 	};
+
+	function addTransforms(obj, key) {
+	  var key2 = key.replace("a", "ar");
+	  obj[key2 + "_min"] = Math.min.apply(this, obj[key]);
+	  obj[key2 + "_avg"] = obj[key].reduce(function (memo, num) {
+	    return memo + num;
+	  }, 0) / obj[key].length;
+	  obj[key2 + "_max"] = Math.max.apply(this, obj[key]);
+	  obj[key2 + "_sum"] = obj[key].reduce(function (memo, num) {
+	    return memo + num;
+	  }, 0);
+	  obj[key2 + "_len"] = obj[key].length;
+	}
 
 
 	exports.check = function (ctx) {
@@ -651,6 +709,18 @@
 	    var len2 = _.keys(ctx).length;
 	    working = len1 !== len2;
 	  }
+
+	  _.each(data, function (item, key) {
+	    if (_.isNumber(item)) {
+	      data[key] = exports.round(item);
+	    } else if (_.isArray(item)) {
+	      _.each(item, function (item2, i) {
+	        if (_.isNumber(item2)) {
+	          item[i] = exports.round(item2);
+	        }
+	      });
+	    }
+	  });
 
 	  return data;
 	};
