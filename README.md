@@ -31,9 +31,7 @@ Make sure you have node installed. Optionally, you can install a live-reload plu
 
 ## Todo
 
-<marquee>**BETTER STYLING FOR DATA SECTION!!!**</marquee>
-
-(the above should be a marquee. but github strips it out...)
+**The data section majorly needs a refactor and restyle. Wanna get "gui tags" and "draggable nums" done first.**
 
  - [x] Setup basic styles and layout
  - [ ] Refactor layout styles to flexbox maybe?
@@ -45,10 +43,11 @@ Make sure you have node installed. Optionally, you can install a live-reload plu
    - [x] Use Regex to pull out any 'tagged items'
    - [ ] Switch out `with(ctx)` for `fn.call(ctx)`. Put `use strict` back in
    - [x] Create new evaluators for array items (see note below)
-   - [ ] `Feature` Ability to change numbers by clicking and draging them
+   - [ ] `Feature` Ability to change numbers by clicking and dragging them
    - [ ] `Feature` See tags as a GUI element in equation
    - [ ] `Feature` Ability to drag / drop tags into the equation
-   - [ ] `Feature` Dropdown of Array Reductions (min, max, avg, etc)
+   - [x] `Feature` Dropdown of Array Reductions (min, max, avg, etc)
+   - [x] `Feature` Use of Array Reductions in equations
    - [ ] Better Styling (emphasis added above)
    - [ ] `Feature` Ability to delete data elements
 

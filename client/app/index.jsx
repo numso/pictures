@@ -31,6 +31,7 @@ var App = React.createClass({
                 <p style={{padding: 5, paddingLeft: 40}}>#1 = image number (always 1)</p>
                 <p style={{padding: 5, paddingLeft: 40}}>#2 = variable number (from 1 on)</p>
                 <p style={{padding: 5}}>Examples: s_1_3 or a_1_1</p>
+                <p style={{padding: 5}}>Can also use: ar_1_1_max, ar_1_1_min, ar_1_1_avg, ar_1_1_len, ar_1_1_sum</p>
               </div>
             </div>
           </div>

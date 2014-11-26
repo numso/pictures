@@ -79,19 +79,17 @@ function evaluateArray(data, expr, max) {
   return arr;
 }
 
-function getCodesAt(i) {
-  // Possible Input: {a-1} + {a-2} * {s-1} / 1000
-  // Read as: array1 + array2 * scalar1 / 1000
-  // convert this to `this.array1[${i}] + this.array2[${i}] * this.scalar1 / 1000`
-}
-
 function getArrayMax(data) {
   return _.reduce(data, function (memo, item, key) {
     if (key[0] !== 'a') return memo;
+    if (key[1] !== '_') return memo;
     return Math.max(memo, item.length);
   }, 0);
 }
 
+exports.round = function (item) {
+  return Math.round(item * 1000) / 1000;
+};
 
 
 
@@ -103,9 +101,21 @@ function getArrayMax(data) {
 exports.strip = function (obj1, obj2) {
   var keys = _.keys(obj1);
   _.each(keys, function (key) {
-    if (key in obj2) delete obj1[key];
+    if (key in obj2) {
+      delete obj1[key];
+      if (key[0] === 'a' && key[1] === '_') addTransforms(obj2, key);
+    }
   });
   return obj1;
+}
+
+function addTransforms(obj, key) {
+  var key2 = key.replace('a', 'ar');
+  obj[key2 + '_min'] = Math.min.apply(this, obj[key]);
+  obj[key2 + '_avg'] = obj[key].reduce(function (memo, num) { return memo + num}, 0) / obj[key].length;
+  obj[key2 + '_max'] = Math.max.apply(this, obj[key]);
+  obj[key2 + '_sum'] = obj[key].reduce(function (memo, num) { return memo + num}, 0);
+  obj[key2 + '_len'] = obj[key].length;
 }
 
 
@@ -122,6 +132,18 @@ exports.check = function (ctx) {
     var len2 = _.keys(ctx).length;
     working = len1 !== len2;
   }
+
+  _.each(data, (item, key) => {
+    if (_.isNumber(item)) {
+      data[key] = exports.round(item);
+    } else if (_.isArray(item)) {
+      _.each(item, (item2, i) => {
+        if (_.isNumber(item2)) {
+          item[i] = exports.round(item2);
+        }
+      });
+    }
+  });
 
   return data;
 };
