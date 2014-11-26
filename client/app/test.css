@@ -1,0 +1,18 @@
+* {
+  font-family: sans-serif;
+}
+
+.tag {
+  background-color: #abbbd9;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  padding: 2px 10px;
+  margin: 2px 0;
+  margin-right: 10px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  display: inline-block;
+  min-width: 20px;
+  min-height: 12px;
+}

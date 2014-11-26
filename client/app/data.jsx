@@ -176,6 +176,15 @@ var Arrayy = React.createClass({
     });
   },
 
+  dragStart(text) {
+    var key = this.props.item.id;
+    if (text) {
+      key += '_' + text;
+      key = key.replace('a', 'ar');
+    }
+    event.dataTransfer.setData('text/plain', key);
+  },
+
   render() {
     var showVal = this.state.isHovered || this.state.isActive;
     var classes = "scalar" + (this.state.isActive ? ' active': '');
@@ -189,7 +198,7 @@ var Arrayy = React.createClass({
     ];
     return (
       <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
-        <ContentEditable onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
+        <ContentEditable draggable="true" onDragStart={this.dragStart.bind(this, '')} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
         <span className='tag__arrow' onClick={this.showStuff}/>
 
         {this.state.showBox &&
@@ -197,7 +206,7 @@ var Arrayy = React.createClass({
           {stats.map((stat) => {
             return (
               <div>
-                <div className="tag">{stat.name} {this.props.item.label}</div>
+                <div className="tag" draggable="true" onDragStart={this.dragStart.bind(this, stat.name)}>{stat.name} {this.props.item.label}</div>
                 <span>{evaluator.round(stat.code(this.props.item.evaluated))}</span>
               </div>
             );
@@ -261,12 +270,16 @@ var Scalar = React.createClass({
     this.props.onValueChange(e);
   },
 
+  dragStart() {
+    event.dataTransfer.setData('text/plain', this.props.item.id);
+  },
+
   render() {
     var showVal = this.state.isHovered || this.state.isActive;
     var classes = "scalar" + (this.state.isActive ? ' active': '');
     return (
       <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
-        <ContentEditable onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
+        <ContentEditable draggable="true" onDragStart={this.dragStart} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
         <ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
       </div>
     );
@@ -302,6 +315,8 @@ var ContentEditable = React.createClass({
                  onKeyDown={this.onKeyDown}
                  onInput={this.emitChange}
                  onBlur={this.emitChange}
+                 draggable={this.props.draggable}
+                 onDragStart={this.props.onDragStart}
                  contentEditable
                  dangerouslySetInnerHTML={{__html: this.props.text}}></span>;
   }

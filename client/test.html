@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>My Test Sandbox</title>
+    <link rel="stylesheet" type="text/css" href="app/test.css">
+  </head>
+  <body>
+
+    <div>ContentEditable with Nested Tags</div>
+
+    <input type="text">
+
+    <div id="demo">
+      <h2>js obj</h2>
+      <div id="obj" contentEditable></div>
+      <h2>raw string</h2>
+      <div id="raw" contentEditable></div>
+      <h2>tagged stuff</h2>
+      <div id="proc" contentEditable></div>
+      <h2>draggable tags</h2>
+      <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{foo}')" class="tag">foo</div>
+      <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{bar}')" class="tag">bar</div>
+      <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{baz}')" class="tag">baz</div>
+      <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{dallin}')" class="tag">dallin</div>
+      <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{tarah}')" class="tag">tarah</div>
+      <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{show}')" class="tag">show</div>
+    </div>
+
+    <div ondragover="return false" ondrop="console.log(event.dataTransfer.getData('text/plain'))">yoo hoo</div>
+
+    <script src="app/test.js"></script>
+  </body>
+</html>
