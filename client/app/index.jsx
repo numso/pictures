@@ -55,12 +55,11 @@ var App = React.createClass({
                 <p style={{padding: 5}}>The equations below accept valid Javascript.</p>
                 <p style={{padding: 5}}>Arrays and Scalars are in the same context.</p>
                 <p style={{padding: 5}}>You must reference other pieces of data by their ID.</p>
-                <p style={{padding: 5}}>Format: z_#1_#2</p>
+                <p style={{padding: 5}}>Format: z_#</p>
                 <p style={{padding: 5, paddingLeft: 40}}>z = a or s (array,scalar)</p>
-                <p style={{padding: 5, paddingLeft: 40}}>#1 = image number (always 1)</p>
-                <p style={{padding: 5, paddingLeft: 40}}>#2 = variable number (from 1 on)</p>
-                <p style={{padding: 5}}>Examples: s_1_3 or a_1_1</p>
-                <p style={{padding: 5}}>Can also use: ar_1_1_max, ar_1_1_min, ar_1_1_avg, ar_1_1_len, ar_1_1_sum</p>
+                <p style={{padding: 5, paddingLeft: 40}}># = variable number (from 1 on)</p>
+                <p style={{padding: 5}}>Examples: s_3 or a_1</p>
+                <p style={{padding: 5}}>Can also use: ar_1_max, ar_1_min, ar_1_avg, ar_1_len, ar_1_sum</p>
               </div>
             </div>
           </div>
