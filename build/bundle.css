@@ -85,10 +85,14 @@
   background-color: white;
   width: 220px;
   height: 150px;
-  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3); }
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer; }
+  .picture.\--selected {
+    box-shadow: 0 0 20px 2px #1e4fea; }
   .picture.\--big {
     width: 720px;
-    height: 900px; }
+    height: 900px;
+    cursor: default; }
 
 .newpicture {
   background-color: #d7dce5;
