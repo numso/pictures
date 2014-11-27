@@ -1,11 +1,14 @@
 var path = require('path');
 
 module.exports = {
-  entry: './client/app/index.jsx',
+  entry: {
+    bundle: './client/app/index.jsx',
+    test: './client/test/test.js'
+  },
 
   output: {
     path: './client/build',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
 
   resolve: {
@@ -19,6 +22,7 @@ module.exports = {
       { test: /\.jsx$/,               loader: '6to5'                       },
       // Can't use this loader untill libsass supports Sass 3.4
       // { test: /\.scss$/,              loader: 'style!css!sass?outputStyle=expand&includePaths[]=' + path.resolve(__dirname, './node_modules') },
+      { test: /\.css$/,              loader: 'style!css'                  },
       { test: /\.(png|jpg|gif)$/,     loader: 'url?limit=8192'             }
     ]
   }
