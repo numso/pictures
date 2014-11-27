@@ -5,10 +5,16 @@
   width: 220px;
   height: 150px;
   box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+
+  @include option(selected) {
+    box-shadow: 0 0 20px 2px rgb(30, 79, 234)
+  }
 
   @include option(big) {
     width: 720px;
     height: 900px;
+    cursor: default;
   }
 }
 

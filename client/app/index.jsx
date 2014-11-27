@@ -1,4 +1,4 @@
-var React = window.React = require('react');
+var React = window.React = require('react/addons');
 var Data = require('./data');
 var CheatSheet = require('./cheat-sheet');
 
@@ -8,20 +8,20 @@ var App = React.createClass({
 
   getInitialState() {
     return {
-      numPictures: store.getLength()
+      numPictures: store.getLength(),
+      curPicture: 0
     };
   },
 
   renderPictures() {
     var markup = [];
     for (var i = 0; i < this.state.numPictures; i++) {
-      markup.push(<Picture num={i} onClick={this.setPicture.bind(this, i)}/>);
+      markup.push(<Picture num={i} selected={this.state.curPicture === i} onClick={this.setPicture.bind(this, i)}/>);
     }
     return markup;
   },
 
   setPicture(i) {
-    console.log('setting picture to ', i);
     this.setState({
       curPicture: i
     });
@@ -30,8 +30,7 @@ var App = React.createClass({
   addNew() {
     store.addItem();
     this.setState({
-      numPictures: store.getLength(),
-      curPicture: 0
+      numPictures: store.getLength()
     });
   },
 
@@ -99,8 +98,12 @@ var App = React.createClass({
 var Picture = React.createClass({
 
   render() {
+    var classes = React.addons.classSet({
+      picture: true,
+      '--selected': this.props.selected
+    });
     return (
-      <div className="picture" onClick={this.props.onClick}/>
+      <div className={classes} onClick={this.props.onClick}/>
     );
   }
 
