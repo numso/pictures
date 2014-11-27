@@ -84,7 +84,8 @@
 	  addNew: function () {
 	    store.addItem();
 	    this.setState({
-	      numPictures: store.getLength()
+	      numPictures: store.getLength(),
+	      curPicture: store.getLength() - 1
 	    });
 	  },
 
@@ -568,6 +569,8 @@
 	"use strict";
 
 	var React = __webpack_require__(12);
+
+	var evaluator = __webpack_require__(15);
 
 	var ContentEditable = __webpack_require__(18);
 
