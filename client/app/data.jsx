@@ -31,15 +31,15 @@ var Data = React.createClass({
     var state = {
       "scalars": [
         { label: 'panels', value: '600', },
-        // { label: 'kW / panel', value: '0.2', },
-        // { label: 'power in kW', value: 's_1_1 * s_1_2', },
-        { label: 'max in array 1', value: 'ar_1_1_max' }
+        { label: 'kW / panel', value: '0.2', },
+        { label: 'power in kW', value: 's_1_1 * s_1_2', },
+        // { label: 'max in array 1', value: 'ar_1_1_max' }
       ],
       'arrays': [
         { label: 'sun hours', value: '[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]', },
-        // { label: 'energy in kWh', value: 's_1_3 * a_1_1', },
-        // { label: 'energy in MWh', value: 'a_1_2 / 1000' },
-        { label: 'foo', value: 'a_1_1 / ar_1_1_max' }
+        { label: 'energy in kWh', value: 's_1_3 * a_1_1', },
+        { label: 'energy in MWh', value: 'a_1_2 / 1000' },
+        // { label: 'foo', value: 'a_1_1 / ar_1_1_max' }
       ]
     };
     giveInitialIDs(state);
@@ -197,7 +197,7 @@ var Arrayy = React.createClass({
       { name: '# of', code: function (arr) { return arr.length; } }
     ];
     return (
-      <div className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <div className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseUp={this.onFocus} onBlur={this.onBlur}>
         <ContentEditable draggable="true" onDragStart={this.dragStart.bind(this, '')} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
         <span className='tag__arrow' onClick={this.showStuff}/>
 
@@ -278,9 +278,9 @@ var Scalar = React.createClass({
     var showVal = this.state.isHovered || this.state.isActive;
     var classes = "scalar" + (this.state.isActive ? ' active': '');
     return (
-      <div className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <div className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onFocus} onMouseLeave={this.onMouseLeave} onMouseUp={this.onFocus} onBlur={this.onBlur}>
         <ContentEditable draggable="true" onDragStart={this.dragStart} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
-        <ContentEditable onChange={this.onValueChange} isEditting={showVal} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
+        <ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
       </div>
     );
   }
