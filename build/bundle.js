@@ -387,6 +387,7 @@
 	    var _this = this;
 	    this.state[type].push({ label: "item", value: 0 });
 	    giveIDs(this.state);
+	    this.evaluate(this.state);
 	    this.setState((function (_ref) {
 	      _ref[type] = _this.state[type];
 	      return _ref;
@@ -768,6 +769,7 @@
 
 
 	function evaluateArray(data, expr, max) {
+	  expr = "" + expr;
 	  var arr = [];
 	  for (var i = 0; i < max; i++) {
 	    var newExpr = expr.replace(/(a_\d*)/g, "$&[" + i + "]");
