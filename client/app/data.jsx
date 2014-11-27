@@ -197,7 +197,7 @@ var Arrayy = React.createClass({
       { name: '# of', code: function (arr) { return arr.length; } }
     ];
     return (
-      <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <div className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
         <ContentEditable draggable="true" onDragStart={this.dragStart.bind(this, '')} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
         <span className='tag__arrow' onClick={this.showStuff}/>
 
@@ -278,9 +278,9 @@ var Scalar = React.createClass({
     var showVal = this.state.isHovered || this.state.isActive;
     var classes = "scalar" + (this.state.isActive ? ' active': '');
     return (
-      <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <div className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onBlur={this.onBlur}>
         <ContentEditable draggable="true" onDragStart={this.dragStart} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
-        <ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
+        <ContentEditable onChange={this.onValueChange} isEditting={showVal} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
       </div>
     );
   }
@@ -298,6 +298,7 @@ var ContentEditable = React.createClass({
   },
 
   emitChange() {
+    if (!this.props.isEditting) return false;
     var text = (this.getDOMNode().innerText || '').trim();
     if (this.props.onChange) this.props.onChange(text);
   },
@@ -317,7 +318,7 @@ var ContentEditable = React.createClass({
                  onBlur={this.emitChange}
                  draggable={this.props.draggable}
                  onDragStart={this.props.onDragStart}
-                 contentEditable
+                 contentEditable={this.props.isEditting}
                  dangerouslySetInnerHTML={{__html: this.props.text}}></span>;
   }
 
