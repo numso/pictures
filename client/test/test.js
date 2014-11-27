@@ -1,3 +1,5 @@
+require('./test.css');
+
 var $ = document.getElementById.bind(document);
 
 var obj = {
