@@ -44,9 +44,17 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(1);
+	__webpack_require__(3);
 
-	var $ = document.getElementById.bind(document);
+	__webpack_require__(1);
+	__webpack_require__(2);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(5);
 
 	var obj = {
 	  tag: 'yayahoo',
@@ -128,12 +136,11 @@
 
 
 
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
 
-
-
-
-
-
+	var $ = __webpack_require__(5);
 
 	var originalX;
 	var originalNum = 5;
@@ -168,21 +175,21 @@
 
 
 /***/ },
-/* 1 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(2);
+	var content = __webpack_require__(4);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(3)(content, {});
+	var update = __webpack_require__(6)(content, {});
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
-		module.hot.accept("!!/home/ubuntu/pictures/node_modules/css-loader/index.js!/home/ubuntu/pictures/client/test/test.css", function() {
-			var newContent = require("!!/home/ubuntu/pictures/node_modules/css-loader/index.js!/home/ubuntu/pictures/client/test/test.css");
+		module.hot.accept("!!/home/ubuntu/pictures/node_modules/css-loader/index.js!/home/ubuntu/pictures/client/test/style.css", function() {
+			var newContent = require("!!/home/ubuntu/pictures/node_modules/css-loader/index.js!/home/ubuntu/pictures/client/test/style.css");
 			if(typeof newContent === 'string') newContent = [module.id, newContent, ''];
 			update(newContent);
 		});
@@ -191,14 +198,22 @@
 	}
 
 /***/ },
-/* 2 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(6)();
+	exports = module.exports = __webpack_require__(10)();
 	exports.push([module.id, "* {\n  font-family: sans-serif;\n}\n\n.tag {\n  background-color: #abbbd9;\n  border-radius: 15px;\n  color: white;\n  cursor: pointer;\n  padding: 2px 10px;\n  margin: 2px 0;\n  margin-right: 10px;\n  font-size: 12px;\n  letter-spacing: 2px;\n  display: inline-block;\n  min-width: 20px;\n  min-height: 12px;\n}\n", ""]);
 
 /***/ },
-/* 3 */
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = document.getElementById.bind(document);
+	module.exports = $;
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -394,9 +409,10 @@
 
 
 /***/ },
-/* 4 */,
-/* 5 */,
-/* 6 */
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function() {
