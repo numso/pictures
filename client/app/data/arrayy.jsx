@@ -1,5 +1,7 @@
 var React = require('react');
 
+var evaluator = require('./evaluator');
+
 var ContentEditable = require('./content-editable');
 
 function getArr(item) {

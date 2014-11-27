@@ -30,7 +30,8 @@ var App = React.createClass({
   addNew() {
     store.addItem();
     this.setState({
-      numPictures: store.getLength()
+      numPictures: store.getLength(),
+      curPicture: store.getLength() - 1
     });
   },
 
