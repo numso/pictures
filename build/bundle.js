@@ -385,6 +385,7 @@
 	    return (React.createElement("div", {
 	      className: classes,
 	      onMouseEnter: this.onMouseEnter,
+	      onDragEnter: this.onMouseEnter,
 	      onMouseLeave: this.onMouseLeave,
 	      onFocus: this.onFocus,
 	      onBlur: this.onBlur
@@ -475,6 +476,7 @@
 	    return (React.createElement("div", {
 	      className: classes,
 	      onMouseEnter: this.onMouseEnter,
+	      onDragEnter: this.onMouseEnter,
 	      onMouseLeave: this.onMouseLeave,
 	      onFocus: this.onFocus,
 	      onBlur: this.onBlur
@@ -487,7 +489,7 @@
 	      className: "tag"
 	    }), React.createElement(ContentEditable, {
 	      onChange: this.onValueChange,
-	      isEditting: this.state.isActive,
+	      isEditting: showVal,
 	      text: showVal ? this.props.item.value : this.props.item.evaluated
 	    })));
 	  }
@@ -507,6 +509,7 @@
 	  },
 
 	  emitChange: function () {
+	    if (!this.props.isEditting) return false;
 	    var text = (this.getDOMNode().innerText || "").trim();
 	    if (this.props.onChange) this.props.onChange(text);
 	  },
@@ -528,7 +531,7 @@
 	      onBlur: this.emitChange,
 	      draggable: this.props.draggable,
 	      onDragStart: this.props.onDragStart,
-	      contentEditable: true,
+	      contentEditable: this.props.isEditting,
 	      dangerouslySetInnerHTML: { __html: this.props.text }
 	    });
 	  }
