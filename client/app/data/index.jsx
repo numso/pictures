@@ -4,6 +4,8 @@ var _ = require('lodash');
 var Scalar = require('./scalar');
 var Arrayy = require('./arrayy');
 
+var store = require('../pictures-store');
+
 var evaluator = require('./evaluator');
 
 function getArr(item) {
@@ -11,43 +13,53 @@ function getArr(item) {
   return [];
 }
 
-var GLOBALS = {
-  arrays: 1,
-  scalars: 1
-};
-function getID(type) {
-  return type[0] + '_1_' + GLOBALS[type]++;
-}
-
-function giveInitialIDs(state) {
-  _.each(state.scalars, (item) => { item.id = getID('scalars'); });
-  _.each(state.arrays, (item) => { item.id = getID('arrays'); });
+function giveIDs(state) {
+  _.each(state.scalars, (item) => {
+    if (item.id) return;
+    item.id = 's_' + state.scalars_id++;
+  });
+  _.each(state.arrays, (item) => {
+    if (item.id) return;
+    item.id = 'a_' + state.arrays_id++;
+  });
 }
 
 var Data = React.createClass({
 
   getInitialState() {
-    // var state = {
-    //   scalars: [{ label: 'parameter', value: '1' }],
-    //   arrays: [{ label: 'item', value: '[1,2,3,4,5]' }]
-    // };
     var state = {
-      "scalars": [
-        { label: 'panels', value: '600', },
-        { label: 'kW / panel', value: '0.2', },
-        { label: 'power in kW', value: 's_1_1 * s_1_2', },
-        // { label: 'max in array 1', value: 'ar_1_1_max' }
-      ],
-      'arrays': [
-        { label: 'sun hours', value: '[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]', },
-        { label: 'energy in kWh', value: 's_1_3 * a_1_1', },
-        { label: 'energy in MWh', value: 'a_1_2 / 1000' },
-        // { label: 'foo', value: 'a_1_1 / ar_1_1_max' }
-      ]
+      scalars: [],
+      arrays: [],
+      scalars_id: 1,
+      arrays_id: 1
     };
-    giveInitialIDs(state);
-    this.evaluate(state);
     return state;
+  },
+
+  getDefaultProps: function() {
+    return {
+      pictureID: 0
+    };
+  },
+
+  loadPicture(props=this.props) {
+    var picture = store.getData(props.pictureID);
+    giveIDs(picture);
+    this.evaluate(picture);
+    this.setState(picture);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.loadPicture(nextProps);
+  },
+
+  componentDidMount() {
+    store.watch(this.picWillUpdate);
+    this.loadPicture();
+  },
+
+  picWillUpdate() {
+    console.log('PICTURE IS TRYING TO UPDATE');
   },
 
   evaluate(state=this.state) {
@@ -68,8 +80,8 @@ var Data = React.createClass({
   },
 
   createNew(type) {
-    var value = { id: getID(type) };
-    this.state[type].push(value);
+    this.state[type].push({ label: 'item', value: 0 });
+    giveIDs(this.state);
     this.setState({ [type]: this.state[type] });
   },
 

@@ -73,7 +73,7 @@ exports.injected = function (ctx, data, max) {
 function evaluateArray(data, expr, max) {
   var arr = [];
   for (var i = 0; i < max; i++) {
-    var newExpr = expr.replace(/(a_\d*_\d*)/g, '$&[' + i + ']')
+    var newExpr = expr.replace(/(a_\d*)/g, '$&[' + i + ']')
     arr[i] = eval(PREAMBLE + 'with(data){' + newExpr + '}')
   }
   return arr;

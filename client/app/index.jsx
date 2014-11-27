@@ -17,7 +17,7 @@ var App = React.createClass({
           </div>
         </div>
 
-        <div style={{ width: 800, display: 'inline-block', verticalAlign: 'top' }}>
+        <div style={{ width: 400, display: 'inline-block', verticalAlign: 'top' }}>
 
           <div>
             <div className="header">Instructions (this is all WIP)</div>
@@ -36,7 +36,7 @@ var App = React.createClass({
             </div>
           </div>
 
-          <Data/>
+          <Data pictureID={0}/>
 
           <div>
             <div className="header">Steps</div>
