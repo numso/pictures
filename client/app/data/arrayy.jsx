@@ -73,8 +73,8 @@ var Arrayy = React.createClass({
       { name: '# of', code: function (arr) { return arr.length; } }
     ];
     return (
-      <div className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseUp={this.onFocus} onBlur={this.onBlur}>
-        <ContentEditable draggable="true" onDragStart={this.dragStart.bind(this, '')} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
+      <tr className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseUp={this.onFocus} onBlur={this.onBlur}>
+        <td><ContentEditable draggable="true" onDragStart={this.dragStart.bind(this, '')} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
         <span className='tag__arrow' onClick={this.showStuff}/>
 
         {this.state.showBox &&
@@ -89,16 +89,18 @@ var Arrayy = React.createClass({
           })}
         </div>
         }
-
+        </td>
+        <td>
         {showVal ?
           <ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={this.props.item.value}/> :
-          <span className="foobar" >
+          <span>
             {getArr(this.props.item.evaluated).map((item) => {
               return <div className="data__indice">{item}</div>
             })}
           </span>
         }
-      </div>
+        </td>
+      </tr>
     );
   }
 

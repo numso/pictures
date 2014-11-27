@@ -106,17 +106,15 @@ var Data = React.createClass({
       <div className="data">
         <div className="header">Data</div>
         <div className="container --data">
-          <div id="scalars">
+          <table>
+          <tbody>
             {s}
-            <span onClick={this.createNew.bind(this, 'scalars')} className="tag --create">+</span>
-          </div>
-
-
-          <div style={{marginLeft: 140}}>{indices.map((i) => { return <div className="data__indice --header">{i}</div>; })}</div>
-          <div id="arrays">
+            <tr><td><span onClick={this.createNew.bind(this, 'scalars')} className="tag --create">+</span></td></tr>
+            <tr><td></td><td><div>{indices.map((i) => { return <div className="data__indice --header">{i}</div>; })}</div></td></tr>
             {a}
-            <span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span>
-          </div>
+            <tr><td><span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span></td></tr>
+            </tbody>
+          </table>
         </div>
         <div className="header">Results</div>
         <div className="container --data">

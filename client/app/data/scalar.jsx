@@ -49,10 +49,10 @@ var Scalar = React.createClass({
     var showVal = this.state.isHovered || this.state.isActive;
     var classes = "scalar" + (this.state.isActive ? ' active': '');
     return (
-      <div className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onFocus} onMouseLeave={this.onMouseLeave} onMouseUp={this.onFocus} onBlur={this.onBlur}>
-        <ContentEditable draggable="true" onDragStart={this.dragStart} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/>
-        <ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={showVal ? this.props.item.value : this.props.item.evaluated}/>
-      </div>
+      <tr className={classes} onMouseEnter={this.onMouseEnter} onDragEnter={this.onFocus} onMouseLeave={this.onMouseLeave} onMouseUp={this.onFocus} onBlur={this.onBlur}>
+        <td><ContentEditable draggable="true" onDragStart={this.dragStart} onChange={this.onTitleChange} isEditting={this.state.isActive} text={this.props.item.label} className="tag"/></td>
+        <td><ContentEditable onChange={this.onValueChange} isEditting={this.state.isActive} text={showVal ? this.props.item.value : this.props.item.evaluated}/></td>
+      </tr>
     );
   }
 
