@@ -9,8 +9,8 @@ rm *.html
 mv release/ build/
 mv build/*.html ./
 
-# git add -A .
-# git commit -m "push release"
-# git push origin gh-pages
+git add -A .
+git commit -m "push release"
+git push origin gh-pages
 
-# git checkout master
+git checkout master

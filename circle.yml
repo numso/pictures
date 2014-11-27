@@ -15,13 +15,12 @@ deployment:
     branch: master
     commands:
       - cp -r client/build/ release/
-      - cp client/index.html release/
+      - cp client/*.html release/
       - git checkout gh-pages
-      - git status
       - rm -rf build/
-      - rm index.html
+      - rm *.html
       - mv release/ build/
-      - mv build/index.html index.html
+      - mv build/*.html ./
       - git status
       - git add -A .
       - git config --global user.email "circleci@dallinosmun.com"
