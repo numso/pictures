@@ -82,6 +82,7 @@ var Data = React.createClass({
   createNew(type) {
     this.state[type].push({ label: 'item', value: 0 });
     giveIDs(this.state);
+    this.evaluate(this.state);
     this.setState({ [type]: this.state[type] });
   },
 
