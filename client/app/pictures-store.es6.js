@@ -21,6 +21,10 @@ var store = [
 
 module.exports = {
 
+  getLength() {
+    return store.length;
+  },
+
   getData(i) {
     return store[i];
   },
