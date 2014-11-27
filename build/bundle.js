@@ -116,17 +116,15 @@
 	      style: { padding: 5 }
 	    }, "You must reference other pieces of data by their ID."), React.createElement("p", {
 	      style: { padding: 5 }
-	    }, "Format: z_#1_#2"), React.createElement("p", {
+	    }, "Format: z_#"), React.createElement("p", {
 	      style: { padding: 5, paddingLeft: 40 }
 	    }, "z = a or s (array,scalar)"), React.createElement("p", {
 	      style: { padding: 5, paddingLeft: 40 }
-	    }, "#1 = image number (always 1)"), React.createElement("p", {
-	      style: { padding: 5, paddingLeft: 40 }
-	    }, "#2 = variable number (from 1 on)"), React.createElement("p", {
+	    }, "# = variable number (from 1 on)"), React.createElement("p", {
 	      style: { padding: 5 }
-	    }, "Examples: s_1_3 or a_1_1"), React.createElement("p", {
+	    }, "Examples: s_3 or a_1"), React.createElement("p", {
 	      style: { padding: 5 }
-	    }, "Can also use: ar_1_1_max, ar_1_1_min, ar_1_1_avg, ar_1_1_len, ar_1_1_sum")))), React.createElement(Data, {
+	    }, "Can also use: ar_1_max, ar_1_min, ar_1_avg, ar_1_len, ar_1_sum")))), React.createElement(Data, {
 	      pictureID: this.state.curPicture
 	    }), React.createElement("div", null, React.createElement("div", {
 	      className: "header"
