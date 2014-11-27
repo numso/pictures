@@ -185,14 +185,8 @@
 	    //   arrays: [{ label: 'item', value: '[1,2,3,4,5]' }]
 	    // };
 	    var state = {
-	      scalars: [{ label: "panels", value: "600" },
-	      // { label: 'kW / panel', value: '0.2', },
-	      // { label: 'power in kW', value: 's_1_1 * s_1_2', },
-	      { label: "max in array 1", value: "ar_1_1_max" }],
-	      arrays: [{ label: "sun hours", value: "[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]" },
-	      // { label: 'energy in kWh', value: 's_1_3 * a_1_1', },
-	      // { label: 'energy in MWh', value: 'a_1_2 / 1000' },
-	      { label: "foo", value: "a_1_1 / ar_1_1_max" }]
+	      scalars: [{ label: "panels", value: "600" }, { label: "kW / panel", value: "0.2" }, { label: "power in kW", value: "s_1_1 * s_1_2" }],
+	      arrays: [{ label: "sun hours", value: "[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]" }, { label: "energy in kWh", value: "s_1_3 * a_1_1" }, { label: "energy in MWh", value: "a_1_2 / 1000" }]
 	    };
 	    giveInitialIDs(state);
 	    this.evaluate(state);
@@ -387,7 +381,7 @@
 	      onMouseEnter: this.onMouseEnter,
 	      onDragEnter: this.onMouseEnter,
 	      onMouseLeave: this.onMouseLeave,
-	      onFocus: this.onFocus,
+	      onMouseUp: this.onFocus,
 	      onBlur: this.onBlur
 	    }, React.createElement(ContentEditable, {
 	      draggable: "true",
@@ -476,9 +470,9 @@
 	    return (React.createElement("div", {
 	      className: classes,
 	      onMouseEnter: this.onMouseEnter,
-	      onDragEnter: this.onMouseEnter,
+	      onDragEnter: this.onFocus,
 	      onMouseLeave: this.onMouseLeave,
-	      onFocus: this.onFocus,
+	      onMouseUp: this.onFocus,
 	      onBlur: this.onBlur
 	    }, React.createElement(ContentEditable, {
 	      draggable: "true",
@@ -489,7 +483,7 @@
 	      className: "tag"
 	    }), React.createElement(ContentEditable, {
 	      onChange: this.onValueChange,
-	      isEditting: showVal,
+	      isEditting: this.state.isActive,
 	      text: showVal ? this.props.item.value : this.props.item.evaluated
 	    })));
 	  }
