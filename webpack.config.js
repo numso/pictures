@@ -3,7 +3,7 @@ var path = require('path');
 module.exports = {
   entry: {
     bundle: './client/app/index.jsx',
-    test: './client/test/test.js'
+    test: './client/test/index.js'
   },
 
   output: {
@@ -12,7 +12,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['', '.js', '.es6.js', '.es6.nostrict.js', '.json', '.jsx', 'index.jsx', 'index.js'] //, '.scss']
+    extensions: ['', '.js', '.es6.js', '.es6.nostrict.js', '.json', '.jsx', 'index.jsx', 'index.js', '.css'] //, '.scss']
   },
 
   module: {
