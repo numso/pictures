@@ -101,30 +101,7 @@
 	      className: "newpicture__content"
 	    }, "+"))), React.createElement("div", {
 	      style: { width: 400, display: "inline-block", verticalAlign: "top" }
-	    }, React.createElement("div", null, React.createElement("div", {
-	      className: "header"
-	    }, "Instructions (this is all WIP)"), React.createElement("div", {
-	      className: "container --data",
-	      style: { minHeight: 10 }
-	    }, React.createElement("div", {
-	      style: { padding: 10 }
-	    }, React.createElement("p", {
-	      style: { padding: 5 }
-	    }, "The equations below accept valid Javascript."), React.createElement("p", {
-	      style: { padding: 5 }
-	    }, "Arrays and Scalars are in the same context."), React.createElement("p", {
-	      style: { padding: 5 }
-	    }, "You must reference other pieces of data by their ID."), React.createElement("p", {
-	      style: { padding: 5 }
-	    }, "Format: z_#"), React.createElement("p", {
-	      style: { padding: 5, paddingLeft: 40 }
-	    }, "z = a or s (array,scalar)"), React.createElement("p", {
-	      style: { padding: 5, paddingLeft: 40 }
-	    }, "# = variable number (from 1 on)"), React.createElement("p", {
-	      style: { padding: 5 }
-	    }, "Examples: s_3 or a_1"), React.createElement("p", {
-	      style: { padding: 5 }
-	    }, "Can also use: ar_1_max, ar_1_min, ar_1_avg, ar_1_len, ar_1_sum")))), React.createElement(Data, {
+	    }, React.createElement(Data, {
 	      pictureID: this.state.curPicture
 	    }), React.createElement("div", null, React.createElement("div", {
 	      className: "header"
