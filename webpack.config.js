@@ -12,7 +12,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['', '.js', '.es6.js', '.es6.nostrict.js', '.json', '.jsx', 'index.jsx', 'index.js', '.css'] //, '.scss']
+    extensions: ['', '.js', '.es6.js', '.es6.nostrict.js', '.json', '.jsx', 'index.jsx', 'index.js', '.css', '.styl'] //, '.scss']
   },
 
   module: {
@@ -22,7 +22,8 @@ module.exports = {
       { test: /\.jsx$/,               loader: '6to5'                       },
       // Can't use this loader untill libsass supports Sass 3.4
       // { test: /\.scss$/,              loader: 'style!css!sass?outputStyle=expand&includePaths[]=' + path.resolve(__dirname, './node_modules') },
-      { test: /\.css$/,              loader: 'style!css'                  },
+      { test: /\.css $/,              loader: 'style!css'                  },
+      { test: /\.styl$/,              loader: 'style!css!stylus'           },
       { test: /\.(png|jpg|gif)$/,     loader: 'url?limit=8192'             }
     ]
   }
