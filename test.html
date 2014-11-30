@@ -4,9 +4,8 @@
   </head>
   <body>
 
-    <div>ContentEditable with Nested Tags</div>
-
-    <input type="text">
+    <h1>Tagging</h1>
+    <hr/>
 
     <div id="demo">
       <h2>js obj</h2>
@@ -22,19 +21,68 @@
       <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{dallin}')" class="tag">dallin</div>
       <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{tarah}')" class="tag">tarah</div>
       <div draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{show}')" class="tag">show</div>
+      <div ondragover="return false" ondrop="console.log(event.dataTransfer.getData('text/plain'))">yoo hoo</div>
     </div>
 
-    <div ondragover="return false" ondrop="console.log(event.dataTransfer.getData('text/plain'))">yoo hoo</div>
-
+    <h1 style="padding-top: 30px">Number Dragging</h1>
+    <hr/>
 
     <div id="demo2">
-      <h2>Number Dragging Test</h2>
-
+      <h2>Drag the number below</h2>
       <div id="num-dragger" draggable="true">5</div>
+      <div id="blank"></div>
     </div>
 
+    <h1 style="padding-top: 30px">Flexbox</h1>
+    <hr/>
 
-    <div id="blank"></div>
+    <div id="demo3">
+      <div class="container">
+        <div class="row">
+          <div class="tag">Tag</div>
+          <div class="expr">Value</div>
+        </div>
+        <div class="row">
+          <div class="tag">foo</div>
+          <div class="expr">4 + 7</div>
+        </div>
+        <div class="row">
+          <div class="tag">this is a really long tag</div>
+          <div class="expr">foo / 100</div>
+        </div>
+        <div class="row">
+          <div class="tag">bar</div>
+          <div class="expr edittable">
+            <input value="foo / 100"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="tag">baz</div>
+          <div class="expr">This is the story all about how my life got flipped turned upside down and I don't know the rest of the lyrics, I just need this to be long enough to wrap.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="demo4" style="padding-top: 40px">
+      <div class="container">
+        <div class="tags">
+          <div><div class="tag">Tag</div></div>
+          <div><div class="tag">foo</div></div>
+          <div><div class="tag">this is a really long tag</div></div>
+          <div><div class="tag">bar</div></div>
+          <div class="tag">baz</div>
+        </div>
+        <div class="expressions">
+          <div class="expr">Value</div>
+          <div class="expr">4 + 7</div>
+          <div class="expr">foo / 100</div>
+          <div class="expr edittable">
+            <input value="foo / 100"/>
+          </div>
+          <div class="expr">This is the story all about how my life got flipped turned upside down and I don't know the rest of the lyrics, I just need this to be long enough to wrap.</div>
+        </div>
+      </div>
+    </div>
 
     <script src="build/test.js"></script>
   </body>

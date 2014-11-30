@@ -46,7 +46,7 @@
 
 	"use strict";
 
-	var React = window.React = __webpack_require__(11);
+	var React = window.React = __webpack_require__(10);
 	var Data = __webpack_require__(9);
 	var CheatSheet = __webpack_require__(7);
 
@@ -172,7 +172,7 @@
 
 	"use strict";
 
-	var React = __webpack_require__(12);
+	var React = __webpack_require__(11);
 
 	var CheatSheet = React.createClass({
 	  displayName: "CheatSheet",
@@ -275,15 +275,15 @@
 
 	"use strict";
 
-	var React = __webpack_require__(12);
+	var React = __webpack_require__(11);
 	var _ = __webpack_require__(19);
 
-	var Scalar = __webpack_require__(13);
-	var Arrayy = __webpack_require__(14);
+	var Scalar = __webpack_require__(12);
+	var Arrayy = __webpack_require__(13);
 
 	var store = __webpack_require__(8);
 
-	var evaluator = __webpack_require__(15);
+	var evaluator = __webpack_require__(14);
 
 	function getArr(item) {
 	  if (item && _.isArray(item)) return item;
@@ -441,27 +441,26 @@
 	module.exports = Data;
 
 /***/ },
-/* 10 */,
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(16);
 
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(17);
 
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var React = __webpack_require__(12);
+	var React = __webpack_require__(11);
 
 	var ContentEditable = __webpack_require__(18);
 
@@ -539,14 +538,14 @@
 	module.exports = Scalar;
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var React = __webpack_require__(12);
+	var React = __webpack_require__(11);
 
-	var evaluator = __webpack_require__(15);
+	var evaluator = __webpack_require__(14);
 
 	var ContentEditable = __webpack_require__(18);
 
@@ -672,7 +671,7 @@
 	module.exports = Arrayy;
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -829,6 +828,7 @@
 	};
 
 /***/ },
+/* 15 */,
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1082,7 +1082,7 @@
 
 	"use strict";
 
-	var React = __webpack_require__(12);
+	var React = __webpack_require__(11);
 
 	var ContentEditable = React.createClass({
 	  displayName: "ContentEditable",

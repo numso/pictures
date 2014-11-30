@@ -188,8 +188,8 @@
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
-		module.hot.accept("!!/home/ubuntu/pictures/node_modules/css-loader/index.js!/home/ubuntu/pictures/client/test/style.css", function() {
-			var newContent = require("!!/home/ubuntu/pictures/node_modules/css-loader/index.js!/home/ubuntu/pictures/client/test/style.css");
+		module.hot.accept("!!/home/ubuntu/pictures/node_modules/css-loader/index.js!/home/ubuntu/pictures/node_modules/stylus-loader/index.js!/home/ubuntu/pictures/client/test/style.styl", function() {
+			var newContent = require("!!/home/ubuntu/pictures/node_modules/css-loader/index.js!/home/ubuntu/pictures/node_modules/stylus-loader/index.js!/home/ubuntu/pictures/client/test/style.styl");
 			if(typeof newContent === 'string') newContent = [module.id, newContent, ''];
 			update(newContent);
 		});
@@ -201,8 +201,8 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(10)();
-	exports.push([module.id, "* {\n  font-family: sans-serif;\n}\n\n.tag {\n  background-color: #abbbd9;\n  border-radius: 15px;\n  color: white;\n  cursor: pointer;\n  padding: 2px 10px;\n  margin: 2px 0;\n  margin-right: 10px;\n  font-size: 12px;\n  letter-spacing: 2px;\n  display: inline-block;\n  min-width: 20px;\n  min-height: 12px;\n}\n", ""]);
+	exports = module.exports = __webpack_require__(15)();
+	exports.push([module.id, "* {\n  font-family: sans-serif;\n}\n.tag {\n  background-color: #abbbd9;\n  border-radius: 15px;\n  color: #fff;\n  cursor: pointer;\n  padding: 2px 10px;\n  margin: 2px 0;\n  margin-right: 10px;\n  font-size: 12px;\n  letter-spacing: 2px;\n  display: inline-block;\n  min-width: 20px;\n  min-height: 12px;\n}\n#demo3 {\n  width: 700px;\n}\n#demo3 .container {\n  background: #eee;\n}\n#demo3 .container .row {\n  display: flex;\n}\n#demo3 .container .row .expr {\n  flex: 1;\n  white-space: nowrap;\n  overflow: auto;\n}\n#demo3 .container .row .expr input {\n  width: 100%;\n}\n#demo3 .container .row .expr:hover {\n  background-color: #ccc;\n  cursor: pointer;\n}\n#demo4 {\n  width: 700px;\n}\n#demo4 .container {\n  background: #eee;\n  display: flex;\n}\n#demo4 .container .expressions {\n  flex: 1;\n  overflow: auto;\n}\n#demo4 .container .expr {\n  width: 100%;\n  height: 22px;\n  white-space: nowrap;\n}\n#demo4 .container .expr input {\n  width: 100%;\n}\n#demo4 .container .expr:hover {\n  background-color: #ccc;\n  cursor: pointer;\n}\n", ""]);
 
 /***/ },
 /* 5 */
@@ -412,7 +412,12 @@
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function() {
