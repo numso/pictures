@@ -280,10 +280,11 @@
 
 	var Scalar = __webpack_require__(12);
 	var Arrayy = __webpack_require__(13);
+	var ContentEditable = __webpack_require__(14);
 
 	var store = __webpack_require__(8);
 
-	var evaluator = __webpack_require__(14);
+	var evaluator = __webpack_require__(15);
 
 	function getArr(item) {
 	  if (item && _.isArray(item)) return item;
@@ -413,11 +414,57 @@
 	    }, 0);
 	    var indices = _.range(1, max + 1);
 
+	    // --- START FLEXBOX STUFF -------------------------------------------------
+
+	    var tags = [];
+	    _.each(this.state.scalars, function (item, i) {
+	      tags.push(React.createElement("div", null, React.createElement(ContentEditable, {
+	        draggable: "true",
+	        text: item.label,
+	        className: "tag"
+	      })));
+	    });
+	    tags.push(React.createElement("div", null, React.createElement("span", {
+	      onClick: this.createNew.bind(this, "scalars"),
+	      className: "tag --create"
+	    }, "+")));
+	    tags.push(React.createElement("div", null, React.createElement("span", {
+	      className: "tag --create"
+	    }, "column")));
+	    _.each(this.state.arrays, function (item, i) {
+	      tags.push(React.createElement("div", null, React.createElement(ContentEditable, {
+	        draggable: "true",
+	        text: item.label,
+	        className: "tag"
+	      })));
+	    });
+	    tags.push(React.createElement("span", {
+	      onClick: this.createNew.bind(this, "arrays"),
+	      className: "tag --create"
+	    }, "+"));
+
+	    var scalarValues = _.map(this.state.scalars, function (item) {
+	      return React.createElement("div", {
+	        style: { minHeight: 22 }
+	      }, React.createElement(ContentEditable, {
+	        text: item.evaluated
+	      }));
+	    });
+	    var arrayValues = _.map(this.state.arrays, function (item) {
+	      return React.createElement("div", null, getArr(item.evaluated).map(function (item) {
+	        return React.createElement("div", {
+	          className: "data__indice"
+	        }, item);
+	      }));
+	    });
+
+	    // --- END FLEXBOX STUFF -------------------------------------------------
+
 	    return (React.createElement("div", {
 	      className: "data"
 	    }, React.createElement("div", {
 	      className: "header"
-	    }, "Data"), React.createElement("div", {
+	    }, "Data (table)"), React.createElement("div", {
 	      className: "container --data"
 	    }, React.createElement("table", null, React.createElement("tbody", null, s, React.createElement("tr", null, React.createElement("td", null, React.createElement("span", {
 	      onClick: this.createNew.bind(this, "scalars"),
@@ -430,6 +477,20 @@
 	      onClick: this.createNew.bind(this, "arrays"),
 	      className: "tag --create"
 	    }, "+")))))), React.createElement("div", {
+	      className: "header"
+	    }, "Data (flexbox)"), React.createElement("div", {
+	      className: "container --data --flex"
+	    }, React.createElement("div", null, tags), React.createElement("div", {
+	      className: "test-1"
+	    }, scalarValues, React.createElement("div", {
+	      style: { minHeight: 22 }
+	    }), React.createElement("div", {
+	      className: "arr-section"
+	    }, React.createElement("div", null, indices.map(function (i) {
+	      return React.createElement("div", {
+	        className: "data__indice --header"
+	      }, i);
+	    })), arrayValues))), React.createElement("div", {
 	      className: "header"
 	    }, "Results"), React.createElement("div", {
 	      className: "container --data"
@@ -444,14 +505,14 @@
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(16);
+	module.exports = __webpack_require__(17);
 
 
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(17);
+	module.exports = __webpack_require__(18);
 
 
 /***/ },
@@ -462,7 +523,7 @@
 
 	var React = __webpack_require__(11);
 
-	var ContentEditable = __webpack_require__(18);
+	var ContentEditable = __webpack_require__(14);
 
 	var Scalar = React.createClass({
 	  displayName: "Scalar",
@@ -545,9 +606,9 @@
 
 	var React = __webpack_require__(11);
 
-	var evaluator = __webpack_require__(14);
+	var evaluator = __webpack_require__(15);
 
-	var ContentEditable = __webpack_require__(18);
+	var ContentEditable = __webpack_require__(14);
 
 	function getArr(item) {
 	  if (item && _.isArray(item)) return item;
@@ -672,6 +733,54 @@
 
 /***/ },
 /* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(11);
+
+	var ContentEditable = React.createClass({
+	  displayName: "ContentEditable",
+
+
+	  shouldComponentUpdate: function (nextProps) {
+	    return !(nextProps.isEditting && this.props.isEditting);
+	  },
+
+	  emitChange: function () {
+	    if (!this.props.isEditting) return false;
+	    var text = (this.getDOMNode().innerText || "").trim();
+	    if (this.props.onChange) this.props.onChange(text);
+	  },
+
+	  onKeyDown: function (e) {
+	    var _this = this;
+	    if (e.keyCode === 13) {
+	      setTimeout(function () {
+	        _this.getDOMNode().blur();
+	      });
+	    }
+	  },
+
+	  render: function () {
+	    return React.createElement("span", {
+	      className: this.props.className,
+	      onKeyDown: this.onKeyDown,
+	      onInput: this.emitChange,
+	      onBlur: this.emitChange,
+	      draggable: this.props.draggable,
+	      onDragStart: this.props.onDragStart,
+	      contentEditable: this.props.isEditting,
+	      dangerouslySetInnerHTML: { __html: this.props.text }
+	    });
+	  }
+
+	});
+
+	module.exports = ContentEditable;
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -828,8 +937,8 @@
 	};
 
 /***/ },
-/* 15 */,
-/* 16 */
+/* 16 */,
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -853,7 +962,7 @@
 	"use strict";
 
 	var LinkedStateMixin = __webpack_require__(20);
-	var React = __webpack_require__(17);
+	var React = __webpack_require__(18);
 	var ReactComponentWithPureRenderMixin =
 	  __webpack_require__(21);
 	var ReactCSSTransitionGroup = __webpack_require__(22);
@@ -886,7 +995,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(54)))
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1075,54 +1184,6 @@
 	module.exports = React;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(54)))
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var React = __webpack_require__(11);
-
-	var ContentEditable = React.createClass({
-	  displayName: "ContentEditable",
-
-
-	  shouldComponentUpdate: function (nextProps) {
-	    return !(nextProps.isEditting && this.props.isEditting);
-	  },
-
-	  emitChange: function () {
-	    if (!this.props.isEditting) return false;
-	    var text = (this.getDOMNode().innerText || "").trim();
-	    if (this.props.onChange) this.props.onChange(text);
-	  },
-
-	  onKeyDown: function (e) {
-	    var _this = this;
-	    if (e.keyCode === 13) {
-	      setTimeout(function () {
-	        _this.getDOMNode().blur();
-	      });
-	    }
-	  },
-
-	  render: function () {
-	    return React.createElement("span", {
-	      className: this.props.className,
-	      onKeyDown: this.onKeyDown,
-	      onInput: this.emitChange,
-	      onBlur: this.emitChange,
-	      draggable: this.props.draggable,
-	      onDragStart: this.props.onDragStart,
-	      contentEditable: this.props.isEditting,
-	      dangerouslySetInnerHTML: { __html: this.props.text }
-	    });
-	  }
-
-	});
-
-	module.exports = ContentEditable;
 
 /***/ },
 /* 19 */
@@ -8404,7 +8465,7 @@
 
 	"use strict";
 
-	var React = __webpack_require__(17);
+	var React = __webpack_require__(18);
 
 	var assign = __webpack_require__(50);
 
@@ -8474,7 +8535,7 @@
 
 	"use strict";
 
-	var React = __webpack_require__(17);
+	var React = __webpack_require__(18);
 	var ReactTransitionChildMapping = __webpack_require__(59);
 
 	var assign = __webpack_require__(50);
@@ -9503,7 +9564,7 @@
 	var EventConstants = __webpack_require__(71);
 	var EventPluginHub = __webpack_require__(72);
 	var EventPropagators = __webpack_require__(73);
-	var React = __webpack_require__(17);
+	var React = __webpack_require__(18);
 	var ReactElement = __webpack_require__(37);
 	var ReactBrowserEventEmitter = __webpack_require__(74);
 	var ReactMount = __webpack_require__(44);
@@ -16487,7 +16548,7 @@
 	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
 	 */
 
-	var React = __webpack_require__(17);
+	var React = __webpack_require__(18);
 
 	/**
 	 * @param {*} value current value of the link
@@ -16699,7 +16760,7 @@
 
 	"use strict";
 
-	var React = __webpack_require__(17);
+	var React = __webpack_require__(18);
 
 	var CSSCore = __webpack_require__(124);
 	var ReactTransitionEvents = __webpack_require__(125);

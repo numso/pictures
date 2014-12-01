@@ -29,6 +29,8 @@
     box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
   .container.\--data {
     min-height: 300px; }
+  .container.\--flex {
+    display: flex; }
 
 .tag {
   background-color: #abbbd9;
@@ -79,6 +81,13 @@
   background-color: white;
   z-index: 1; }
 
+.test-1 {
+  flex: 1;
+  white-space: nowrap; }
+
+.test-1 .arr-section {
+  overflow: auto; }
+
 .picture {
   margin: 20px;
   display: inline-block;
@@ -122,6 +131,7 @@
   display: inline-block;
   font-size: 12px;
   width: 40px;
+  height: 22px;
   border-left: 1px solid;
   text-align: center; }
   .data__indice.\--header {
