@@ -3,7 +3,15 @@ var _ = require('lodash');
 
 var Scalar = require('./scalar');
 var Arrayy = require('./arrayy');
-var ContentEditable = require('./content-editable');
+
+// For Flexbox version
+
+var Tag = require('./tag');
+var CreateTag = require('./create-tag');
+var ScalarVal = require('./scalar-val');
+var ArrayVal = require('./array-val');
+
+// End Flexbox
 
 var store = require('../pictures-store');
 
@@ -80,6 +88,14 @@ var Data = React.createClass({
     });
   },
 
+  createScalar() {
+    this.createNew('scalars');
+  },
+
+  createArray() {
+    this.createNew('arrays');
+  },
+
   createNew(type) {
     this.state[type].push({ label: 'item', value: 0 });
     giveIDs(this.state);
@@ -119,25 +135,21 @@ var Data = React.createClass({
     // --- START FLEXBOX STUFF -------------------------------------------------
 
     var tags = [];
-    _.each(this.state.scalars, (item, i) => {
-      tags.push(<div><ContentEditable draggable="true" text={item.label} className="tag"/></div>);
+    _.each(this.state.scalars, (item) => {
+      tags.push(<Tag item={item}/>);
     });
-    tags.push(<div><span onClick={this.createNew.bind(this, 'scalars')} className="tag --create">+</span></div>);
-    tags.push(<div><span className="tag --create">column</span></div>);
-    _.each(this.state.arrays, (item, i) => {
-      tags.push(<div><ContentEditable draggable="true" text={item.label} className="tag"/></div>);
+    tags.push(<CreateTag onClick={this.createScalar}>+</CreateTag>);
+    tags.push(<CreateTag>column</CreateTag>);
+    _.each(this.state.arrays, (item) => {
+      tags.push(<Tag item={item}/>);
     });
-    tags.push(<span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span>);
+    tags.push(<CreateTag onClick={this.createArray}>+</CreateTag>);
 
     var scalarValues = _.map(this.state.scalars, (item) => {
-      return <div style={{minHeight: 22}}><ContentEditable text={item.evaluated}/></div>;
+      return <ScalarVal item={item}/>
     });
     var arrayValues = _.map(this.state.arrays, (item) => {
-      return <div>
-            {getArr(item.evaluated).map((item) => {
-              return <div className="data__indice">{item}</div>
-            })}
-          </div>;
+      return <ArrayVal item={item}/>;
     });
 
     // --- END FLEXBOX STUFF -------------------------------------------------
