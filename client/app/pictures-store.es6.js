@@ -14,7 +14,8 @@ var store = [
       { label: 'energy in MWh', value: 'a_2 / 1000' }
     ],
     scalars_id: 1,
-    arrays_id: 1
+    arrays_id: 1,
+    title: 'Solar Data'
   }
 
 ];
@@ -56,6 +57,9 @@ function newItem() {
     scalars: [{ label: 'parameter', value: '1' }],
     arrays: [{ label: 'item', value: '[1,2,3,4,5]' }],
     scalars_id: 1,
-    arrays_id: 1
+    arrays_id: 1,
+    title: 'untitled'
   };
 }
+
+store.push(newItem());

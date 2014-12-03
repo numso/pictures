@@ -16,7 +16,8 @@ var App = React.createClass({
   renderPictures() {
     var markup = [];
     for (var i = 0; i < this.state.numPictures; i++) {
-      markup.push(<Picture num={i} selected={this.state.curPicture === i} onClick={this.setPicture.bind(this, i)}/>);
+      var title = store.getData(i).title;
+      markup.push(<Picture num={i} title={title} selected={this.state.curPicture === i} onClick={this.setPicture.bind(this, i)}/>);
     }
     return markup;
   },
@@ -87,7 +88,10 @@ var Picture = React.createClass({
       '--selected': this.props.selected
     });
     return (
-      <div className={classes} onClick={this.props.onClick}/>
+      <div>
+        <div className={classes} onClick={this.props.onClick}/>
+        <div style={{ textAlign: 'center', marginBottom: 15 }}>{this.props.title}</div>
+      </div>
     );
   }
 
