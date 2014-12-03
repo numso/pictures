@@ -13,7 +13,7 @@ var ArrayVal = require('./array-val');
 
 // End Flexbox
 
-var store = require('../pictures-store');
+var store = require('../stores/pictures');
 
 var evaluator = require('./evaluator');
 
@@ -154,7 +154,7 @@ var Data = React.createClass({
 
     // --- END FLEXBOX STUFF -------------------------------------------------
 
-    var DEBUG = false;
+    var DEBUG = true;
 
     return (
       <div className="data">

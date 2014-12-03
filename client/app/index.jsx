@@ -5,10 +5,9 @@ var Data = require('./data');
 var Steps = require('./steps');
 var BigPicture = require('./big-picture');
 var Measurements = require('./measurements');
-
 var CheatSheet = require('./cheat-sheet');
 
-var store = require('./pictures-store');
+var store = require('./stores/pictures');
 
 var App = React.createClass({
 

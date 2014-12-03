@@ -1,7 +1,7 @@
 var React = require('react');
 var Picture = require('./picture');
 
-var store = require('../pictures-store');
+var store = require('../stores/pictures');
 
 var Pictures = React.createClass({
 

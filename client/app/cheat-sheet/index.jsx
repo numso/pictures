@@ -21,7 +21,7 @@ var CheatSheet = React.createClass({
       ],
       flow: [
         { label: 'loop', hotkey: 'l' },
-        { label: 'if',   hotkey: 'l' }
+        { label: 'if',   hotkey: 'i' }
       ],
       modifiers: [
         { label: 'guide', hotkey: 'g' },
