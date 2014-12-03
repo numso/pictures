@@ -48,15 +48,14 @@
 
 	var React = window.React = __webpack_require__(14);
 
-	var Pictures = __webpack_require__(8);
-	var Data = __webpack_require__(9);
-	var Steps = __webpack_require__(10);
-	var BigPicture = __webpack_require__(11);
-	var Measurements = __webpack_require__(12);
+	var Pictures = __webpack_require__(7);
+	var Data = __webpack_require__(8);
+	var Steps = __webpack_require__(9);
+	var BigPicture = __webpack_require__(10);
+	var Measurements = __webpack_require__(11);
+	var CheatSheet = __webpack_require__(12);
 
-	var CheatSheet = __webpack_require__(13);
-
-	var store = __webpack_require__(7);
+	var store = __webpack_require__(13);
 
 	var App = React.createClass({
 	  displayName: "App",
@@ -107,82 +106,10 @@
 
 	"use strict";
 
-	var watchers = [];
-
-	var cur = 0;
-
-	var store = [{
-	  scalars: [{ label: "panels", value: "600" }, { label: "kW / panel", value: "0.2" }, { label: "power in kW", value: "s_1 * s_2" }],
-	  arrays: [{ label: "sun hours", value: "[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]" }, { label: "energy in kWh", value: "s_3 * a_1" }, { label: "energy in MWh", value: "a_2 / 1000" }],
-	  scalars_id: 1,
-	  arrays_id: 1,
-	  title: "Solar Data"
-	}];
-
-	module.exports = {
-	  getLength: function () {
-	    return store.length;
-	  },
-
-	  getData: function (i) {
-	    return store[i];
-	  },
-
-	  setData: function (i, updated) {
-	    store[i] = updated;
-	    notify();
-	  },
-
-	  addItem: function () {
-	    store.push(newItem());
-	    cur = store.length - 1;
-	    notify();
-	  },
-
-	  watch: function (cb) {
-	    watchers.push(cb);
-	  },
-
-	  getCur: function () {
-	    return cur;
-	  },
-
-	  setCur: function (i) {
-	    cur = i;
-	    notify();
-	  }
-
-	};
-
-
-	function notify() {
-	  watchers.forEach(function (cb) {
-	    cb();
-	  });
-	}
-
-	function newItem() {
-	  return {
-	    scalars: [{ label: "parameter", value: "1" }],
-	    arrays: [{ label: "item", value: "[1,2,3,4,5]" }],
-	    scalars_id: 1,
-	    arrays_id: 1,
-	    title: "untitled"
-	  };
-	}
-
-	store.push(newItem());
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
 	var React = __webpack_require__(15);
 	var Picture = __webpack_require__(16);
 
-	var store = __webpack_require__(7);
+	var store = __webpack_require__(13);
 
 	var Pictures = React.createClass({
 	  displayName: "Pictures",
@@ -242,7 +169,7 @@
 	module.exports = Pictures;
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -262,7 +189,7 @@
 
 	// End Flexbox
 
-	var store = __webpack_require__(7);
+	var store = __webpack_require__(13);
 
 	var evaluator = __webpack_require__(23);
 
@@ -436,7 +363,7 @@
 
 	    // --- END FLEXBOX STUFF -------------------------------------------------
 
-	    var DEBUG = false;
+	    var DEBUG = true;
 
 	    return (React.createElement("div", {
 	      className: "data"
@@ -480,7 +407,7 @@
 	module.exports = Data;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -504,7 +431,7 @@
 	module.exports = Steps;
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -526,7 +453,7 @@
 	module.exports = BigPicture;
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -550,7 +477,7 @@
 	module.exports = Measurements;
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -565,7 +492,7 @@
 	    return {
 	      draw: [{ label: "line", hotkey: "x" }, { label: "path", hotkey: "a" }, { label: "rect", hotkey: "r" }, { label: "circle", hotkey: "c" }, { label: "text", hotkey: "t" }, { label: "magnet", hotkey: "u" }, { label: "picture", hotkey: "p" }],
 	      adjust: [{ label: "move", hotkey: "v" }, { label: "scale", hotkey: "s" }, { label: "rotate", hotkey: "e" }, { label: "duplicate", hotkey: "d" }],
-	      flow: [{ label: "loop", hotkey: "l" }, { label: "if", hotkey: "l" }],
+	      flow: [{ label: "loop", hotkey: "l" }, { label: "if", hotkey: "i" }],
 	      modifiers: [{ label: "guide", hotkey: "g" }, { label: "clip", hotkey: "k" }]
 	    };
 	  },
@@ -596,6 +523,78 @@
 	});
 
 	module.exports = CheatSheet;
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var watchers = [];
+
+	var cur = 0;
+
+	var store = [{
+	  scalars: [{ label: "panels", value: "600" }, { label: "kW / panel", value: "0.2" }, { label: "power in kW", value: "s_1 * s_2" }],
+	  arrays: [{ label: "sun hours", value: "[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]" }, { label: "energy in kWh", value: "s_3 * a_1" }, { label: "energy in MWh", value: "a_2 / 1000" }],
+	  scalars_id: 1,
+	  arrays_id: 1,
+	  title: "Solar Data"
+	}];
+
+	module.exports = {
+	  getLength: function () {
+	    return store.length;
+	  },
+
+	  getData: function (i) {
+	    return store[i];
+	  },
+
+	  setData: function (i, updated) {
+	    store[i] = updated;
+	    notify();
+	  },
+
+	  addItem: function () {
+	    store.push(newItem());
+	    cur = store.length - 1;
+	    notify();
+	  },
+
+	  watch: function (cb) {
+	    watchers.push(cb);
+	  },
+
+	  getCur: function () {
+	    return cur;
+	  },
+
+	  setCur: function (i) {
+	    cur = i;
+	    notify();
+	  }
+
+	};
+
+
+	function notify() {
+	  watchers.forEach(function (cb) {
+	    cb();
+	  });
+	}
+
+	function newItem() {
+	  return {
+	    scalars: [{ label: "parameter", value: "1" }],
+	    arrays: [{ label: "item", value: "[1,2,3,4,5]" }],
+	    scalars_id: 1,
+	    arrays_id: 1,
+	    title: "untitled"
+	  };
+	}
+
+	store.push(newItem());
 
 /***/ },
 /* 14 */
