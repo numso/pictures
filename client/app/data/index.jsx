@@ -154,8 +154,11 @@ var Data = React.createClass({
 
     // --- END FLEXBOX STUFF -------------------------------------------------
 
+    var DEBUG = false;
+
     return (
       <div className="data">
+        {DEBUG&&[<div>
         <div className="header">Data (table)</div>
         <div className="container --data">
           <table>
@@ -168,6 +171,7 @@ var Data = React.createClass({
             </tbody>
           </table>
         </div>
+        </div>]}
         <div className="header">Data (flexbox)</div>
         <div className="container --data --flex">
           <div>
@@ -182,10 +186,12 @@ var Data = React.createClass({
             </div>
           </div>
         </div>
+        {DEBUG&&[<div>
         <div className="header">Results</div>
         <div className="container --data">
           <pre>{JSON.stringify(this.state, 2, 2)}</pre>
         </div>
+        </div>]}
       </div>
     );
   }

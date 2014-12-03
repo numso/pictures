@@ -1,5 +1,11 @@
 var React = window.React = require('react/addons');
+
+var Pictures = require('./pictures');
 var Data = require('./data');
+var Steps = require('./steps');
+var BigPicture = require('./big-picture');
+var Measurements = require('./measurements');
+
 var CheatSheet = require('./cheat-sheet');
 
 var store = require('./pictures-store');
@@ -8,58 +14,27 @@ var App = React.createClass({
 
   getInitialState() {
     return {
-      numPictures: store.getLength(),
-      curPicture: 0
+      curPicture: store.getCur()
     };
   },
 
-  renderPictures() {
-    var markup = [];
-    for (var i = 0; i < this.state.numPictures; i++) {
-      var title = store.getData(i).title;
-      markup.push(<Picture num={i} title={title} selected={this.state.curPicture === i} onClick={this.setPicture.bind(this, i)}/>);
-    }
-    return markup;
-  },
-
-  setPicture(i) {
-    this.setState({
-      curPicture: i
-    });
-  },
-
-  addNew() {
-    store.addItem();
-    this.setState({
-      numPictures: store.getLength(),
-      curPicture: store.getLength() - 1
+  componentDidMount() {
+    store.watch(() => {
+      this.setState({
+        curPicture: store.getCur()
+      });
     });
   },
 
   render() {
     return (
       <div>
-        <div className="header">Pictures</div>
-        <div className="container --pictures">
-          {this.renderPictures()}
-          <div className="newpicture" onClick={this.addNew}>
-            <span className="newpicture__content">+</span>
-          </div>
-        </div>
+        <Pictures/>
 
         <div style={{ width: 400, display: 'inline-block', verticalAlign: 'top' }}>
-
           <Data pictureID={this.state.curPicture}/>
-
-          <div>
-            <div className="header">Steps</div>
-            <div className="container --data">steps go here</div>
-          </div>
-
-          <div>
-            <div className="header">Measurements</div>
-            <div className="container --data">measurements go here</div>
-          </div>
+          <Steps/>
+          <Measurements/>
         </div>
 
         <div style={{ display: 'inline-block', paddingTop: 20 }}>
@@ -76,39 +51,5 @@ var App = React.createClass({
   }
 
 });
-
-
-
-
-var Picture = React.createClass({
-
-  render() {
-    var classes = React.addons.classSet({
-      picture: true,
-      '--selected': this.props.selected
-    });
-    return (
-      <div>
-        <div className={classes} onClick={this.props.onClick}/>
-        <div style={{ textAlign: 'center', marginBottom: 15 }}>{this.props.title}</div>
-      </div>
-    );
-  }
-
-});
-
-
-
-var BigPicture = React.createClass({
-
-  render() {
-    return (
-      <div className="picture --big"/>
-    );
-  }
-
-});
-
-
 
 React.render(<App/>, document.body);
