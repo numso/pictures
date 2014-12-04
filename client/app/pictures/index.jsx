@@ -30,8 +30,7 @@ var Pictures = React.createClass({
   renderPictures() {
     var markup = [];
     for (var i = 0; i < this.state.numPictures; i++) {
-      var title = store.getData(i).title;
-      markup.push(<Picture num={i} title={title} selected={this.state.curPicture === i} onClick={this.setPicture.bind(this, i)}/>);
+      markup.push(<Picture num={i} selected={this.state.curPicture === i} onClick={this.setPicture.bind(this, i)}/>);
     }
     return markup;
   },
