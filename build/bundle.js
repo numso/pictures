@@ -342,7 +342,7 @@
 	    _.each(this.state.arrays, function (item) {
 	      tags.push(React.createElement(Tag, {
 	        item: item
-	      }));
+	      }, _this4.getArrayStats(item)));
 	    });
 	    tags.push(React.createElement(CreateTag, {
 	      onClick: this.createArray
@@ -398,6 +398,32 @@
 	    }, "Results"), React.createElement("div", {
 	      className: "container --data"
 	    }, React.createElement("pre", null, JSON.stringify(this.state, 2, 2))))]));
+	  },
+
+	  getArrayStats: function (item) {
+	    var stats = [{ name: "min", code: function (arr) {
+	        return Math.min.apply(this, arr);
+	      } }, { name: "avg", code: function (arr) {
+	        return arr.reduce(function (memo, num) {
+	          return memo + num;
+	        }, 0) / arr.length;
+	      } }, { name: "max", code: function (arr) {
+	        return Math.max.apply(this, arr);
+	      } }, { name: "sum of", code: function (arr) {
+	        return arr.reduce(function (memo, num) {
+	          return memo + num;
+	        }, 0);
+	      } }, { name: "# of", code: function (arr) {
+	        return arr.length;
+	      } }];
+	    return (React.createElement("div", {
+	      className: "test-box"
+	    }, stats.map(function (stat) {
+	      return (React.createElement("div", null, React.createElement("div", {
+	        className: "tag",
+	        draggable: "true"
+	      }, stat.name, " ", item.label), React.createElement("span", null, evaluator.round(stat.code(item.evaluated)))));
+	    })));
 	  }
 
 	});
@@ -912,7 +938,8 @@
 
 	  getInitialState: function () {
 	    return {
-	      editting: false
+	      editting: false,
+	      showChildren: false
 	    };
 	  },
 
@@ -938,23 +965,36 @@
 	    store.setCur(store.getCur());
 	  },
 
+	  toggleShowChildren: function () {
+	    this.setState({
+	      showChildren: !this.state.showChildren
+	    });
+	  },
+
 	  render: function () {
-	    if (this.state.editting) {
-	      return (React.createElement("div", null, React.createElement("div", {
-	        className: "tag",
-	        style: { color: "black" }
-	      }, React.createElement(ContentEditable, {
-	        text: this.props.item.label,
-	        onChange: this.onChange,
-	        onFinish: this.onFinish
-	      }))));
-	    } else {
-	      return (React.createElement("div", null, React.createElement("div", {
-	        draggable: "true",
-	        className: "tag",
-	        onMouseUp: this.onMouseUp
-	      }, this.props.item.label)));
-	    }
+	    return this.state.editting ? this.renderEditableTag() : this.renderTag();
+	  },
+
+	  renderEditableTag: function () {
+	    return (React.createElement("div", null, React.createElement("div", {
+	      className: "tag",
+	      style: { color: "black" }
+	    }, React.createElement(ContentEditable, {
+	      text: this.props.item.label,
+	      onChange: this.onChange,
+	      onFinish: this.onFinish
+	    }))));
+	  },
+
+	  renderTag: function () {
+	    return (React.createElement("div", null, React.createElement("div", {
+	      draggable: "true",
+	      className: "tag",
+	      onMouseUp: this.onMouseUp
+	    }, this.props.item.label), this.props.children && React.createElement("div", {
+	      className: "tag__arrow",
+	      onClick: this.toggleShowChildren
+	    }), this.state.showChildren && this.props.children));
 	  }
 
 	});
