@@ -650,7 +650,7 @@
 	  updateTitle: function (newTitle) {
 	    var datum = store.getData(this.props.num);
 	    datum.title = newTitle;
-	    store.setData(datum);
+	    store.setData(this.props.num, datum);
 	    this.setState({
 	      title: newTitle
 	    });
@@ -903,18 +903,58 @@
 	"use strict";
 
 	var React = __webpack_require__(15);
-	var ContentEditable = __webpack_require__(27);
+	var ContentEditable = __webpack_require__(28);
+	var store = __webpack_require__(13);
 
 	var Tag = React.createClass({
 	  displayName: "Tag",
 
 
+	  getInitialState: function () {
+	    return {
+	      editting: false
+	    };
+	  },
+
+	  onMouseUp: function () {
+	    this.setState({
+	      editting: true
+	    });
+	  },
+
+	  onChange: function (lbl) {
+	    this.updateLabel(lbl);
+	  },
+
+	  onFinish: function (lbl) {
+	    this.updateLabel(lbl);
+	    this.setState({
+	      editting: false
+	    });
+	  },
+
+	  updateLabel: function (newLbl) {
+	    this.props.item.label = newLbl;
+	    store.setCur(store.getCur());
+	  },
+
 	  render: function () {
-	    return (React.createElement("div", null, React.createElement(ContentEditable, {
-	      draggable: "true",
-	      text: this.props.item.label,
-	      className: "tag"
-	    })));
+	    if (this.state.editting) {
+	      return (React.createElement("div", null, React.createElement("div", {
+	        className: "tag",
+	        style: { color: "black" }
+	      }, React.createElement(ContentEditable, {
+	        text: this.props.item.label,
+	        onChange: this.onChange,
+	        onFinish: this.onFinish
+	      }))));
+	    } else {
+	      return (React.createElement("div", null, React.createElement("div", {
+	        draggable: "true",
+	        className: "tag",
+	        onMouseUp: this.onMouseUp
+	      }, this.props.item.label)));
+	    }
 	  }
 
 	});
