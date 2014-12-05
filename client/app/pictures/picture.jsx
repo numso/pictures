@@ -32,7 +32,7 @@ var Picture = React.createClass({
   updateTitle(newTitle) {
     var datum = store.getData(this.props.num);
     datum.title = newTitle;
-    store.setData(datum);
+    store.setData(this.props.num, datum);
     this.setState({
       title: newTitle
     });
