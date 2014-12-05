@@ -6,7 +6,8 @@ var Tag = React.createClass({
 
   getInitialState() {
     return {
-      editting: false
+      editting: false,
+      showChildren: false
     };
   },
 
@@ -32,24 +33,36 @@ var Tag = React.createClass({
     store.setCur(store.getCur());
   },
 
+  toggleShowChildren() {
+    this.setState({
+      showChildren: !this.state.showChildren
+    });
+  },
+
   render() {
-    if (this.state.editting) {
-      return (
-        <div>
-          <div className="tag" style={{ color: 'black' }}>
-            <ContentEditable text={this.props.item.label} onChange={this.onChange} onFinish={this.onFinish}/>
-          </div>
+    return this.state.editting ? this.renderEditableTag() : this.renderTag();
+  },
+
+  renderEditableTag() {
+    return (
+      <div>
+        <div className="tag" style={{ color: 'black' }}>
+          <ContentEditable text={this.props.item.label} onChange={this.onChange} onFinish={this.onFinish}/>
         </div>
-      );
-    } else {
-      return (
-        <div>
-          <div draggable="true" className="tag" onMouseUp={this.onMouseUp}>
-            {this.props.item.label}
-          </div>
+      </div>
+    );
+  },
+
+  renderTag() {
+    return (
+      <div>
+        <div draggable="true" className="tag" onMouseUp={this.onMouseUp}>
+          {this.props.item.label}
         </div>
-      );
-    }
+        {this.props.children && <div className="tag__arrow" onClick={this.toggleShowChildren}/>}
+        {this.state.showChildren && this.props.children}
+      </div>
+    );
   }
 
 });

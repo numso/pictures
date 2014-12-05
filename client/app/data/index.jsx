@@ -141,7 +141,7 @@ var Data = React.createClass({
     tags.push(<CreateTag onClick={this.createScalar}>+</CreateTag>);
     tags.push(<CreateTag>column</CreateTag>);
     _.each(this.state.arrays, (item) => {
-      tags.push(<Tag item={item}/>);
+      tags.push(<Tag item={item}>{this.getArrayStats(item)}</Tag>);
     });
     tags.push(<CreateTag onClick={this.createArray}>+</CreateTag>);
 
@@ -192,6 +192,28 @@ var Data = React.createClass({
           <pre>{JSON.stringify(this.state, 2, 2)}</pre>
         </div>
         </div>]}
+      </div>
+    );
+  },
+
+  getArrayStats(item) {
+    var stats = [
+      { name: 'min', code: function (arr) { return Math.min.apply(this, arr); } },
+      { name: 'avg', code: function (arr) { return arr.reduce(function (memo, num) { return memo + num}, 0) / arr.length; } },
+      { name: 'max', code: function (arr) { return Math.max.apply(this, arr); } },
+      { name: 'sum of', code: function (arr) { return arr.reduce(function (memo, num) { return memo + num}, 0); } },
+      { name: '# of', code: function (arr) { return arr.length; } }
+    ];
+    return (
+      <div className="test-box">
+        {stats.map((stat) => {
+          return (
+            <div>
+              <div className="tag" draggable="true">{stat.name} {item.label}</div>
+              <span>{evaluator.round(stat.code(item.evaluated))}</span>
+            </div>
+          );
+        })}
       </div>
     );
   }
