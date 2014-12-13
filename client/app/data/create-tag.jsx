@@ -1,5 +1,4 @@
 var React = require('react');
-var ContentEditable = require('./content-editable');
 
 var CreateTag = React.createClass({
 
