@@ -1,0 +1,189 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif; }
+
+.header {
+  background: #b9c8e7;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #b9c8e7 0%, #98a6c1 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #b9c8e7), color-stop(100%, #98a6c1));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #b9c8e7 0%, #98a6c1 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #b9c8e7 0%, #98a6c1 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #b9c8e7 0%, #98a6c1 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #b9c8e7 0%, #98a6c1 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b9c8e7', endColorstr='#98a6c1',GradientType=0 );
+  /* IE6-9 */
+  text-align: center;
+  padding: 2px 0; }
+
+.container {
+  background-color: #e4e8ef; }
+  .container.\--pictures {
+    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset;
+    display: flex; }
+  .container.\--data {
+    min-height: 300px; }
+  .container.\--flex {
+    display: flex; }
+
+.tag {
+  background-color: #abbbd9;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  padding: 2px 10px;
+  margin: 2px 0;
+  margin-right: 10px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  display: inline-block;
+  min-width: 20px;
+  min-height: 12px;
+  white-space: nowrap; }
+  .tag.\--create {
+    background-color: #d8dde3;
+    color: #9fa1a8;
+    text-align: center;
+    opacity: 0; }
+  .tag__arrow {
+    display: inline-block;
+    border: 4px solid transparent;
+    width: 0;
+    height: 0;
+    border-top: 4px solid white;
+    position: relative;
+    left: -21px;
+    top: 2px;
+    cursor: pointer; }
+
+.tag:hover {
+  background-color: #8abcd9; }
+
+.tag.\--create:hover {
+  background-color: #d8dde3;
+  opacity: 1; }
+
+.tag.\--create:active {
+  background-color: #d0d5db; }
+
+.test-box {
+  box-shadow: 0 0 20px 2px;
+  display: inline-block;
+  padding: 6px;
+  border-radius: 3px;
+  position: absolute;
+  background-color: white;
+  z-index: 1; }
+
+.test-1 {
+  flex: 1;
+  white-space: nowrap; }
+
+.test-1 .arr-section {
+  overflow: auto; }
+
+.picture {
+  margin: 20px;
+  margin-bottom: 5px;
+  display: inline-block;
+  background-color: white;
+  width: 220px;
+  height: 150px;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer; }
+  .picture.\--selected {
+    box-shadow: 0 0 20px 2px #1e4fea; }
+  .picture.\--big {
+    width: 720px;
+    height: 900px;
+    cursor: default; }
+
+.newpicture {
+  background-color: #d7dce5;
+  border-radius: 100px;
+  padding: 20px;
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border: 1px solid #888;
+  position: relative;
+  vertical-align: top;
+  margin-top: 70px;
+  cursor: pointer; }
+  .newpicture__content {
+    color: #888;
+    position: relative;
+    top: -9px;
+    left: -5px; }
+
+.newpicture:hover {
+  background-color: #c2cad8; }
+
+.newpicture:active {
+  background-color: #afb8c8; }
+
+.data__indice {
+  display: inline-block;
+  font-size: 12px;
+  width: 40px;
+  height: 22px;
+  border-left: 1px solid;
+  text-align: center; }
+  .data__indice.\--header {
+    background-color: #ccc; }
+
+.data__indice:last-of-type {
+  border-right: 1px solid; }
+
+.scalar {
+  position: relative; }
+
+.scalar:hover,
+.scalar.active {
+  background: whitesmoke;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
+
+.array-val,
+.scalar-val {
+  min-height: 22px; }
+  .array-val .value,
+  .scalar-val .value {
+    display: none; }
+  .array-val:hover,
+  .scalar-val:hover {
+    background-color: #aaa; }
+    .array-val:hover .evaluated,
+    .scalar-val:hover .evaluated {
+      display: none; }
+    .array-val:hover .value,
+    .scalar-val:hover .value {
+      display: block; }
+
+.cheatsheet__section {
+  margin-bottom: 20px; }
+.cheatsheet__title {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: underline;
+  padding-right: 40px;
+  text-align: right; }
+.cheatsheet__group {
+  text-align: right;
+  padding-right: 20px; }
+.cheatsheet__item {
+  display: inline-block;
+  color: #ccc; }
+.cheatsheet__hotkey {
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: bold; }
+
+/*# sourceMappingURL=bundle.css.map */
