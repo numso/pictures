@@ -1,20 +1,12 @@
 var React = require('react');
 var _ = require('lodash');
 
-var Scalar = require('./scalar');
-var Arrayy = require('./arrayy');
-
-// For Flexbox version
-
 var Tag = require('./tag');
 var CreateTag = require('./create-tag');
 var ScalarVal = require('./scalar-val');
 var ArrayVal = require('./array-val');
 
-// End Flexbox
-
 var store = require('../stores/pictures');
-
 var evaluator = require('./evaluator');
 
 function getArr(item) {
@@ -115,24 +107,10 @@ var Data = React.createClass({
   },
 
   render() {
-    var s = this.state.scalars.map((item, i) => {
-      return <Scalar item={item}
-                     onTitleChange={this.onTitleChange.bind(this, i, 'scalars')}
-                     onValueChange={this.onValueChange.bind(this, i, 'scalars')}/>
-    });
-
-    var a = this.state.arrays.map((item, i) => {
-      return <Arrayy item={item}
-                     onTitleChange={this.onTitleChange.bind(this, i, 'arrays')}
-                     onValueChange={this.onValueChange.bind(this, i, 'arrays')}/>
-    });
-
     var max = this.state.arrays.reduce((memo, item) => {
       return Math.max(memo, getArr(item.evaluated).length);
     }, 0);
     var indices = _.range(1, max + 1);
-
-    // --- START FLEXBOX STUFF -------------------------------------------------
 
     var tags = [];
     _.each(this.state.scalars, (item) => {
@@ -152,27 +130,11 @@ var Data = React.createClass({
       return <ArrayVal item={item}/>;
     });
 
-    // --- END FLEXBOX STUFF -------------------------------------------------
-
     var DEBUG = true;
 
     return (
       <div className="data">
-        {DEBUG&&[<div>
-        <div className="header">Data (table)</div>
-        <div className="container --data">
-          <table>
-            <tbody>
-              {s}
-              <tr><td><span onClick={this.createNew.bind(this, 'scalars')} className="tag --create">+</span></td></tr>
-              <tr><td></td><td><div>{indices.map((i) => { return <div className="data__indice --header">{i}</div>; })}</div></td></tr>
-              {a}
-              <tr><td><span onClick={this.createNew.bind(this, 'arrays')} className="tag --create">+</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        </div>]}
-        <div className="header">Data (flexbox)</div>
+        <div className="header">Data</div>
         <div className="container --data --flex">
           <div>
             {tags}
