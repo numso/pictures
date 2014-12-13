@@ -259,6 +259,7 @@
 	  },
 
 	  createScalar: function () {
+	    console.log("creating new scalar");
 	    this.createNew("scalars");
 	  },
 
@@ -728,6 +729,10 @@
 	    }))));
 	  },
 
+	  onDragStart: function () {
+	    event.dataTransfer.setData("text/plain", this.props.item.id);
+	  },
+
 	  renderTag: function () {
 	    var classes = React.addons.classSet({
 	      tag: true,
@@ -735,6 +740,7 @@
 	    });
 	    return (React.createElement("div", null, React.createElement("div", {
 	      draggable: "true",
+	      onDragStart: this.onDragStart,
 	      className: classes,
 	      onMouseUp: this.onMouseUp
 	    }, this.props.item.label), this.props.children && React.createElement("div", {
@@ -842,7 +848,7 @@
 	      className: "evaluated"
 	    }, this.props.item.evaluated), React.createElement("div", {
 	      className: "value"
-	    }, generateValueMarkup(this.props.item.value))));
+	    }, generateValueMarkup(this.props.item.value || ""))));
 	  }
 
 	});
@@ -956,7 +962,7 @@
 	      }, item);
 	    })), React.createElement("div", {
 	      className: "value"
-	    }, generateValueMarkup(this.props.item.value))));
+	    }, generateValueMarkup(this.props.item.value || ""))));
 	  }
 
 	});
