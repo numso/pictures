@@ -26,9 +26,12 @@
 .container {
   background-color: #e4e8ef; }
   .container.\--pictures {
-    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
+    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset;
+    display: flex; }
   .container.\--data {
     min-height: 300px; }
+  .container.\--flex {
+    display: flex; }
 
 .tag {
   background-color: #abbbd9;
@@ -42,7 +45,8 @@
   letter-spacing: 2px;
   display: inline-block;
   min-width: 20px;
-  min-height: 12px; }
+  min-height: 12px;
+  white-space: nowrap; }
   .tag.\--create {
     background-color: #d8dde3;
     color: #9fa1a8;
@@ -78,16 +82,28 @@
   background-color: white;
   z-index: 1; }
 
+.test-1 {
+  flex: 1;
+  white-space: nowrap; }
+
+.test-1 .arr-section {
+  overflow: auto; }
+
 .picture {
   margin: 20px;
+  margin-bottom: 5px;
   display: inline-block;
   background-color: white;
   width: 220px;
   height: 150px;
-  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3); }
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer; }
+  .picture.\--selected {
+    box-shadow: 0 0 20px 2px #1e4fea; }
   .picture.\--big {
     width: 720px;
-    height: 900px; }
+    height: 900px;
+    cursor: default; }
 
 .newpicture {
   background-color: #d7dce5;
@@ -117,6 +133,7 @@
   display: inline-block;
   font-size: 12px;
   width: 40px;
+  height: 22px;
   border-left: 1px solid;
   text-align: center; }
   .data__indice.\--header {
@@ -133,9 +150,21 @@
   background: whitesmoke;
   box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
 
-.foobar {
-  position: absolute;
-  left: 140px; }
+.array-val,
+.scalar-val {
+  min-height: 22px; }
+  .array-val .value,
+  .scalar-val .value {
+    display: none; }
+  .array-val:hover,
+  .scalar-val:hover {
+    background-color: #aaa; }
+    .array-val:hover .evaluated,
+    .scalar-val:hover .evaluated {
+      display: none; }
+    .array-val:hover .value,
+    .scalar-val:hover .value {
+      display: block; }
 
 .cheatsheet__section {
   margin-bottom: 20px; }
