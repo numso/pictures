@@ -40,9 +40,8 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(3);
@@ -52,8 +51,7 @@
 
 
 /***/ },
-
-/***/ 1:
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(5);
@@ -139,8 +137,7 @@
 
 
 /***/ },
-
-/***/ 2:
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(5);
@@ -178,8 +175,7 @@
 
 
 /***/ },
-
-/***/ 3:
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -202,16 +198,14 @@
 	}
 
 /***/ },
-
-/***/ 4:
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(24)();
+	exports = module.exports = __webpack_require__(22)();
 	exports.push([module.id, "* {\n  font-family: sans-serif;\n}\n.tag {\n  background-color: #abbbd9;\n  border-radius: 15px;\n  color: #fff;\n  cursor: pointer;\n  padding: 2px 10px;\n  margin: 2px 0;\n  margin-right: 10px;\n  font-size: 12px;\n  letter-spacing: 2px;\n  display: inline-block;\n  min-width: 20px;\n  min-height: 12px;\n}\n#demo3 {\n  width: 700px;\n}\n#demo3 .container {\n  background: #eee;\n}\n#demo3 .container .row {\n  display: flex;\n}\n#demo3 .container .row .expr {\n  flex: 1;\n  white-space: nowrap;\n  overflow: auto;\n}\n#demo3 .container .row .expr::-webkit-scrollbar {\n  display: none;\n}\n#demo3 .container .row .expr input {\n  width: 100%;\n}\n#demo3 .container .row .expr:hover {\n  background-color: #ccc;\n  cursor: pointer;\n}\n#demo4 {\n  width: 700px;\n}\n#demo4 .container {\n  background: #eee;\n  display: flex;\n}\n#demo4 .container .expressions {\n  flex: 1;\n  overflow: auto;\n}\n#demo4 .container .expressions::-webkit-scrollbar {\n  display: none;\n}\n#demo4 .container .expr {\n  width: 100%;\n  height: 22px;\n  white-space: nowrap;\n}\n#demo4 .container .expr input {\n  width: 100%;\n}\n#demo4 .container .expr:hover {\n  background-color: #ccc;\n  cursor: pointer;\n}\n", ""]);
 
 /***/ },
-
-/***/ 5:
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $ = document.getElementById.bind(document);
@@ -219,8 +213,7 @@
 
 
 /***/ },
-
-/***/ 6:
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -416,8 +409,22 @@
 
 
 /***/ },
-
-/***/ 24:
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function() {
@@ -438,5 +445,4 @@
 	}
 
 /***/ }
-
-/******/ })
+/******/ ])

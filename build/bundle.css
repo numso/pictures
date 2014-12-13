@@ -150,6 +150,22 @@
   background: whitesmoke;
   box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset; }
 
+.array-val,
+.scalar-val {
+  min-height: 22px; }
+  .array-val .value,
+  .scalar-val .value {
+    display: none; }
+  .array-val:hover,
+  .scalar-val:hover {
+    background-color: #aaa; }
+    .array-val:hover .evaluated,
+    .scalar-val:hover .evaluated {
+      display: none; }
+    .array-val:hover .value,
+    .scalar-val:hover .value {
+      display: block; }
+
 .cheatsheet__section {
   margin-bottom: 20px; }
 .cheatsheet__title {
