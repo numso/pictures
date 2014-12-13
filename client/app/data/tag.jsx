@@ -54,9 +54,13 @@ var Tag = React.createClass({
   },
 
   renderTag() {
+    var classes = React.addons.classSet({
+      tag: true,
+      '--array': this.props.children
+    });
     return (
       <div>
-        <div draggable="true" className="tag" onMouseUp={this.onMouseUp}>
+        <div draggable="true" className={classes} onMouseUp={this.onMouseUp}>
           {this.props.item.label}
         </div>
         {this.props.children && <div className="tag__arrow" onClick={this.toggleShowChildren}/>}

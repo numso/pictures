@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   font-family: sans-serif;
+  box-sizing: border-box;
 }
 
 @include component(header) {
@@ -41,7 +42,6 @@
   cursor: pointer;
   padding: 2px 10px;
   margin: 2px 0;
-  margin-right: 10px;
   font-size: 12px;
   letter-spacing: 2px;
   display: inline-block;
@@ -54,6 +54,10 @@
     color: #9fa1a8;
     text-align: center;
     opacity: 0;
+  }
+
+  @include option(array) {
+    margin-right: 10px;
   }
 
   @include part(arrow) {

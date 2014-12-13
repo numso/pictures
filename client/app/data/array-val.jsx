@@ -58,7 +58,9 @@ var ArrayVal = React.createClass({
             return <div className="data__indice">{item}</div>
           })}
         </div>
-        <div className="value">{this.props.item.value}</div>
+        <div className="value">
+          {generateValueMarkup(this.props.item.value)}
+        </div>
       </div>
     );
   }
@@ -66,3 +68,30 @@ var ArrayVal = React.createClass({
 });
 
 module.exports = ArrayVal;
+
+function generateValueMarkup(val) {
+  var map = getMap();
+  var re = /[as]_[0-9]*/g;
+
+  var a = val.split(re) || [];
+  a = a.map((i) => (<span>{i}</span>));
+
+  var b = val.match(re) || [];
+  b = b.map((i) => (<div className="tag">{map[i]}</div>));
+
+  var c = _.compact(_.flatten(_.zip(a, b)));
+  return c;
+}
+
+
+function getMap() {
+  var data = store.getData(store.getCur());
+  var obj = {};
+  _.each(data.arrays, (a) => {
+    obj[a.id] = a.label;
+  });
+  _.each(data.scalars, (s) => {
+    obj[s.id] = s.label;
+  });
+  return obj;
+}
