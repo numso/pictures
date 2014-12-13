@@ -53,6 +53,10 @@ var Tag = React.createClass({
     );
   },
 
+  onDragStart() {
+    event.dataTransfer.setData('text/plain', this.props.item.id);
+  },
+
   renderTag() {
     var classes = React.addons.classSet({
       tag: true,
@@ -60,7 +64,7 @@ var Tag = React.createClass({
     });
     return (
       <div>
-        <div draggable="true" className={classes} onMouseUp={this.onMouseUp}>
+        <div draggable="true" onDragStart={this.onDragStart} className={classes} onMouseUp={this.onMouseUp}>
           {this.props.item.label}
         </div>
         {this.props.children && <div className="tag__arrow" onClick={this.toggleShowChildren}/>}

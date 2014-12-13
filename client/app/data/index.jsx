@@ -81,6 +81,7 @@ var Data = React.createClass({
   },
 
   createScalar() {
+    console.log('creating new scalar')
     this.createNew('scalars');
   },
 

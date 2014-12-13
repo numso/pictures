@@ -59,7 +59,7 @@ var ArrayVal = React.createClass({
           })}
         </div>
         <div className="value">
-          {generateValueMarkup(this.props.item.value)}
+          {generateValueMarkup(this.props.item.value || '')}
         </div>
       </div>
     );

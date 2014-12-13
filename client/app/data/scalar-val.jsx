@@ -50,7 +50,7 @@ var ScalarVal = React.createClass({
       <div className="scalar-val" onClick={this.onClick}>
         <div className="evaluated">{this.props.item.evaluated}</div>
         <div className="value">
-          {generateValueMarkup(this.props.item.value)}
+          {generateValueMarkup(this.props.item.value || '')}
         </div>
       </div>
     );
