@@ -28,13 +28,12 @@ function giveIDs(state) {
 var Data = React.createClass({
 
   getInitialState() {
-    var state = {
+    return {
       scalars: [],
       arrays: [],
       scalars_id: 1,
       arrays_id: 1
     };
-    return state;
   },
 
   getDefaultProps() {
@@ -92,6 +91,9 @@ var Data = React.createClass({
   createNew(type) {
     this.state[type].push({ label: 'item', value: 0 });
     giveIDs(this.state);
+    var picture = store.getData(this.props.pictureID);
+    picture.scalars_id = this.state.scalars_id;
+    picture.arrays_id = this.state.arrays_id;
     this.evaluate(this.state);
     this.setState({ [type]: this.state[type] });
   },
@@ -125,10 +127,10 @@ var Data = React.createClass({
     tags.push(<CreateTag onClick={this.createArray}>+</CreateTag>);
 
     var scalarValues = _.map(this.state.scalars, (item) => {
-      return <ScalarVal item={item}/>
+      return <ScalarVal picID={this.props.pictureID} item={item}/>
     });
     var arrayValues = _.map(this.state.arrays, (item) => {
-      return <ArrayVal item={item}/>;
+      return <ArrayVal picID={this.props.pictureID} item={item}/>;
     });
 
     var DEBUG = true;
@@ -173,7 +175,7 @@ var Data = React.createClass({
           return (
             <div>
               <div className="tag" draggable="true">{stat.name} {item.label}</div>
-              <span>{evaluator.round(stat.code(item.evaluated))}</span>
+              <span>{evaluator.round(stat.code(item.evaluated || []))}</span>
             </div>
           );
         })}

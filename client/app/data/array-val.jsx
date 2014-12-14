@@ -22,6 +22,14 @@ var ArrayVal = React.createClass({
     });
   },
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.picID !== this.props.picID) {
+      this.setState({
+        editting: false
+      });
+    }
+  },
+
   onChange(val) {
     this.updateValue(val);
   },
@@ -73,7 +81,7 @@ module.exports = ArrayVal;
 function generateValueMarkup(val, item) {
   var map = getMap();
   var re = /[as]_[0-9]*/;
-  var chunks = val.split(' ');
+  var chunks = val.split(/\s/);
 
   return _.map(chunks, (chunk, i, arr) => {
     if (re.test(chunk)) {

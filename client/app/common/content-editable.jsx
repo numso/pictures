@@ -32,7 +32,7 @@ var ContentEditable = React.createClass({
   },
 
   render() {
-    return <span style={{ backgroundColor: 'white' }}
+    return <span style={{ backgroundColor: 'white', minWidth: 50, display: 'inline-block' }}
                  onInput={this.onInput}
                  onKeyDown={this.onKeyDown}
                  contentEditable={true}

@@ -77,7 +77,7 @@ function evaluateArray(data, expr, max) {
     var newExpr = expr.replace(/(a_\d*)/g, '$&[' + i + ']');
     arr[i] = eval(PREAMBLE + 'with(data){' + newExpr + '}');
   }
-  return arr;
+  return !max ? null : arr;
 }
 
 function getArrayMax(data) {
@@ -123,10 +123,10 @@ function addTransforms(obj, key) {
 exports.check = function (ctx) {
   var data = exports.simple(ctx, {});
   ctx = exports.strip(ctx, data);
-  var max = getArrayMax(data);
 
   var working = true;
   while (working) {
+    var max = getArrayMax(data);
     data = exports.injected(ctx, data, max);
     var len1 = _.keys(ctx).length;
     ctx = exports.strip(ctx, data);
