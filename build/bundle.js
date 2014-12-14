@@ -519,7 +519,7 @@
 
 	var store = [{
 	  scalars: [{ label: "panels", value: "600" }, { label: "kW / panel", value: "0.2" }, { label: "power in kW", value: "s_1 * s_2" }],
-	  arrays: [{ label: "sun hours", value: "[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]" }, { label: "energy in kWh", value: "s_3 * a_1" }, { label: "energy in MWh", value: "a_2 / 1000" }],
+	  arrays: [{ label: "sun hours", value: "[ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ]" }, { label: "energy in kWh", value: "s_3 * a_1" }, { label: "energy in MWh", value: "a_2 / 1000" }],
 	  scalars_id: 1,
 	  arrays_id: 1,
 	  title: "Solar Data"
@@ -760,7 +760,6 @@
 	"use strict";
 
 	var React = __webpack_require__(15);
-	var ContentEditable = __webpack_require__(25);
 
 	var CreateTag = React.createClass({
 	  displayName: "CreateTag",
@@ -791,6 +790,7 @@
 
 	var React = __webpack_require__(15);
 	var ContentEditable = __webpack_require__(27);
+	var Dragger = __webpack_require__(188);
 	var store = __webpack_require__(13);
 	var _ = __webpack_require__(26);
 
@@ -848,33 +848,37 @@
 	      className: "evaluated"
 	    }, this.props.item.evaluated), React.createElement("div", {
 	      className: "value"
-	    }, generateValueMarkup(this.props.item.value || ""))));
+	    }, generateValueMarkup(this.props.item.value || "", this.props.item))));
 	  }
 
 	});
 
 	module.exports = ScalarVal;
 
-	function generateValueMarkup(val) {
+	function generateValueMarkup(val, item) {
 	  var map = getMap();
-	  var re = /[as]_[0-9]*/g;
+	  var re = /[as]_[0-9]*/;
+	  var chunks = val.split(" ");
 
-	  var a = val.split(re) || [];
-	  a = a.map(function (i) {
-	    return (React.createElement("span", null, i));
+	  return _.map(chunks, function (chunk, i, arr) {
+	    if (re.test(chunk)) {
+	      return (React.createElement("div", {
+	        className: "tag"
+	      }, map[chunk]));
+	    }
+	    if (!isNaN(parseFloat(chunk))) {
+	      var firstChunk = arr.slice(0, i).join(" ");
+	      var secondChunk = arr.slice(i + 1, arr.length).join(" ");
+	      return React.createElement(Dragger, {
+	        number: chunk,
+	        firstChunk: firstChunk,
+	        secondChunk: secondChunk,
+	        item: item
+	      });
+	    }
+	    return (React.createElement("span", null, " ", chunk, " "));
 	  });
-
-	  var b = val.match(re) || [];
-	  b = b.map(function (i) {
-	    return (React.createElement("div", {
-	      className: "tag"
-	    }, map[i]));
-	  });
-
-	  var c = _.compact(_.flatten(_.zip(a, b)));
-	  return c;
 	}
-
 
 	function getMap() {
 	  var data = store.getData(store.getCur());
@@ -896,6 +900,7 @@
 
 	var React = __webpack_require__(15);
 	var ContentEditable = __webpack_require__(27);
+	var Dragger = __webpack_require__(188);
 	var store = __webpack_require__(13);
 
 	function getArr(item) {
@@ -962,31 +967,36 @@
 	      }, item);
 	    })), React.createElement("div", {
 	      className: "value"
-	    }, generateValueMarkup(this.props.item.value || ""))));
+	    }, generateValueMarkup(this.props.item.value || "", this.props.item))));
 	  }
 
 	});
 
 	module.exports = ArrayVal;
 
-	function generateValueMarkup(val) {
+	function generateValueMarkup(val, item) {
 	  var map = getMap();
-	  var re = /[as]_[0-9]*/g;
+	  var re = /[as]_[0-9]*/;
+	  var chunks = val.split(" ");
 
-	  var a = val.split(re) || [];
-	  a = a.map(function (i) {
-	    return (React.createElement("span", null, i));
+	  return _.map(chunks, function (chunk, i, arr) {
+	    if (re.test(chunk)) {
+	      return (React.createElement("div", {
+	        className: "tag"
+	      }, map[chunk]));
+	    }
+	    if (!isNaN(parseFloat(chunk))) {
+	      var firstChunk = arr.slice(0, i).join(" ");
+	      var secondChunk = arr.slice(i + 1, arr.length).join(" ");
+	      return React.createElement(Dragger, {
+	        number: chunk,
+	        firstChunk: firstChunk,
+	        secondChunk: secondChunk,
+	        item: item
+	      });
+	    }
+	    return (React.createElement("span", null, " ", chunk, " "));
 	  });
-
-	  var b = val.match(re) || [];
-	  b = b.map(function (i) {
-	    return (React.createElement("div", {
-	      className: "tag"
-	    }, map[i]));
-	  });
-
-	  var c = _.compact(_.flatten(_.zip(a, b)));
-	  return c;
 	}
 
 
@@ -1409,54 +1419,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)))
 
 /***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var React = __webpack_require__(15);
-
-	var ContentEditable = React.createClass({
-	  displayName: "ContentEditable",
-
-
-	  shouldComponentUpdate: function (nextProps) {
-	    return !(nextProps.isEditting && this.props.isEditting);
-	  },
-
-	  emitChange: function () {
-	    if (!this.props.isEditting) return false;
-	    var text = (this.getDOMNode().innerText || "").trim();
-	    if (this.props.onChange) this.props.onChange(text);
-	  },
-
-	  onKeyDown: function (e) {
-	    var _this = this;
-	    if (e.keyCode === 13) {
-	      setTimeout(function () {
-	        _this.getDOMNode().blur();
-	      });
-	    }
-	  },
-
-	  render: function () {
-	    return React.createElement("span", {
-	      className: this.props.className,
-	      onKeyDown: this.onKeyDown,
-	      onInput: this.emitChange,
-	      onBlur: this.emitChange,
-	      draggable: this.props.draggable,
-	      onDragStart: this.props.onDragStart,
-	      contentEditable: this.props.isEditting,
-	      dangerouslySetInnerHTML: { __html: this.props.text }
-	    });
-	  }
-
-	});
-
-	module.exports = ContentEditable;
-
-/***/ },
+/* 25 */,
 /* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -29042,6 +29005,100 @@
 	module.exports = toArray;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)))
+
+/***/ },
+/* 188 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(15);
+	var store = __webpack_require__(13);
+
+	var originalNum, originalX, step, curNum;
+
+	var Dragger = React.createClass({
+	  displayName: "Dragger",
+
+
+	  getDefaultProps: function () {
+	    return {
+	      number: 0,
+	      firstChunk: "",
+	      secondChunk: ""
+	    };
+	  },
+
+	  componentWillReceiveProps: function (nextProps) {
+	    if (!this.state.isDragging) {
+	      this.setState({
+	        number: nextProps.number
+	      });
+	    }
+	  },
+
+	  getInitialState: function () {
+	    return {
+	      number: 0,
+	      isDragging: false
+	    };
+	  },
+
+	  componentDidMount: function () {
+	    this.setState({
+	      number: this.props.number
+	    });
+	  },
+
+	  onDragStart: function (e) {
+	    this.setState({
+	      isDragging: true
+	    });
+	    originalNum = parseFloat(this.state.number);
+	    originalX = e.clientX;
+	    step = 10;
+	    // e.dataTransfer.setDragImage(document.getElementById('blank'), 0, 0);
+	  },
+
+	  onDrag: function (e) {
+	    if (e.clientX === 0) return;
+	    var delta = e.clientX - originalX;
+	    var num = Math.floor(originalNum + (delta / 20) * step);
+	    if (num !== curNum) {
+	      curNum = num;
+	      this.setNum(curNum);
+	    }
+	  },
+
+	  setNum: function (num) {
+	    var hasComma = this.props.number[this.props.number.length - 1] === ",";
+	    if (hasComma) num += ",";
+	    var newVal = [this.props.firstChunk, num, this.props.secondChunk].join(" ").trim();
+	    this.props.item.value = newVal;
+	    this.setState({
+	      number: num
+	    });
+	    store.setCur(store.getCur());
+	  },
+
+	  onDragEnd: function (e) {
+	    this.setState({
+	      isDragging: false
+	    });
+	  },
+
+	  render: function () {
+	    return (React.createElement("span", {
+	      draggable: "true",
+	      onDrag: this.onDrag,
+	      onDragStart: this.onDragStart,
+	      onDragEnd: this.onDragEnd
+	    }, this.state.number));
+	  }
+
+	});
+
+	module.exports = Dragger;
 
 /***/ }
 /******/ ])
