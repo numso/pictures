@@ -38,7 +38,7 @@ var Dragger = React.createClass({
     this.setState({
       isDragging: true
     });
-    originalNum = +this.state.number;
+    originalNum = parseFloat(this.state.number);
     originalX = e.clientX;
     step = 10;
     // e.dataTransfer.setDragImage(document.getElementById('blank'), 0, 0);
@@ -55,6 +55,8 @@ var Dragger = React.createClass({
   },
 
   setNum(num) {
+    var hasComma = this.props.number[this.props.number.length - 1] === ',';
+    if (hasComma) num += ',';
     var newVal = [this.props.firstChunk, num, this.props.secondChunk].join(' ').trim();
     this.props.item.value = newVal;
     this.setState({

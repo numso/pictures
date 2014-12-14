@@ -11,7 +11,7 @@ var store = [
       { label: 'power in kW', value: 's_1 * s_2', }
     ],
     arrays: [
-      { label: 'sun hours', value: '[53, 86,134, 155, 159, 155, 130, 143, 126, 112, 81, 65]', },
+      { label: 'sun hours', value: '[ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ]', },
       { label: 'energy in kWh', value: 's_3 * a_1', },
       { label: 'energy in MWh', value: 'a_2 / 1000' }
     ],

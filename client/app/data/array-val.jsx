@@ -1,5 +1,6 @@
 var React = require('react');
 var ContentEditable = require('../common/content-editable');
+var Dragger = require('./dragger');
 var store = require('../stores/pictures');
 
 function getArr(item) {
@@ -59,7 +60,7 @@ var ArrayVal = React.createClass({
           })}
         </div>
         <div className="value">
-          {generateValueMarkup(this.props.item.value || '')}
+          {generateValueMarkup(this.props.item.value || '', this.props.item)}
         </div>
       </div>
     );
@@ -69,18 +70,22 @@ var ArrayVal = React.createClass({
 
 module.exports = ArrayVal;
 
-function generateValueMarkup(val) {
+function generateValueMarkup(val, item) {
   var map = getMap();
-  var re = /[as]_[0-9]*/g;
+  var re = /[as]_[0-9]*/;
+  var chunks = val.split(' ');
 
-  var a = val.split(re) || [];
-  a = a.map((i) => (<span>{i}</span>));
-
-  var b = val.match(re) || [];
-  b = b.map((i) => (<div className="tag">{map[i]}</div>));
-
-  var c = _.compact(_.flatten(_.zip(a, b)));
-  return c;
+  return _.map(chunks, (chunk, i, arr) => {
+    if (re.test(chunk)) {
+      return (<div className="tag">{map[chunk]}</div>);
+    }
+    if (!isNaN(parseFloat(chunk))) {
+      var firstChunk = arr.slice(0, i).join(' ');
+      var secondChunk = arr.slice(i + 1, arr.length).join(' ');
+      return <Dragger number={chunk} firstChunk={firstChunk} secondChunk={secondChunk} item={item}/>
+    }
+    return (<span> {chunk} </span>);
+  });
 }
 
 
