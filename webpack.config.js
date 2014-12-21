@@ -3,7 +3,7 @@ var path = require('path');
 module.exports = {
   entry: {
     bundle: './client/app/index.jsx',
-    test: './client/test/index.js'
+    test: './client/test/index.es6.js'
   },
 
   output: {
