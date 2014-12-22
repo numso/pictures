@@ -2,6 +2,7 @@ require('./style');
 
 require('./tags');
 require('./drag-num');
+require('./drawing');
 
 
 var $ = require('jquery');
