@@ -1,6 +1,9 @@
 var d3 = require('d3');
 var $ = require('jquery');
 
+var blue = '#56a7e1';
+var grey = '#cacaca';
+
 var type = 'circle';
 $('#demo5 .type').click(function () {
   type = type === 'circle' ? 'square' : 'circle';
@@ -11,8 +14,7 @@ $('#demo5 .clear').click(clearAll);
 
 var svg = d3.select('#picture-box').append('svg')
   .attr('width', 500)
-  .attr('height', 500)
-  .style('background-color', '#ccc')
+  .attr('height', 500);
 
 svg.append('circle').attr('class', 'preview-circle');
 svg.append('rect').attr('class', 'preview-rect');
@@ -23,7 +25,12 @@ function drawCircle(x, y, r) {
     .attr('cx', x)
     .attr('cy', y)
     .attr('r', r)
-    .attr('fill', '#777');
+    .attr('fill', grey);
+
+  drawGuide(x, y + r);
+  drawGuide(x, y - r);
+  drawGuide(x + r, y);
+  drawGuide(x - r, y);
 }
 
 function drawPreview(x, y, r) {
@@ -31,7 +38,7 @@ function drawPreview(x, y, r) {
     .attr('cx', x)
     .attr('cy', y)
     .attr('r', r)
-    .attr('fill', '#777');
+    .attr('fill', grey);
 }
 
 function drawRect(x, y, w, h) {
@@ -41,7 +48,18 @@ function drawRect(x, y, w, h) {
     .attr('y', y)
     .attr('width', w)
     .attr('height', h)
-    .attr('fill', '#777');
+    .attr('fill', grey);
+
+  drawGuide(x, y);
+  drawGuide(x + w / 2, y);
+  drawGuide(x + w, y);
+
+  drawGuide(x, y + h / 2);
+  drawGuide(x + w, y + h / 2);
+
+  drawGuide(x, y + h);
+  drawGuide(x + w / 2, y + h);
+  drawGuide(x + w, y + h);
 }
 
 function drawRectPreview(x, y, w, h) {
@@ -50,12 +68,22 @@ function drawRectPreview(x, y, w, h) {
     .attr('y', y)
     .attr('width', w)
     .attr('height', h)
-    .attr('fill', '#777');
+    .attr('fill', grey);
+}
+
+function drawGuide(x, y) {
+  svg.append('circle')
+    .attr('class', 'guide')
+    .attr('cx', x)
+    .attr('cy', y)
+    .attr('r', 5)
+    .attr('fill', blue);
 }
 
 function clearAll() {
   svg.selectAll('.real-rect').remove();
   svg.selectAll('.real-circle').remove();
+  svg.selectAll('.guide').remove();
 }
 
 
