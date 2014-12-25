@@ -6,7 +6,11 @@ var grey = '#cacaca';
 
 var type = 'circle';
 $('#demo5 .type').click(function () {
-  type = type === 'circle' ? 'square' : 'circle';
+  switch (type) {
+    case 'circle': type = 'square'; break;
+    case 'square': type = 'line'; break;
+    default: type = 'circle';
+  }
   $(this).text(type + 's')
 });
 
@@ -18,6 +22,7 @@ var svg = d3.select('#picture-box').append('svg')
 
 svg.append('circle').attr('class', 'preview-circle');
 svg.append('rect').attr('class', 'preview-rect');
+svg.append('line').attr('class', 'preview-line');
 
 function drawCircle(x, y, r) {
   svg.append('circle')
@@ -33,7 +38,7 @@ function drawCircle(x, y, r) {
   drawGuide(x - r, y);
 }
 
-function drawPreview(x, y, r) {
+function drawCirclePreview(x, y, r) {
   svg.select('.preview-circle')
     .attr('cx', x)
     .attr('cy', y)
@@ -71,6 +76,29 @@ function drawRectPreview(x, y, w, h) {
     .attr('fill', grey);
 }
 
+function drawLine(x, y, x2, y2) {
+  svg.append('line')
+    .attr('class', 'real-line')
+    .attr('x1', x)
+    .attr('y1', y)
+    .attr('x2', x2)
+    .attr('y2', y2)
+    .attr('stroke', grey);
+
+  drawGuide(x, y);
+  drawGuide((x + x2) / 2, (y + y2) / 2);
+  drawGuide(x2, y2);
+}
+
+function drawLinePreview(x, y, x2, y2) {
+  svg.select('.preview-line')
+    .attr('x1', x)
+    .attr('y1', y)
+    .attr('x2', x2)
+    .attr('y2', y2)
+    .attr('stroke', grey);
+}
+
 function drawGuide(x, y) {
   svg.append('circle')
     .attr('class', 'guide')
@@ -83,6 +111,7 @@ function drawGuide(x, y) {
 function clearAll() {
   svg.selectAll('.real-rect').remove();
   svg.selectAll('.real-circle').remove();
+  svg.selectAll('.real-line').remove();
   svg.selectAll('.guide').remove();
 }
 
@@ -101,13 +130,15 @@ svg.on('mousemove', function (e) {
   if (type === 'circle') {
     var mid = midpoint(startx, starty, endx, endy);
     var dist = distance(startx, starty, endx, endy);
-    drawPreview(mid.x, mid.y, dist / 2);
-  } else {
+    drawCirclePreview(mid.x, mid.y, dist / 2);
+  } else  if (type === 'square') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
     var h = Math.abs(starty - endy);
     drawRectPreview(x, y, w, h);
+  } else {
+    drawLinePreview(startx, starty, endx, endy);
   }
 });
 
@@ -118,14 +149,17 @@ svg.on('mouseup', function (e) {
     var mid = midpoint(startx, starty, endx, endy);
     var dist = distance(startx, starty, endx, endy);
     drawCircle(mid.x, mid.y, dist / 2);
-    drawPreview(0, 0, 0);
-  } else {
+    drawCirclePreview(0, 0, 0);
+  } else if (type === 'square') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
     var h = Math.abs(starty - endy);
     drawRect(x, y, w, h);
     drawRectPreview(0, 0, 0, 0);
+  } else {
+    drawLine(startx, starty, endx, endy);
+    drawLinePreview(0, 0, 0, 0);
   }
   startx = null;
 });
