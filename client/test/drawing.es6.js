@@ -1,10 +1,20 @@
+// --- set up globals ----------------------------------------------------------
+
 var d3 = require('d3');
 var $ = require('jquery');
 
+var size = 500;
 var blue = '#56a7e1';
 var grey = '#cacaca';
 
 var type = 'circle';
+var mode = 'create';
+
+var startx = null;
+var starty;
+
+// --- set up buttons ----------------------------------------------------------
+
 $('#demo5 .type').click(function () {
   switch (type) {
     case 'circle': type = 'square'; break;
@@ -14,15 +24,27 @@ $('#demo5 .type').click(function () {
   $(this).text(type + 's')
 });
 
+$('#demo5 .mode').click(function () {
+  switch (mode) {
+    case 'create': mode = 'update'; break;
+    default: mode = 'create';
+  }
+  $(this).text(mode);
+});
+
 $('#demo5 .clear').click(clearAll);
 
+// --- set up svg --------------------------------------------------------------
+
 var svg = d3.select('#picture-box').append('svg')
-  .attr('width', 500)
-  .attr('height', 500);
+  .attr('width', size)
+  .attr('height', size);
 
 svg.append('circle').attr('class', 'preview-circle');
 svg.append('rect').attr('class', 'preview-rect');
 svg.append('line').attr('class', 'preview-line');
+
+// --- shape drawing functions -------------------------------------------------
 
 function drawCircle(x, y, r) {
   svg.append('circle')
@@ -85,8 +107,10 @@ function drawLine(x, y, x2, y2) {
     .attr('y2', y2)
     .attr('stroke', grey);
 
+  var mid = midpoint(...arguments);
+
   drawGuide(x, y);
-  drawGuide((x + x2) / 2, (y + y2) / 2);
+  drawGuide(mid.x, mid.y);
   drawGuide(x2, y2);
 }
 
@@ -115,8 +139,7 @@ function clearAll() {
   svg.selectAll('.guide').remove();
 }
 
-
-var startx = null, starty;
+// --- bound svg events --------------------------------------------------------
 
 svg.on('mousedown', function (e) {
   startx = d3.event.offsetX;
@@ -163,6 +186,8 @@ svg.on('mouseup', function (e) {
   }
   startx = null;
 });
+
+// --- helper functions --------------------------------------------------------
 
 function midpoint(x, y, x2, y2) {
   return {
