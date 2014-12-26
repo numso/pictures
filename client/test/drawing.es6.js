@@ -123,13 +123,17 @@ function drawLinePreview(x, y, x2, y2) {
     .attr('stroke', grey);
 }
 
-function drawGuide(x, y) {
+function drawGuide(x, y, parent) {
   svg.append('circle')
     .attr('class', 'guide')
     .attr('cx', x)
     .attr('cy', y)
     .attr('r', 5)
-    .attr('fill', blue);
+    .attr('fill', blue)
+    .on('mousedown', function (e) {
+      console.log('mousedown woot');
+      // modify parent as moved?
+    });
 }
 
 function clearAll() {
@@ -142,11 +146,28 @@ function clearAll() {
 // --- bound svg events --------------------------------------------------------
 
 svg.on('mousedown', function (e) {
-  startx = d3.event.offsetX;
-  starty = d3.event.offsetY;
+  if (mode === 'create') mouseDownCreate(e);
+  if (mode === 'update') mouseDownUpdate(e);
 });
 
 svg.on('mousemove', function (e) {
+  if (mode === 'create') mouseMoveCreate(e);
+  if (mode === 'update') mouseMoveUpdate(e);
+});
+
+svg.on('mouseup', function (e) {
+  if (mode === 'create') mouseUpCreate(e);
+  if (mode === 'update') mouseUpUpdate(e);
+});
+
+// --- create event methods ----------------------------------------------------
+
+function mouseDownCreate(e) {
+  startx = d3.event.offsetX;
+  starty = d3.event.offsetY;
+}
+
+function mouseMoveCreate(e) {
   if (startx === null) return;
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
@@ -163,9 +184,9 @@ svg.on('mousemove', function (e) {
   } else {
     drawLinePreview(startx, starty, endx, endy);
   }
-});
+}
 
-svg.on('mouseup', function (e) {
+function mouseUpCreate(e) {
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
   if (type === 'circle') {
@@ -185,7 +206,21 @@ svg.on('mouseup', function (e) {
     drawLinePreview(0, 0, 0, 0);
   }
   startx = null;
-});
+}
+
+// --- update event methods ----------------------------------------------------
+
+function mouseDownUpdate(e) {
+
+}
+
+function mouseMoveUpdate(e) {
+
+}
+
+function mouseUpUpdate(e) {
+
+}
 
 // --- helper functions --------------------------------------------------------
 
