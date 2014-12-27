@@ -99,8 +99,11 @@ function drawRectPreview(x, y, w, h) {
 }
 
 function drawLine(x, y, x2, y2) {
+  var id = 'rect-' + Math.floor(Math.random() * 99999);
+
   svg.append('line')
     .attr('class', 'real-line')
+    .attr('class', id)
     .attr('x1', x)
     .attr('y1', y)
     .attr('x2', x2)
@@ -111,7 +114,11 @@ function drawLine(x, y, x2, y2) {
 
   drawGuide(x, y);
   drawGuide(mid.x, mid.y);
-  drawGuide(x2, y2);
+  drawGuide(x2, y2, function (x, y) {
+    svg.select('.' + id)
+      .attr('x2', x)
+      .attr('y2', y);
+  });
 }
 
 function drawLinePreview(x, y, x2, y2) {
@@ -123,7 +130,7 @@ function drawLinePreview(x, y, x2, y2) {
     .attr('stroke', grey);
 }
 
-function drawGuide(x, y, parent) {
+function drawGuide(x, y, update) {
   svg.append('circle')
     .attr('class', 'guide')
     .attr('cx', x)
@@ -131,8 +138,9 @@ function drawGuide(x, y, parent) {
     .attr('r', 5)
     .attr('fill', blue)
     .on('mousedown', function (e) {
-      console.log('mousedown woot');
-      // modify parent as moved?
+      // set selected
+      // then, on mouse move, set it if selected
+      update && update(d3.event.offsetX, d3.event.offsetY);
     });
 }
 
