@@ -1,7 +1,7 @@
 require('./style');
 
-// require('./tags');
-// require('./drag-num');
+require('./tags');
+require('./drag-num');
 require('./drawing');
 
 
