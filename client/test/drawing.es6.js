@@ -137,10 +137,11 @@ function drawGuide(x, y, update) {
     .attr('cy', y)
     .attr('r', 5)
     .attr('fill', blue)
-    .on('mousedown', function (e) {
+    .on('mousemove', function (e) {
       // set selected
       // then, on mouse move, set it if selected
       update && update(d3.event.offsetX, d3.event.offsetY);
+      // redraw guides...
     });
 }
 
