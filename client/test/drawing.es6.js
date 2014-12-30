@@ -131,8 +131,10 @@ function drawLinePreview(x, y, x2, y2) {
 }
 
 function drawGuide(x, y, update) {
+  var id = 'guide-' + Math.floor(Math.random() * 99999);
   svg.append('circle')
     .attr('class', 'guide')
+    .attr('class', id)
     .attr('cx', x)
     .attr('cy', y)
     .attr('r', 5)
@@ -141,6 +143,9 @@ function drawGuide(x, y, update) {
       // set selected
       // then, on mouse move, set it if selected
       update && update(d3.event.offsetX, d3.event.offsetY);
+      svg.select('.' + id)
+        .attr('cx', d3.event.offsetX)
+        .attr('cy', d3.event.offsetY);
       // redraw guides...
     });
 }
