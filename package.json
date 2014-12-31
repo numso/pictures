@@ -5,8 +5,7 @@
   "repository": "",
   "scripts": {
     "lr": "node --harmony scripts/live-reload.js",
-    "sass": "sass -I ./node_modules --scss --watch ./client/style/main.scss:./client/build/bundle.css",
-    "test": "mocha --harmony --recursive test/"
+    "sass": "sass -I ./node_modules --scss --watch ./client/style/main.scss:./client/build/bundle.css"
   },
   "author": "Dallin Osmun",
   "license": "MIT",
