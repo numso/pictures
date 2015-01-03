@@ -1,4 +1,5 @@
 var React = require('react');
+var store = require('../stores/mode');
 
 var CheatSheet = React.createClass({
 
@@ -28,6 +29,28 @@ var CheatSheet = React.createClass({
         { label: 'clip',  hotkey: 'k' }
       ]
     };
+  },
+
+  componentDidMount() {
+    document.addEventListener('keydown', function (e) {
+      switch (e.keyCode) {
+        case 88:
+          console.log('Switch Mode to Line');
+          store.mode = 'line';
+          break;
+        case 82:
+          console.log('Switch Mode to Rect');
+          store.mode = 'square';
+          break;
+        case 67:
+          console.log('Switch Mode to Circle');
+          store.mode = 'circle';
+          break;
+        default:
+          console.log('Key Not supported yet');
+          break;
+      }
+    });
   },
 
   render() {

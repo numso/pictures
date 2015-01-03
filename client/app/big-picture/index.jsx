@@ -1,12 +1,11 @@
 var React = require('react');
 var d3 = require('d3');
+var store = require('../stores/mode');
 
 var svg;
 
 var blue = '#56a7e1';
 var grey = '#cacaca';
-
-var type = 'circle';
 
 var startx = null;
 var starty;
@@ -127,11 +126,11 @@ function mouseMoveCreate(e) {
   if (startx === null) return;
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
-  if (type === 'circle') {
+  if (store.mode === 'circle') {
     var mid = midpoint(startx, starty, endx, endy);
     var dist = distance(startx, starty, endx, endy);
     drawCirclePreview(mid.x, mid.y, dist / 2);
-  } else  if (type === 'square') {
+  } else  if (store.mode === 'square') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
@@ -145,12 +144,12 @@ function mouseMoveCreate(e) {
 function mouseUpCreate(e) {
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
-  if (type === 'circle') {
+  if (store.mode === 'circle') {
     var mid = midpoint(startx, starty, endx, endy);
     var dist = distance(startx, starty, endx, endy);
     drawCircle(mid.x, mid.y, dist / 2);
     drawCirclePreview(0, 0, 0);
-  } else if (type === 'square') {
+  } else if (store.mode === 'square') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
@@ -187,6 +186,8 @@ var BigPicture = React.createClass({
       .attr('height', 900);
 
     svg.append('circle').attr('class', 'preview-circle');
+    svg.append('rect').attr('class', 'preview-rect');
+    svg.append('line').attr('class', 'preview-line');
 
     svg.on('mousedown', mouseDownCreate);
     svg.on('mousemove', mouseMoveCreate);
