@@ -34,41 +34,48 @@ var CheatSheet = React.createClass({
     };
   },
 
-  setMode(mode, display=mode) {
-
+  setMode(mode) {
     store.mode = mode;
-    this.setState({
-      mode: display
-    });
+    this.setState({ mode });
   },
 
   componentDidMount() {
     document.addEventListener('keydown', (e) => {
       switch (e.keyCode) {
-        case 88:
-          console.log('Switch Mode to Line');
+        case 88: // x
           this.setMode('line');
           break;
-        case 82:
-          console.log('Switch Mode to Rect');
-          this.setMode('square', 'rect');
+        case 82: // r
+          this.setMode('rect');
           break;
-        case 67:
-          console.log('Switch Mode to Circle');
+        case 67: // c
           this.setMode('circle');
           break;
+        case 65: // a
+        case 84: // t
+        case 85: // u
+        case 80: // p
+        case 86: // v
+        case 83: // s
+        case 69: // e
+        case 68: // d
+        case 76: // l
+        case 73: // i
+        case 71: // g
+        case 75: // k
+          console.log('Key Not Supported... yet', e.keyCode);
+          break;
         default:
-          console.log('Key Not supported yet');
+          console.log('Key Not Supported', e.keyCode);
           break;
       }
     });
   },
 
   render() {
-
-    var test = [];
+    var content = [];
     for (var key in this.state.labels) {
-      test.push(
+      content.push(
         <div className="cheatsheet__section">
           <div className="cheatsheet__title">{key}</div>
           {this.state.labels[key].map((item) => {
@@ -77,7 +84,7 @@ var CheatSheet = React.createClass({
               '--selected': item.label === this.state.mode
             });
             return (
-              <div className={classes}>
+              <div className={classes} onClick={this.setMode.bind(this, item.label)}>
                 <div className="cheatsheet__item">{item.label}</div>
                 <div className="cheatsheet__hotkey">{item.hotkey}</div>
               </div>
@@ -89,7 +96,7 @@ var CheatSheet = React.createClass({
 
     return (
       <div className="cheatsheet">
-        {test}
+        {content}
       </div>
     );
   }

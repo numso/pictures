@@ -130,13 +130,13 @@ function mouseMoveCreate(e) {
     var mid = midpoint(startx, starty, endx, endy);
     var dist = distance(startx, starty, endx, endy);
     drawCirclePreview(mid.x, mid.y, dist / 2);
-  } else  if (store.mode === 'square') {
+  } else  if (store.mode === 'rect') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
     var h = Math.abs(starty - endy);
     drawRectPreview(x, y, w, h);
-  } else {
+  } else if (store.mode === 'line') {
     drawLinePreview(startx, starty, endx, endy);
   }
 }
@@ -149,14 +149,14 @@ function mouseUpCreate(e) {
     var dist = distance(startx, starty, endx, endy);
     drawCircle(mid.x, mid.y, dist / 2);
     drawCirclePreview(0, 0, 0);
-  } else if (store.mode === 'square') {
+  } else if (store.mode === 'rect') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
     var h = Math.abs(starty - endy);
     drawRect(x, y, w, h);
     drawRectPreview(0, 0, 0, 0);
-  } else {
+  } else if (store.mode === 'line') {
     drawLine(startx, starty, endx, endy);
     drawLinePreview(0, 0, 0, 0);
   }
