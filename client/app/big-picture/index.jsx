@@ -95,6 +95,13 @@ function drawLinePreview(x, y, x2, y2) {
     .attr('stroke', grey);
 }
 
+function drawText(x, y, x2, y2) {
+  svg.append('text')
+    .attr('x', x2)
+    .attr('y', y2)
+    .text('Hi!');
+}
+
 function drawGuide(x, y, update) {
   var id = 'guide-' + Math.floor(Math.random() * 99999);
   svg.append('circle')
@@ -117,12 +124,12 @@ function drawGuide(x, y, update) {
 
 // --- create event methods ----------------------------------------------------
 
-function mouseDownCreate(e) {
+function mouseDown(e) {
   startx = d3.event.offsetX;
   starty = d3.event.offsetY;
 }
 
-function mouseMoveCreate(e) {
+function mouseMove(e) {
   if (startx === null) return;
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
@@ -141,7 +148,7 @@ function mouseMoveCreate(e) {
   }
 }
 
-function mouseUpCreate(e) {
+function mouseUp(e) {
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
   if (store.mode === 'circle') {
@@ -159,6 +166,8 @@ function mouseUpCreate(e) {
   } else if (store.mode === 'line') {
     drawLine(startx, starty, endx, endy);
     drawLinePreview(0, 0, 0, 0);
+  } else if (store.mode === 'text') {
+    drawText(startx, starty, endx, endy);
   }
   startx = null;
 }
@@ -189,9 +198,9 @@ var BigPicture = React.createClass({
     svg.append('rect').attr('class', 'preview-rect');
     svg.append('line').attr('class', 'preview-line');
 
-    svg.on('mousedown', mouseDownCreate);
-    svg.on('mousemove', mouseMoveCreate);
-    svg.on('mouseup', mouseUpCreate);
+    svg.on('mousedown', mouseDown);
+    svg.on('mousemove', mouseMove);
+    svg.on('mouseup', mouseUp);
   },
 
   render() {

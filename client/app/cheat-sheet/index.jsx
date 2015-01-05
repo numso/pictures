@@ -51,8 +51,10 @@ var CheatSheet = React.createClass({
         case 67: // c
           this.setMode('circle');
           break;
-        case 65: // a
         case 84: // t
+          this.setMode('text');
+          break;
+        case 65: // a
         case 85: // u
         case 80: // p
         case 86: // v
