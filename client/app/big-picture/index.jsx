@@ -3,6 +3,7 @@ var d3 = require('d3');
 var store = require('../stores/mode');
 
 var svg;
+var thiz;
 
 var blue = '#56a7e1';
 var grey = '#cacaca';
@@ -137,14 +138,23 @@ function mouseMove(e) {
     var mid = midpoint(startx, starty, endx, endy);
     var dist = distance(startx, starty, endx, endy);
     drawCirclePreview(mid.x, mid.y, dist / 2);
+    thiz.setState({
+      msg: `Draw circle around (${mid.x}, ${mid.y}), ${Math.floor(dist / 2)} px in radius.`
+    });
   } else  if (store.mode === 'rect') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
     var h = Math.abs(starty - endy);
     drawRectPreview(x, y, w, h);
+    thiz.setState({
+      msg: `Draw rect from (${startx}, ${starty}), ${endx - startx} px horizontally, ${endy - starty} px vertically.`
+    });
   } else if (store.mode === 'line') {
     drawLinePreview(startx, starty, endx, endy);
+    thiz.setState({
+      msg: `Draw line from (${startx}, ${starty}), ${endx - startx} px horizontally, ${endy - starty} px vertically.`
+    });
   }
 }
 
@@ -168,6 +178,9 @@ function mouseUp(e) {
     drawLinePreview(0, 0, 0, 0);
   } else if (store.mode === 'text') {
     drawText(startx, starty, endx, endy);
+    thiz.setState({
+      msg: `Draw text at (${startx}, ${starty})`
+    });
   }
   startx = null;
 }
@@ -201,11 +214,20 @@ var BigPicture = React.createClass({
     svg.on('mousedown', mouseDown);
     svg.on('mousemove', mouseMove);
     svg.on('mouseup', mouseUp);
+    thiz = this;
+  },
+
+  getInitialState() {
+    return {
+      msg: ''
+    };
   },
 
   render() {
     return (
-      <div id="picture-box" className="picture --big">
+      <div>
+        <div style={{textAlign: 'center', height: 18}}>{this.state.msg}</div>
+        <div id="picture-box" className="picture --big"></div>
       </div>
     );
   }

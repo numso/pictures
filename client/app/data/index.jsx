@@ -133,7 +133,7 @@ var Data = React.createClass({
       return <ArrayVal picID={this.props.pictureID} item={item}/>;
     });
 
-    var DEBUG = true;
+    var DEBUG = false;
 
     return (
       <div className="data">
@@ -151,12 +151,12 @@ var Data = React.createClass({
             </div>
           </div>
         </div>
-        {DEBUG&&[<div>
+        {DEBUG&&(<div>
         <div className="header">Results</div>
         <div className="container --data">
           <pre>{JSON.stringify(this.state, 2, 2)}</pre>
         </div>
-        </div>]}
+        </div>)}
       </div>
     );
   },
