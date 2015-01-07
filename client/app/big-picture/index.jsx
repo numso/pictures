@@ -135,11 +135,10 @@ function mouseMove(e) {
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
   if (store.mode === 'circle') {
-    var mid = midpoint(startx, starty, endx, endy);
     var dist = distance(startx, starty, endx, endy);
-    drawCirclePreview(mid.x, mid.y, dist / 2);
+    drawCirclePreview(startx, starty, dist);
     thiz.setState({
-      msg: `Draw circle around (${mid.x}, ${mid.y}), ${Math.floor(dist / 2)} px in radius.`
+      msg: `Draw circle around (${startx}, ${starty}), ${Math.floor(dist)} px in radius.`
     });
   } else  if (store.mode === 'rect') {
     var x = Math.min(startx, endx);
@@ -162,9 +161,8 @@ function mouseUp(e) {
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
   if (store.mode === 'circle') {
-    var mid = midpoint(startx, starty, endx, endy);
     var dist = distance(startx, starty, endx, endy);
-    drawCircle(mid.x, mid.y, dist / 2);
+    drawCircle(startx, starty, dist);
     drawCirclePreview(0, 0, 0);
   } else if (store.mode === 'rect') {
     var x = Math.min(startx, endx);
