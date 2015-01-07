@@ -28,6 +28,8 @@
 
   @include option(data) {
     min-height: 300px;
+    max-height: 420px;
+    overflow: auto;
   }
 
   @include option(flex) {

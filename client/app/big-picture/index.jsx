@@ -1,6 +1,7 @@
 var React = require('react');
 var d3 = require('d3');
 var store = require('../stores/mode');
+var steps = require('../stores/steps');
 
 var svg;
 var thiz;
@@ -164,6 +165,7 @@ function mouseUp(e) {
     var dist = distance(startx, starty, endx, endy);
     drawCircle(startx, starty, dist);
     drawCirclePreview(0, 0, 0);
+    steps.add({ type: 'circle', x1: startx, y1: starty, r: dist });
   } else if (store.mode === 'rect') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
@@ -171,14 +173,17 @@ function mouseUp(e) {
     var h = Math.abs(starty - endy);
     drawRect(x, y, w, h);
     drawRectPreview(0, 0, 0, 0);
+    steps.add({ type: 'rect', x1: startx, y1: starty, x2: endx, y2: endy });
   } else if (store.mode === 'line') {
     drawLine(startx, starty, endx, endy);
     drawLinePreview(0, 0, 0, 0);
+    steps.add({ type: 'line', x1: startx, y1: starty, x2: endx, y2: endy });
   } else if (store.mode === 'text') {
     drawText(startx, starty, endx, endy);
     thiz.setState({
       msg: `Draw text at (${startx}, ${starty})`
     });
+    steps.add({ type: 'text', x1: startx, y1: starty });
   }
   startx = null;
 }
