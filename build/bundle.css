@@ -30,7 +30,9 @@
     box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset;
     display: flex; }
   .container.\--data {
-    min-height: 300px; }
+    min-height: 300px;
+    max-height: 420px;
+    overflow: auto; }
   .container.\--flex {
     display: flex; }
 
