@@ -5,7 +5,8 @@ var Steps = React.createClass({
 
   getInitialState() {
     return {
-      steps: steps.data
+      steps: steps.data,
+      selected: null
     };
   },
 
@@ -14,7 +15,10 @@ var Steps = React.createClass({
   },
 
   refresh() {
-    this.setState({ steps: steps.data });
+    this.setState({
+      steps: steps.data,
+      selected: steps.data.length - 1
+    });
   },
 
   renderStep(s, i, steps) {
@@ -52,14 +56,27 @@ var Steps = React.createClass({
       boxShadow: '0 0 20px 2px rgba(0,0,0,0.5)'
     };
 
+    var item = {
+      padding: '10px 0',
+      cursor: 'pointer'
+    };
+
+    if (this.state.selected === i) {
+      item.backgroundColor = '#a0af0b';
+    }
+
     return (
-      <li style={{padding: '10px 0'}}>
+      <li style={item} onClick={this.onClick.bind(this, i)}>
         <svg style={style}>
           {svgParts}
         </svg>
         <p style={{float: 'right', width: 240}}>{msg}</p>
       </li>
     );
+  },
+
+  onClick(selected) {
+    this.setState({ selected });
   },
 
   render() {
