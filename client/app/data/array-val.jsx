@@ -67,7 +67,7 @@ var ArrayVal = React.createClass({
             return <div className="data__indice">{item}</div>
           })}
         </div>
-        <div className="value">
+        <div className="value" style={{height:25}}>
           {generateValueMarkup(this.props.item.value || '', this.props.item)}
         </div>
       </div>

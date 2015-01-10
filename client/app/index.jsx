@@ -1,4 +1,8 @@
 var React = window.React = require('react/addons');
+var {component, handler} = require('omniscient-tools');
+
+var CheatSheetStore = require('./cheat-sheet/store');
+var store = require('./stores/pictures');
 
 var Pictures = require('./pictures');
 var Data = require('./data');
@@ -7,7 +11,13 @@ var BigPicture = require('./big-picture');
 var Measurements = require('./measurements');
 var CheatSheet = require('./cheat-sheet');
 
-var store = require('./stores/pictures');
+function load() {
+  // optionally load all stores from a backend or localstorage or firebase or something.
+}
+
+var Index = handler(load, function () {
+  return <App/>;
+});
 
 var App = React.createClass({
 
@@ -42,7 +52,10 @@ var App = React.createClass({
           </div>
 
           <div style={{ display: 'inline-block', position: 'absolute', right: 0 }}>
-            <CheatSheet/>
+            <CheatSheet
+              labels={CheatSheetStore.state.cursor('labels')}
+              mode={CheatSheetStore.state.cursor('mode')}
+            />
           </div>
         </div>
       </div>
@@ -51,4 +64,11 @@ var App = React.createClass({
 
 });
 
-React.render(<App/>, document.body);
+// when do we call load, should it exist?
+function render() {
+  React.render(<Index/>, document.body);
+}
+
+CheatSheetStore.state.on('swap', render);
+
+render();
