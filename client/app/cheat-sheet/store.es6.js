@@ -33,3 +33,15 @@ var state = exports.state = immstruct({
   }
 
 });
+
+function codeFromLetter(str) {
+  return str.toUpperCase().charCodeAt(0);
+}
+
+exports.getItemFor = (code) => {
+  return state.current.get('labels').reduce((memo, set) => {
+    return memo || set.find((item) => {
+      return codeFromLetter(item.get('hotkey')) === code;
+    });
+  }, undefined);
+};
