@@ -1,6 +1,6 @@
+var immutable = require('immutable');
 var React = require('react');
 var d3 = require('d3');
-var steps = require('../stores/steps');
 
 var svg;
 var thiz;
@@ -166,7 +166,7 @@ function mouseUp(e) {
     var dist = distance(startx, starty, endx, endy);
     drawCircle(startx, starty, dist);
     drawCirclePreview(0, 0, 0);
-    steps.add({ type: 'circle', x1: startx, y1: starty, r: dist });
+    addStep({ type: 'circle', x1: startx, y1: starty, r: dist });
   } else if (mode === 'rect') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
@@ -174,17 +174,17 @@ function mouseUp(e) {
     var h = Math.abs(starty - endy);
     drawRect(x, y, w, h);
     drawRectPreview(0, 0, 0, 0);
-    steps.add({ type: 'rect', x1: startx, y1: starty, x2: endx, y2: endy });
+    addStep({ type: 'rect', x1: startx, y1: starty, x2: endx, y2: endy });
   } else if (mode === 'line') {
     drawLine(startx, starty, endx, endy);
     drawLinePreview(0, 0, 0, 0);
-    steps.add({ type: 'line', x1: startx, y1: starty, x2: endx, y2: endy });
+    addStep({ type: 'line', x1: startx, y1: starty, x2: endx, y2: endy });
   } else if (mode === 'text') {
     drawText(startx, starty, endx, endy);
     thiz.setState({
       msg: `Draw text at (${endx}, ${endy})`
     });
-    steps.add({ type: 'text', x1: endx, y1: endy });
+    addStep({ type: 'text', x1: endx, y1: endy });
   }
   startx = null;
 }
@@ -202,6 +202,11 @@ function distance(x, y, x2, y2) {
   return Math.sqrt(Math.pow(x2 - x, 2) + Math.pow(y2 - y, 2));
 }
 
+function addStep(step) {
+  thiz.props.steps.update((oldSteps) => {
+    return oldSteps.push(immutable.fromJS(step));
+  });
+}
 
 
 var BigPicture = React.createClass({
