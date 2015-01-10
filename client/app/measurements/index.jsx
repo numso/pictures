@@ -1,16 +1,12 @@
-var React = require('react');
+var {component} = require('omniscient-tools');
 
-var Measurements = React.createClass({
+module.exports = component(function () {
 
-  render() {
-    return (
-      <div>
-        <div className="header">Measurements</div>
-        <div className="container --data">measurements go here</div>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <div className="header">Measurements</div>
+      <div className="container --data">measurements go here</div>
+    </div>
+  );
 
 });
-
-module.exports = Measurements;
