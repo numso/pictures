@@ -1,6 +1,5 @@
 var React = require('react');
 var d3 = require('d3');
-var store = require('../stores/mode');
 var steps = require('../stores/steps');
 
 var svg;
@@ -132,16 +131,17 @@ function mouseDown(e) {
 }
 
 function mouseMove(e) {
+  var mode = thiz.props.mode.get('current');
   if (startx === null) return;
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
-  if (store.mode === 'circle') {
+  if (mode === 'circle') {
     var dist = distance(startx, starty, endx, endy);
     drawCirclePreview(startx, starty, dist);
     thiz.setState({
       msg: `Draw circle around (${startx}, ${starty}), ${Math.floor(dist)} px in radius.`
     });
-  } else  if (store.mode === 'rect') {
+  } else  if (mode === 'rect') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
@@ -150,7 +150,7 @@ function mouseMove(e) {
     thiz.setState({
       msg: `Draw rect from (${startx}, ${starty}), ${endx - startx} px horizontally, ${endy - starty} px vertically.`
     });
-  } else if (store.mode === 'line') {
+  } else if (mode === 'line') {
     drawLinePreview(startx, starty, endx, endy);
     thiz.setState({
       msg: `Draw line from (${startx}, ${starty}), ${endx - startx} px horizontally, ${endy - starty} px vertically.`
@@ -159,14 +159,15 @@ function mouseMove(e) {
 }
 
 function mouseUp(e) {
+  var mode = thiz.props.mode.get('current');
   var endx = d3.event.offsetX;
   var endy = d3.event.offsetY;
-  if (store.mode === 'circle') {
+  if (mode === 'circle') {
     var dist = distance(startx, starty, endx, endy);
     drawCircle(startx, starty, dist);
     drawCirclePreview(0, 0, 0);
     steps.add({ type: 'circle', x1: startx, y1: starty, r: dist });
-  } else if (store.mode === 'rect') {
+  } else if (mode === 'rect') {
     var x = Math.min(startx, endx);
     var y = Math.min(starty, endy);
     var w = Math.abs(startx - endx);
@@ -174,16 +175,16 @@ function mouseUp(e) {
     drawRect(x, y, w, h);
     drawRectPreview(0, 0, 0, 0);
     steps.add({ type: 'rect', x1: startx, y1: starty, x2: endx, y2: endy });
-  } else if (store.mode === 'line') {
+  } else if (mode === 'line') {
     drawLine(startx, starty, endx, endy);
     drawLinePreview(0, 0, 0, 0);
     steps.add({ type: 'line', x1: startx, y1: starty, x2: endx, y2: endy });
-  } else if (store.mode === 'text') {
+  } else if (mode === 'text') {
     drawText(startx, starty, endx, endy);
     thiz.setState({
-      msg: `Draw text at (${startx}, ${starty})`
+      msg: `Draw text at (${endx}, ${endy})`
     });
-    steps.add({ type: 'text', x1: startx, y1: starty });
+    steps.add({ type: 'text', x1: endx, y1: endy });
   }
   startx = null;
 }

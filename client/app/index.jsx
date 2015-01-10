@@ -48,7 +48,7 @@ var App = React.createClass({
 
         <div style={{ display: 'inline-block', paddingTop: 20 }}>
           <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
-            <BigPicture/>
+            <BigPicture mode={CheatSheetStore.state.cursor('mode')} />
           </div>
 
           <div style={{ display: 'inline-block', position: 'absolute', right: 0 }}>
