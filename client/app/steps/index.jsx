@@ -1,4 +1,5 @@
 var {component} = require('omniscient-tools');
+var {generateParts} = require('../common/drawing');
 
 module.exports = component(function ({steps, selected}) {
 
@@ -11,23 +12,7 @@ module.exports = component(function ({steps, selected}) {
       case 'text': msg = `Draw text at (${s.get('x1')}, ${s.get('y1')})`; break;
     }
 
-    var PROPORTION = (1/9);
-    var svgParts = [];
-    for (var j = 0; j <= i; j++) {
-      var s = steps.get(j);
-      switch (s.get('type')) {
-        case 'circle': svgParts.push(<circle cx={s.get('x1')*PROPORTION} cy={s.get('y1')*PROPORTION} r={s.get('r')*PROPORTION} fill="#cacaca"/>); break;
-        case 'rect':
-          var x = Math.min(s.get('x1'), s.get('x2'));
-          var y = Math.min(s.get('y1'), s.get('y2'));
-          var w = Math.abs(s.get('x1') - s.get('x2'));
-          var h = Math.abs(s.get('y1') - s.get('y2'));
-          svgParts.push(<rect x={x*PROPORTION} y={y*PROPORTION} width={w*PROPORTION} height={h*PROPORTION} fill="#cacaca"/>);
-          break;
-        case 'line': svgParts.push(<line x1={s.get('x1')*PROPORTION} y1={s.get('y1')*PROPORTION} x2={s.get('x2')*PROPORTION} y2={s.get('y2')*PROPORTION} stroke="#cacaca"/>); break;
-        case 'text': svgParts.push(<text x={s.get('x1')*PROPORTION} y={s.get('y1')*PROPORTION} fill="#cacaca" fontSize="4">Hi!</text>); break;
-      }
-    }
+    var svgParts = generateParts(steps.slice(0, i + 1), 1 / 9, 4);
 
     var style = {
       backgroundColor: 'white',

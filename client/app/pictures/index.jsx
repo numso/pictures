@@ -20,7 +20,7 @@ module.exports = component(function ({selectedPicture, pictures}) {
   function renderPictures() {
     var markup = [];
     for (var i = 0; i < pictures.size; i++) {
-      markup.push(<Picture num={i} selected={selectedPicture.get('current') === i} onClick={setPicture(i)}/>);
+      markup.push(<Picture picture={pictures.get(i)} num={i} selected={selectedPicture.get('current') === i} onClick={setPicture(i)}/>);
     }
     return markup;
   }

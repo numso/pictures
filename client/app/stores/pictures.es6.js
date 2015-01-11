@@ -65,3 +65,5 @@ function newItem() {
 }
 
 store.push(newItem());
+store.push(newItem());
+store.push(newItem());
