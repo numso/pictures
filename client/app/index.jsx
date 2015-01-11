@@ -49,6 +49,7 @@ var App = component(function () {
             mode={CheatSheetStore.state.cursor('mode')}
             steps={stepsCursor}
             bigPictureStuff={aoeu}
+            selectedStep={curStepSelectedCursor}
           />
         </div>
 

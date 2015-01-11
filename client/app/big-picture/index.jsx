@@ -5,7 +5,7 @@ var {generateParts} = require('../common/drawing');
 var startx = null;
 var starty;
 
-module.exports = component(function ({mode, steps, bigPictureStuff}) {
+module.exports = component(function ({mode, steps, selectedStep, bigPictureStuff}) {
 
   function mouseDown(e) {
     startx = e.nativeEvent.offsetX;
@@ -36,10 +36,13 @@ module.exports = component(function ({mode, steps, bigPictureStuff}) {
     var endy = e.nativeEvent.offsetY;
     if (_mode === 'circle') {
       var dist = distance(startx, starty, endx, endy);
+      removePreview('circle');
       addStep({ type: 'circle', x1: startx, y1: starty, r: dist });
     } else if (_mode === 'rect') {
+      removePreview('rect');
       addStep({ type: 'rect', x1: startx, y1: starty, x2: endx, y2: endy });
     } else if (_mode === 'line') {
+      removePreview('line');
       addStep({ type: 'line', x1: startx, y1: starty, x2: endx, y2: endy });
     } else if (_mode === 'text') {
       bigPictureStuff.update('msg', () => `Draw text at (${endx}, ${endy})`);
@@ -56,13 +59,18 @@ module.exports = component(function ({mode, steps, bigPictureStuff}) {
     steps.update((oldSteps) => {
       return oldSteps.push(immutable.fromJS(step));
     });
+    selectedStep.update('current', () => steps.size);
   }
 
   function setPreview(key, preview) {
     bigPictureStuff.get('previews').update(key, () => immutable.fromJS(preview));
   }
 
-  var svgParts = generateParts(steps);
+  function removePreview(key) {
+    bigPictureStuff.get('previews').remove(key);
+  }
+
+  var svgParts = generateParts(steps.slice(0, selectedStep.get('current') + 1));
   var previewParts = generateParts(bigPictureStuff.get('previews'));
 
   return (
