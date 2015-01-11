@@ -2,7 +2,6 @@ var React = window.React = require('react/addons');
 var {component, handler} = require('omniscient-tools');
 
 var PictureStore = require('./pictures/store');
-var StepsStore = require('./steps/store');
 var CheatSheetStore = require('./cheat-sheet/store');
 var store = require('./stores/pictures');
 
@@ -22,6 +21,10 @@ var Index = handler(load, function () {
 });
 
 var App = component(function () {
+  var curPicture = PictureStore.state.cursor('selectedPicture').get('current');
+  var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture);
+  var stepsCursor = curPictureCursor.get('steps');
+  var curStepSelectedCursor = curPictureCursor.get('selectedStep');
   return (
     <div>
       <Pictures
@@ -34,8 +37,8 @@ var App = component(function () {
           selectedPicture={PictureStore.state.cursor('selectedPicture')}
         />
         <Steps
-          steps={StepsStore.state.cursor('steps')}
-          selected={StepsStore.state.cursor('selected')}
+          steps={stepsCursor}
+          selected={curStepSelectedCursor}
         />
         <Measurements/>
       </div>
@@ -44,7 +47,7 @@ var App = component(function () {
         <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
           <BigPicture
             mode={CheatSheetStore.state.cursor('mode')}
-            steps={StepsStore.state.cursor('steps')}
+            steps={stepsCursor}
           />
         </div>
 
@@ -66,7 +69,6 @@ function render(a, b) {
 }
 
 PictureStore.state.on('swap', render);
-StepsStore.state.on('swap', render);
 CheatSheetStore.state.on('swap', render);
 
 render();
