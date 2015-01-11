@@ -1,7 +1,5 @@
 var watchers = [];
 
-var cur = 0;
-
 var store = [
 
   {
@@ -39,22 +37,13 @@ module.exports = {
 
   addItem() {
     store.push(newItem());
-    cur = store.length - 1;
+    // cur = store.length - 1;
     notify();
   },
 
   watch(cb) {
     watchers.push(cb);
   },
-
-  getCur() {
-    return cur;
-  },
-
-  setCur(i) {
-    cur = i;
-    notify();
-  }
 
 };
 

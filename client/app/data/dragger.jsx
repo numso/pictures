@@ -62,7 +62,7 @@ var Dragger = React.createClass({
     this.setState({
       number: num
     });
-    store.setCur(store.getCur());
+    // store.setCur(store.getCur());
   },
 
   onDragEnd(e) {

@@ -39,7 +39,7 @@ var ScalarVal = React.createClass({
 
   updateValue(newValue) {
     this.props.item.value = newValue;
-    store.setCur(store.getCur());
+    // store.setCur(store.getCur());
   },
 
   render() {
@@ -88,7 +88,7 @@ function generateValueMarkup(val, item) {
 }
 
 function getMap() {
-  var data = store.getData(store.getCur());
+  var data = store.getData(GETCUR());
   var obj = {};
   _.each(data.arrays, (a) => {
     obj[a.id] = a.label;
@@ -97,4 +97,9 @@ function getMap() {
     obj[s.id] = s.label;
   });
   return obj;
+}
+
+var pStore = require('../pictures/store');
+function GETCUR() {
+  return pStore.state.cursor('selectedPicture').get('current');
 }

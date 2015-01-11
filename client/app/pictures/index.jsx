@@ -1,54 +1,40 @@
-var React = require('react');
+var {component} = require('omniscient-tools');
 var Picture = require('./picture');
+var PicturesStore = require('./store');
+var immutable = require('immutable');
 
-var store = require('../stores/pictures');
+module.exports = component(function ({selectedPicture, pictures}) {
 
-var Pictures = React.createClass({
-
-  addNew() {
-    store.addItem();
-    this.setState({
-      numPictures: store.getLength(),
-      curPicture: store.getLength() - 1
+  function addNew() {
+    pictures.update((oldPictures) => {
+      return oldPictures.push(immutable.fromJS(PicturesStore.newPicture()));
     });
-  },
-
-  getInitialState() {
-    return {
-      numPictures: store.getLength(),
-      curPicture: store.getCur()
-    };
-  },
-
-  setPicture(i) {
-    store.setCur(i);
-    this.setState({
-      curPicture: i
-    });
-  },
-
-  renderPictures() {
-    var markup = [];
-    for (var i = 0; i < this.state.numPictures; i++) {
-      markup.push(<Picture num={i} selected={this.state.curPicture === i} onClick={this.setPicture.bind(this, i)}/>);
-    }
-    return markup;
-  },
-
-  render() {
-    return (
-      <div>
-        <div className="header">Pictures</div>
-        <div className="container --pictures">
-          {this.renderPictures()}
-          <div className="newpicture" onClick={this.addNew}>
-            <span className="newpicture__content">+</span>
-          </div>
-        </div>
-      </div>
-    );
   }
 
-});
+  function setPicture(i) {
+    return function () {
+      selectedPicture.update('current', () => i);
+    };
+  }
 
-module.exports = Pictures;
+  function renderPictures() {
+    var markup = [];
+    for (var i = 0; i < pictures.size; i++) {
+      markup.push(<Picture num={i} selected={selectedPicture.get('current') === i} onClick={setPicture(i)}/>);
+    }
+    return markup;
+  }
+
+  return (
+    <div>
+      <div className="header">Pictures</div>
+      <div className="container --pictures">
+        {renderPictures()}
+        <div className="newpicture" onClick={addNew}>
+          <span className="newpicture__content">+</span>
+        </div>
+      </div>
+    </div>
+  );
+
+});

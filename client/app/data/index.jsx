@@ -36,14 +36,8 @@ var Data = React.createClass({
     };
   },
 
-  getDefaultProps() {
-    return {
-      pictureID: 0
-    };
-  },
-
   loadPicture(props=this.props) {
-    var picture = store.getData(props.pictureID);
+    var picture = store.getData(props.selectedPicture.get('current'));
     giveIDs(picture);
     this.evaluate(picture);
     this.setState(picture);
@@ -91,7 +85,7 @@ var Data = React.createClass({
   createNew(type) {
     this.state[type].push({ label: 'item', value: 0 });
     giveIDs(this.state);
-    var picture = store.getData(this.props.pictureID);
+    var picture = store.getData(this.props.selectedPicture.get('current'));
     picture.scalars_id = this.state.scalars_id;
     picture.arrays_id = this.state.arrays_id;
     this.evaluate(this.state);
@@ -127,10 +121,10 @@ var Data = React.createClass({
     tags.push(<CreateTag onClick={this.createArray}>+</CreateTag>);
 
     var scalarValues = _.map(this.state.scalars, (item) => {
-      return <ScalarVal picID={this.props.pictureID} item={item}/>
+      return <ScalarVal picID={this.props.selectedPicture.get('current')} item={item}/>
     });
     var arrayValues = _.map(this.state.arrays, (item) => {
-      return <ArrayVal picID={this.props.pictureID} item={item}/>;
+      return <ArrayVal picID={this.props.selectedPicture.get('current')} item={item}/>;
     });
 
     var DEBUG = false;
