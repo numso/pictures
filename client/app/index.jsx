@@ -3,7 +3,6 @@ var {component, handler} = require('omniscient-tools');
 
 var PictureStore = require('./pictures/store');
 var CheatSheetStore = require('./cheat-sheet/store');
-var store = require('./stores/pictures');
 
 var Pictures = require('./pictures');
 var Data = require('./data');
@@ -25,6 +24,7 @@ var App = component(function () {
   var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture);
   var stepsCursor = curPictureCursor.get('steps');
   var curStepSelectedCursor = curPictureCursor.get('selectedStep');
+  var aoeu = curPictureCursor.get('bigPictureStuff');
   return (
     <div>
       <Pictures
@@ -48,6 +48,7 @@ var App = component(function () {
           <BigPicture
             mode={CheatSheetStore.state.cursor('mode')}
             steps={stepsCursor}
+            bigPictureStuff={aoeu}
           />
         </div>
 

@@ -8,6 +8,7 @@ exports.newPicture = function () {
     selectedStep: {
       current: 0
     },
+    bigPictureStuff: { msg: '', previews: {} },
     data: {
       scalars: [{ label: 'parameter', value: '1' }],
       arrays: [{ label: 'item', value: '[1,2,3,4,5]' }],
@@ -37,6 +38,7 @@ function solarExample() {
     selectedStep: {
       current: 0
     },
+    bigPictureStuff: { msg: '', previews: {} },
     data: {
       scalars: [
         { label: 'panels', value: '600', },
