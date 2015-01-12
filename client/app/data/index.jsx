@@ -1,4 +1,4 @@
-var React = require('react');
+var {component} = require('omniscient-tools');
 var _ = require('lodash');
 
 var Tag = require('./tag');
@@ -14,75 +14,65 @@ function getArr(item) {
   return [];
 }
 
-function giveIDs(state) {
-  _.each(state.scalars, (item) => {
-    if (item.id) return;
-    item.id = 's_' + state.scalars_id++;
-  });
-  _.each(state.arrays, (item) => {
-    if (item.id) return;
-    item.id = 'a_' + state.arrays_id++;
-  });
+function giveIDs(dataCursor) {
+  var scalars_id = dataCursor.get('scalars_id');
+  for (var i = 0; i < dataCursor.get('scalars').size; i++) {
+    var item = dataCursor.get('scalars').get(i);
+    if (!item.get('id')) {
+      item.set('id', 's_' + scalars_id++);
+    }
+  }
+  dataCursor.update('scalars_id', () => scalars_id);
+
+  var arrays_id = dataCursor.get('arrays_id');
+  for (var i = 0; i < dataCursor.get('arrays').size; i++) {
+    var item = dataCursor.get('arrays').get(i);
+    if (!item.get('id')) {
+      item.update('id', () => ('a_' + arrays_id++));
+    }
+  }
+  dataCursor.update('arrays_id', () => arrays_id);
 }
 
-var Data = React.createClass({
+module.exports = component(function ({pictureData, selectedPicture}) {
 
-  getInitialState() {
-    return {
-      scalars: [],
-      arrays: [],
-      scalars_id: 1,
-      arrays_id: 1
-    };
-  },
+  // THIS FUNCTION NEEDS MAJOR WORK
+  giveIDs(pictureData);
+  evaluate(pictureData);
 
-  loadPicture(props=this.props) {
-    var picture = store.getData(props.selectedPicture.get('current'));
-    giveIDs(picture);
-    this.evaluate(picture);
-    this.setState(picture);
-  },
-
-  componentWillReceiveProps(nextProps) {
-    this.loadPicture(nextProps);
-  },
-
-  componentDidMount() {
-    store.watch(this.picWillUpdate);
-    this.loadPicture();
-  },
-
-  picWillUpdate() {
-    console.log('PICTURE IS TRYING TO UPDATE');
-  },
-
-  evaluate(state=this.state) {
+  function evaluate(dataCursor) {
     var ctx = {};
-    _.each(state.scalars, (item) => {
-      ctx[item.id] = item.value;
-    });
-    _.each(state.arrays, (item) => {
-      ctx[item.id] = item.value;
-    });
+    for (var i = 0; i < pictureData.get('scalars').size; i++) {
+      var item = pictureData.get('scalars').get(i);
+      ctx[item.get('id')] = item.get('value');
+    }
+    // for (var i = 0; i < pictureData.get('arrays').size; i++) {
+    //   var item = pictureData.get('arrays').get(i);
+    //   ctx[item.get('id')] = item.get('value');
+    // }
     var data = evaluator.check(ctx);
-    _.each(state.scalars, (item) => {
-      item.evaluated = data[item.id];
-    });
-    _.each(state.arrays, (item) => {
-      item.evaluated = data[item.id];
-    });
-  },
+    for (var i = 0; i < pictureData.get('scalars').size; i++) {
+      var item = pictureData.get('scalars').get(i);
+      var id = item.get('id');
+      var foo = item.update('evaluated', () => data[id]);
+    }
+    // for (var i = 0; i < pictureData.get('arrays').size; i++) {
+    //   var item = pictureData.get('arrays').get(i);
+    //   // only update if it's not already updated....
+    //   item.update('evaluated', () => data[item.get('id')]);
+    // }
+  }
 
-  createScalar() {
-    console.log('creating new scalar')
-    this.createNew('scalars');
-  },
+  function createScalar() {
+    createNew('scalars');
+  }
 
-  createArray() {
-    this.createNew('arrays');
-  },
+  function createArray() {
+    createNew('arrays');
+  }
 
-  createNew(type) {
+  console.log('TODO:: Fix these methods as well');
+  function createNew(type) {
     this.state[type].push({ label: 'item', value: 0 });
     giveIDs(this.state);
     var picture = store.getData(this.props.selectedPicture.get('current'));
@@ -90,72 +80,20 @@ var Data = React.createClass({
     picture.arrays_id = this.state.arrays_id;
     this.evaluate(this.state);
     this.setState({ [type]: this.state[type] });
-  },
+  }
 
-  onTitleChange(i, type, newText) {
+  function onTitleChange(i, type, newText) {
     this.state[type][i].label = newText;
     this.setState({ [type]: this.state[type] });
-  },
+  }
 
-  onValueChange(i, type, newText) {
+  function onValueChange(i, type, newText) {
     this.state[type][i].value = newText;
     this.evaluate();
     this.setState({ [type]: this.state[type] });
-  },
+  }
 
-  render() {
-    var max = this.state.arrays.reduce((memo, item) => {
-      return Math.max(memo, getArr(item.evaluated).length);
-    }, 0);
-    var indices = _.range(1, max + 1);
-
-    var tags = [];
-    _.each(this.state.scalars, (item) => {
-      tags.push(<Tag item={item}/>);
-    });
-    tags.push(<CreateTag onClick={this.createScalar}>+</CreateTag>);
-    tags.push(<CreateTag>column</CreateTag>);
-    _.each(this.state.arrays, (item) => {
-      tags.push(<Tag item={item}>{this.getArrayStats(item)}</Tag>);
-    });
-    tags.push(<CreateTag onClick={this.createArray}>+</CreateTag>);
-
-    var scalarValues = _.map(this.state.scalars, (item) => {
-      return <ScalarVal picID={this.props.selectedPicture.get('current')} item={item}/>
-    });
-    var arrayValues = _.map(this.state.arrays, (item) => {
-      return <ArrayVal picID={this.props.selectedPicture.get('current')} item={item}/>;
-    });
-
-    var DEBUG = false;
-
-    return (
-      <div className="data">
-        <div className="header">Data</div>
-        <div className="container --data --flex">
-          <div>
-            {tags}
-          </div>
-          <div className="test-1">
-            {scalarValues}
-            <div style={{minHeight: 22}}></div>
-            <div className="arr-section">
-              <div>{indices.map((i) => { return <div className="data__indice --header">{i}</div>; })}</div>
-              {arrayValues}
-            </div>
-          </div>
-        </div>
-        {DEBUG&&(<div>
-        <div className="header">Results</div>
-        <div className="container --data">
-          <pre>{JSON.stringify(this.state, 2, 2)}</pre>
-        </div>
-        </div>)}
-      </div>
-    );
-  },
-
-  getArrayStats(item) {
+  function getArrayStats(item) {
     var stats = [
       { name: 'min', code: function (arr) { return Math.min.apply(this, arr); } },
       { name: 'avg', code: function (arr) { return arr.reduce(function (memo, num) { return memo + num}, 0) / arr.length; } },
@@ -177,6 +115,46 @@ var Data = React.createClass({
     );
   }
 
-});
+  var max = pictureData.get('arrays').toJS().reduce((memo, item) => {
+    return Math.max(memo, getArr(item.evaluated).length);
+  }, 0);
+  var indices = _.range(1, max + 1);
 
-module.exports = Data;
+  var tags = [];
+  _.each(pictureData.get('scalars').toJS(), (item) => {
+    tags.push(<Tag item={item}/>);
+  });
+  tags.push(<CreateTag onClick={createScalar}>+</CreateTag>);
+  tags.push(<CreateTag>column</CreateTag>);
+  _.each(pictureData.get('arrays').toJS(), (item) => {
+    tags.push(<Tag item={item}>{getArrayStats(item)}</Tag>);
+  });
+  tags.push(<CreateTag onClick={createArray}>+</CreateTag>);
+
+  var scalarValues = pictureData.get('scalars').map((item) => {
+    return <ScalarVal picID={selectedPicture.get('current')} item={item}/>
+  }).toJS();
+  var arrayValues = pictureData.get('arrays').map((item) => {
+    return <ArrayVal picID={selectedPicture.get('current')} item={item}/>;
+  }).toJS();
+
+  return (
+    <div className="data">
+      <div className="header">Data</div>
+      <div className="container --data --flex">
+        <div>
+          {tags}
+        </div>
+        <div className="test-1">
+          {scalarValues}
+          <div style={{minHeight: 22}}></div>
+          <div className="arr-section">
+            <div>{indices.map((i) => { return <div className="data__indice --header">{i}</div>; })}</div>
+            {arrayValues}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+});

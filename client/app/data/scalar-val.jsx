@@ -55,11 +55,12 @@ var ScalarVal = React.createClass({
   },
 
   renderScalar() {
+    var i = this.props.item;
     return (
       <div className="scalar-val" onClick={this.onClick}>
-        <div className="evaluated">{this.props.item.evaluated}</div>
+        <div className="evaluated">{i && i.get('evaluated')}</div>
         <div className="value">
-          {generateValueMarkup(this.props.item.value || '', this.props.item)}
+          {generateValueMarkup((i && i.get('value')) || '', i)}
         </div>
       </div>
     );
@@ -88,6 +89,7 @@ function generateValueMarkup(val, item) {
 }
 
 function getMap() {
+  console.log('need to get all pictureData');
   var data = store.getData(GETCUR());
   var obj = {};
   _.each(data.arrays, (a) => {

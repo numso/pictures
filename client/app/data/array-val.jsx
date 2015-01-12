@@ -60,15 +60,16 @@ var ArrayVal = React.createClass({
 
   renderArray() {
     // TODO:: parse out numbers and render draggable numbers in their place in value section
+    var i = this.props.item;
     return (
       <div className="array-val" onClick={this.onClick}>
         <div className="evaluated">
-          {getArr(this.props.item.evaluated).map((item) => {
+          {getArr(i && i.evaluated).map((item) => {
             return <div className="data__indice">{item}</div>
           })}
         </div>
         <div className="value" style={{height:25}}>
-          {generateValueMarkup(this.props.item.value || '', this.props.item)}
+          {generateValueMarkup(i && i.value || '', i)}
         </div>
       </div>
     );

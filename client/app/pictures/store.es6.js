@@ -45,17 +45,17 @@ function solarExample() {
     bigPictureStuff: { msg: '', previews: {} },
     data: {
       scalars: [
-        { label: 'panels', value: '600', },
-        { label: 'kW / panel', value: '0.2', },
-        { label: 'power in kW', value: 's_1 * s_2', }
+        { id: 's_1', label: 'panels', value: '600', },
+        { id: 's_2', label: 'kW / panel', value: '0.2', },
+        { id: 's_3', label: 'power in kW', value: 's_1 * s_2', }
       ],
       arrays: [
-        { label: 'sun hours', value: '[ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ]', },
-        { label: 'energy in kWh', value: 's_3 * a_1', },
-        { label: 'energy in MWh', value: 'a_2 / 1000' }
+        { id: 'a_1', label: 'sun hours', value: '[ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ]', },
+        { id: 'a_2', label: 'energy in kWh', value: 's_3 * a_1', },
+        { id: 'a_3', label: 'energy in MWh', value: 'a_2 / 1000' }
       ],
-      scalars_id: 1,
-      arrays_id: 1
+      scalars_id: 4,
+      arrays_id: 4
     }
   };
 }

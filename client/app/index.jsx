@@ -24,6 +24,7 @@ var Index = handler(load, function () {
 var App = component(function () {
   var curPicture = PictureStore.state.cursor('selectedPicture').get('current');
   var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture);
+  var dataCursor = curPictureCursor.get('data');
   var stepsCursor = curPictureCursor.get('steps');
   var curStepSelectedCursor = curPictureCursor.get('selectedStep');
   var bigPictureStuff = curPictureCursor.get('bigPictureStuff');
@@ -37,6 +38,7 @@ var App = component(function () {
       <div style={{ width: 400, display: 'inline-block', verticalAlign: 'top' }}>
         <Data
           selectedPicture={PictureStore.state.cursor('selectedPicture')}
+          pictureData={dataCursor}
         />
         <Steps
           steps={stepsCursor}
