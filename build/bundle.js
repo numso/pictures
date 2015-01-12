@@ -125,7 +125,9 @@
 
 	exports.newPicture = function () {
 	  return {
-	    title: "untitled",
+	    title: {
+	      current: "untitled"
+	    },
 	    steps: [],
 	    selectedStep: {
 	      current: 0
@@ -151,10 +153,14 @@
 
 	function solarExample() {
 	  return {
-	    title: "Solar Data",
-	    steps: [],
+	    title: {
+	      current: "Solar Data"
+	    },
+	    steps: [53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65].map(function (month, i) {
+	      return ({ type: "rect", x1: i * (720 / 12) + 4, x2: (i + 1) * (720 / 12) - 4, y1: 900 - month / 159 * 900, y2: 900 });
+	    }),
 	    selectedStep: {
-	      current: 0
+	      current: 11
 	    },
 	    bigPictureStuff: { msg: "", previews: {} },
 	    data: {
@@ -177,11 +183,9 @@
 
 	var state = exports.state = immstruct({
 	  labels: {
-	    draw: [{ label: "line", hotkey: "x" }, { label: "path", hotkey: "a" }, { label: "rect", hotkey: "r" }, { label: "circle", hotkey: "c" }, { label: "text", hotkey: "t" }, { label: "magnet", hotkey: "u" }, { label: "picture", hotkey: "p" }],
-	    adjust: [{ label: "move", hotkey: "v" }, { label: "scale", hotkey: "s" }, { label: "rotate", hotkey: "e" }, { label: "duplicate", hotkey: "d" }],
-	    flow: [{ label: "loop", hotkey: "l" }, { label: "if", hotkey: "i" }],
-	    modifiers: [{ label: "guide", hotkey: "g" }, { label: "clip", hotkey: "k" }]
-	  },
+	    draw: [{ label: "line", hotkey: "x" },
+	    // { label: 'path',    hotkey: 'a' },
+	    { label: "rect", hotkey: "r" }, { label: "circle", hotkey: "c" }, { label: "text", hotkey: "t" }] },
 
 	  mode: {
 	    current: "line"
@@ -286,32 +290,17 @@
 	    });
 	  }
 
-	  function setPicture(i) {
-	    return function () {
-	      selectedPicture.update("current", function () {
-	        return i;
-	      });
-	    };
-	  }
-
-	  function renderPictures() {
-	    var markup = [];
-	    for (var i = 0; i < pictures.size; i++) {
-	      markup.push(React.createElement(Picture, {
-	        picture: pictures.get(i),
-	        num: i,
-	        selected: selectedPicture.get("current") === i,
-	        onClick: setPicture(i)
-	      }));
-	    }
-	    return markup;
-	  }
-
 	  return (React.createElement("div", null, React.createElement("div", {
 	    className: "header"
 	  }, "Pictures"), React.createElement("div", {
 	    className: "container --pictures"
-	  }, renderPictures(), React.createElement("div", {
+	  }, pictures.map(function (picture, i) {
+	    return React.createElement(Picture, {
+	      index: i,
+	      picture: pictures.get(i),
+	      selectedPicture: selectedPicture
+	    });
+	  }).toJS(), React.createElement("div", {
 	    className: "newpicture",
 	    onClick: addNew
 	  }, React.createElement("span", {
@@ -869,81 +858,69 @@
 
 	"use strict";
 
-	var React = __webpack_require__(15);
+	var _ref = __webpack_require__(14);
+
+	var component = _ref.component;
 	var ContentEditable = __webpack_require__(35);
-	var _ref = __webpack_require__(242);
+	var _ref2 = __webpack_require__(242);
 
-	var generateParts = _ref.generateParts;
-
-
-	var store = __webpack_require__(4);
-
-	var Picture = React.createClass({
-	  displayName: "Picture",
+	var generateParts = _ref2.generateParts;
 
 
-	  getInitialState: function () {
-	    return {
-	      editting: false,
-	      title: store.getData(this.props.num).title
-	    };
-	  },
+	module.exports = component(function (_ref3) {
+	  var picture = _ref3.picture;
+	  var selectedPicture = _ref3.selectedPicture;
+	  var index = _ref3.index;
 
-	  onMouseUp: function () {
-	    this.setState({
-	      editting: true
+
+	  var title = picture.get("title");
+
+	  function onMouseUp() {
+	    title.update("editing", function () {
+	      return title.get("current");
 	    });
-	  },
-
-	  onChange: function (title) {
-	    this.updateTitle(title);
-	  },
-
-	  onFinish: function (title) {
-	    this.updateTitle(title);
-	    this.setState({
-	      editting: false
-	    });
-	  },
-
-	  updateTitle: function (newTitle) {
-	    var datum = store.getData(this.props.num);
-	    datum.title = newTitle;
-	    store.setData(this.props.num, datum);
-	    this.setState({
-	      title: newTitle
-	    });
-	  },
-
-	  render: function () {
-	    var classes = React.addons.classSet({
-	      picture: true,
-	      "--selected": this.props.selected
-	    });
-
-	    var svgParts = generateParts(this.props.picture.get("steps"), 1 / 6, 5);
-
-	    var title = this.state.editting ? React.createElement(ContentEditable, {
-	      text: this.state.title,
-	      onChange: this.onChange,
-	      onFinish: this.onFinish
-	    }) : React.createElement("div", {
-	      onMouseUp: this.onMouseUp
-	    }, this.state.title);
-
-	    return (React.createElement("div", null, React.createElement("div", {
-	      className: classes,
-	      onClick: this.props.onClick
-	    }, React.createElement("svg", {
-	      width: 220
-	    }, svgParts)), React.createElement("div", {
-	      style: { textAlign: "center", marginBottom: 15 }
-	    }, title)));
 	  }
 
-	});
+	  function onChange(_title) {
+	    title.update("current", function () {
+	      return _title;
+	    });
+	  }
 
-	module.exports = Picture;
+	  function onFinish(_title) {
+	    title.update("current", function () {
+	      return _title;
+	    });
+	    title.remove("editing");
+	  }
+
+	  function selectPicture() {
+	    selectedPicture.update("current", function () {
+	      return index;
+	    });
+	  }
+
+	  function isSelected() {
+	    return selectedPicture.get("current") === index;
+	  }
+
+	  var classes = isSelected() ? "picture --selected" : "picture";
+
+	  return (React.createElement("div", null, React.createElement("div", {
+	    className: classes,
+	    onClick: selectPicture
+	  }, React.createElement("svg", {
+	    width: 220
+	  }, generateParts(picture.get("steps"), 1 / 6, 5))), React.createElement("div", {
+	    style: { textAlign: "center", marginBottom: 15 }
+	  }, title.get("editing") ? React.createElement(ContentEditable, {
+	    text: title.get("editing"),
+	    onChange: onChange,
+	    onFinish: onFinish
+	  }) : React.createElement("div", {
+	    onMouseUp: onMouseUp
+	  }, title.get("current")))));
+	});
 
 /***/ },
 /* 18 */
