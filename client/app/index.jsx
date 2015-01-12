@@ -16,6 +16,8 @@ function load() {
 }
 
 var Index = handler(load, function () {
+  // When refactor is done (and you've chosen a better name than 'bigPictureStuff')
+  // all the cursors should be passed into the app here instead of a random num.
   return <App foo={Math.random()}/>;
 });
 
@@ -24,7 +26,7 @@ var App = component(function () {
   var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture);
   var stepsCursor = curPictureCursor.get('steps');
   var curStepSelectedCursor = curPictureCursor.get('selectedStep');
-  var aoeu = curPictureCursor.get('bigPictureStuff');
+  var bigPictureStuff = curPictureCursor.get('bigPictureStuff');
   return (
     <div>
       <Pictures
@@ -48,7 +50,7 @@ var App = component(function () {
           <BigPicture
             mode={CheatSheetStore.state.cursor('mode')}
             steps={stepsCursor}
-            bigPictureStuff={aoeu}
+            bigPictureStuff={bigPictureStuff}
             selectedStep={curStepSelectedCursor}
           />
         </div>
@@ -65,7 +67,6 @@ var App = component(function () {
 
 });
 
-// when do we call load, should it exist?
 function render(a, b) {
   React.render(<Index/>, document.body);
 }
@@ -74,3 +75,19 @@ PictureStore.state.on('swap', render);
 CheatSheetStore.state.on('swap', render);
 
 render();
+
+// just a quick test for removing steps
+// should be moved somewhere else....
+// also, keypress's should be paused while editing stuff
+document.addEventListener('keypress', (e) => {
+  if (e.keyCode === 39) { // ' (apostrophe)
+    var curPicture = PictureStore.state.cursor('selectedPicture').get('current');
+    var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture);
+    var stepsCursor = curPictureCursor.get('steps');
+    var selectedStep = curPictureCursor.get('selectedStep').get('current');
+    stepsCursor = stepsCursor.remove(selectedStep);
+    if (selectedStep >= stepsCursor.size) {
+      curPictureCursor.get('selectedStep').update('current', () => stepsCursor.size - 1);
+    }
+  }
+});
