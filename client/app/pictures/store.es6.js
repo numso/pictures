@@ -34,9 +34,9 @@ var state = exports.state = immstruct({
 function solarExample() {
   return {
     title: 'Solar Data',
-    steps: [],
+    steps: [ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ].map((month, i) => ({ type: 'rect', x1: i * (720 / 12) + 4, x2: (i + 1) * (720 / 12) - 4, y1: 900 - month / 159 * 900, y2: 900 })),
     selectedStep: {
-      current: 0
+      current: 11
     },
     bigPictureStuff: { msg: '', previews: {} },
     data: {
