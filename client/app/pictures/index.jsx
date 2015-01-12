@@ -11,25 +11,17 @@ module.exports = component(function ({selectedPicture, pictures}) {
     });
   }
 
-  function setPicture(i) {
-    return function () {
-      selectedPicture.update('current', () => i);
-    };
-  }
-
-  function renderPictures() {
-    var markup = [];
-    for (var i = 0; i < pictures.size; i++) {
-      markup.push(<Picture picture={pictures.get(i)} num={i} selected={selectedPicture.get('current') === i} onClick={setPicture(i)}/>);
-    }
-    return markup;
-  }
-
   return (
     <div>
       <div className="header">Pictures</div>
       <div className="container --pictures">
-        {renderPictures()}
+        {pictures.map((picture, i) => {
+          return <Picture
+            index={i}
+            picture={pictures.get(i)}
+            selectedPicture={selectedPicture}
+          />
+        }).toJS()}
         <div className="newpicture" onClick={addNew}>
           <span className="newpicture__content">+</span>
         </div>

@@ -1,68 +1,47 @@
-var React = require('react/addons');
+var {component} = require('omniscient-tools');
 var ContentEditable = require('../common/content-editable');
 var {generateParts} = require('../common/drawing');
 
-var store = require('../stores/pictures');
+module.exports = component(function ({picture, selectedPicture, index}) {
 
-var Picture = React.createClass({
+  var title = picture.get('title');
 
-  getInitialState() {
-    return {
-      editting: false,
-      title: store.getData(this.props.num).title
-    };
-  },
-
-  onMouseUp() {
-    this.setState({
-      editting: true
-    });
-  },
-
-  onChange(title) {
-    this.updateTitle(title);
-  },
-
-  onFinish(title) {
-    this.updateTitle(title);
-    this.setState({
-      editting: false
-    });
-  },
-
-  updateTitle(newTitle) {
-    var datum = store.getData(this.props.num);
-    datum.title = newTitle;
-    store.setData(this.props.num, datum);
-    this.setState({
-      title: newTitle
-    });
-  },
-
-  render() {
-    var classes = React.addons.classSet({
-      picture: true,
-      '--selected': this.props.selected
-    });
-
-    var svgParts = generateParts(this.props.picture.get('steps'), 1 / 6, 5);
-
-    var title = this.state.editting ?
-      <ContentEditable text={this.state.title} onChange={this.onChange} onFinish={this.onFinish}/> :
-      <div onMouseUp={this.onMouseUp}>{this.state.title}</div>;
-
-    return (
-      <div>
-        <div className={classes} onClick={this.props.onClick}>
-          <svg width={220}>{svgParts}</svg>
-        </div>
-        <div style={{ textAlign: 'center', marginBottom: 15 }}>
-        {title}
-        </div>
-      </div>
-    );
+  function onMouseUp() {
+    title.update('editing', () => title.get('current'));
   }
 
-});
+  function onChange(_title) {
+    title.update('current', () => _title);
+  }
 
-module.exports = Picture;
+  function onFinish(_title) {
+    title.update('current', () => _title);
+    title.remove('editing');
+  }
+
+  function selectPicture() {
+    selectedPicture.update('current', () => index);
+  }
+
+  function isSelected() {
+    return selectedPicture.get('current') === index;
+  }
+
+  var classes = isSelected() ? 'picture --selected' : 'picture';
+
+  return (
+    <div>
+      <div className={classes} onClick={selectPicture}>
+        <svg width={220}>
+          {generateParts(picture.get('steps'), 1 / 6, 5)}
+        </svg>
+      </div>
+      <div style={{ textAlign: 'center', marginBottom: 15 }}>
+        {title.get('editing')
+          ? <ContentEditable text={title.get('editing')} onChange={onChange} onFinish={onFinish}/>
+          : <div onMouseUp={onMouseUp}>{title.get('current')}</div>}
+      </div>
+    </div>
+  );
+
+});
