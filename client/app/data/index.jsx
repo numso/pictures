@@ -1,4 +1,5 @@
 var {component} = require('omniscient-tools');
+var Immutable = require('immutable');
 var _ = require('lodash');
 
 var Tag = require('./tag');
@@ -6,7 +7,6 @@ var CreateTag = require('./create-tag');
 var ScalarVal = require('./scalar-val');
 var ArrayVal = require('./array-val');
 
-var store = require('../stores/pictures');
 var evaluator = require('./evaluator');
 
 function getArr(item) {
@@ -16,10 +16,11 @@ function getArr(item) {
 
 function giveIDs(dataCursor) {
   var scalars_id = dataCursor.get('scalars_id');
-  for (var i = 0; i < dataCursor.get('scalars').size; i++) {
+  var len = dataCursor.get('scalars').size;
+  for (var i = 0; i < len; i++) {
     var item = dataCursor.get('scalars').get(i);
     if (!item.get('id')) {
-      item.set('id', 's_' + scalars_id++);
+      item.update('id', () => ('s_' + scalars_id++));
     }
   }
   dataCursor.update('scalars_id', () => scalars_id);
@@ -36,6 +37,8 @@ function giveIDs(dataCursor) {
 
 module.exports = component(function ({pictureData, selectedPicture}) {
 
+  console.log('-------RENDER--------');
+
   // THIS FUNCTION NEEDS MAJOR WORK
   giveIDs(pictureData);
   evaluate(pictureData);
@@ -46,15 +49,15 @@ module.exports = component(function ({pictureData, selectedPicture}) {
       var item = pictureData.get('scalars').get(i);
       ctx[item.get('id')] = item.get('value');
     }
-    // for (var i = 0; i < pictureData.get('arrays').size; i++) {
-    //   var item = pictureData.get('arrays').get(i);
-    //   ctx[item.get('id')] = item.get('value');
-    // }
+    for (var i = 0; i < pictureData.get('arrays').size; i++) {
+      var item = pictureData.get('arrays').get(i);
+      ctx[item.get('id')] = item.get('value');
+    }
     var data = evaluator.check(ctx);
     for (var i = 0; i < pictureData.get('scalars').size; i++) {
       var item = pictureData.get('scalars').get(i);
       var id = item.get('id');
-      var foo = item.update('evaluated', () => data[id]);
+      item.update('evaluated', () => data[id]);
     }
     // for (var i = 0; i < pictureData.get('arrays').size; i++) {
     //   var item = pictureData.get('arrays').get(i);
@@ -73,24 +76,11 @@ module.exports = component(function ({pictureData, selectedPicture}) {
 
   console.log('TODO:: Fix these methods as well');
   function createNew(type) {
-    this.state[type].push({ label: 'item', value: 0 });
-    giveIDs(this.state);
-    var picture = store.getData(this.props.selectedPicture.get('current'));
-    picture.scalars_id = this.state.scalars_id;
-    picture.arrays_id = this.state.arrays_id;
-    this.evaluate(this.state);
-    this.setState({ [type]: this.state[type] });
-  }
-
-  function onTitleChange(i, type, newText) {
-    this.state[type][i].label = newText;
-    this.setState({ [type]: this.state[type] });
-  }
-
-  function onValueChange(i, type, newText) {
-    this.state[type][i].value = newText;
-    this.evaluate();
-    this.setState({ [type]: this.state[type] });
+    pictureData.get(type).update((oldArr) => {
+      // IT NEEDS A GENERATED ID
+      return oldArr.push(Immutable.fromJS({ id: 's_4', label: 'item', value: '10' }));
+    });
+    evaluate(pictureData);
   }
 
   function getArrayStats(item) {
@@ -118,7 +108,7 @@ module.exports = component(function ({pictureData, selectedPicture}) {
   var max = pictureData.get('arrays').toJS().reduce((memo, item) => {
     return Math.max(memo, getArr(item.evaluated).length);
   }, 0);
-  var indices = _.range(1, max + 1);
+  var indices = _.range(1, Math.max(max + 1, 6));
 
   var tags = [];
   _.each(pictureData.get('scalars').toJS(), (item) => {
