@@ -14,57 +14,9 @@ function getArr(item) {
   return [];
 }
 
-function giveIDs(dataCursor) {
-  var scalars_id = dataCursor.get('scalars_id');
-  var len = dataCursor.get('scalars').size;
-  for (var i = 0; i < len; i++) {
-    var item = dataCursor.get('scalars').get(i);
-    if (!item.get('id')) {
-      item.update('id', () => ('s_' + scalars_id++));
-    }
-  }
-  dataCursor.update('scalars_id', () => scalars_id);
-
-  var arrays_id = dataCursor.get('arrays_id');
-  for (var i = 0; i < dataCursor.get('arrays').size; i++) {
-    var item = dataCursor.get('arrays').get(i);
-    if (!item.get('id')) {
-      item.update('id', () => ('a_' + arrays_id++));
-    }
-  }
-  dataCursor.update('arrays_id', () => arrays_id);
-}
-
 module.exports = component(function ({pictureData, selectedPicture}) {
 
   console.log('-------RENDER--------');
-
-  // THIS FUNCTION NEEDS MAJOR WORK
-  giveIDs(pictureData);
-  evaluate(pictureData);
-
-  function evaluate(dataCursor) {
-    var ctx = {};
-    for (var i = 0; i < pictureData.get('scalars').size; i++) {
-      var item = pictureData.get('scalars').get(i);
-      ctx[item.get('id')] = item.get('value');
-    }
-    for (var i = 0; i < pictureData.get('arrays').size; i++) {
-      var item = pictureData.get('arrays').get(i);
-      ctx[item.get('id')] = item.get('value');
-    }
-    var data = evaluator.check(ctx);
-    for (var i = 0; i < pictureData.get('scalars').size; i++) {
-      var item = pictureData.get('scalars').get(i);
-      var id = item.get('id');
-      item.update('evaluated', () => data[id]);
-    }
-    // for (var i = 0; i < pictureData.get('arrays').size; i++) {
-    //   var item = pictureData.get('arrays').get(i);
-    //   // only update if it's not already updated....
-    //   item.update('evaluated', () => data[item.get('id')]);
-    // }
-  }
 
   function createScalar() {
     createNew('scalars');
@@ -122,10 +74,10 @@ module.exports = component(function ({pictureData, selectedPicture}) {
   tags.push(<CreateTag onClick={createArray}>+</CreateTag>);
 
   var scalarValues = pictureData.get('scalars').map((item) => {
-    return <ScalarVal picID={selectedPicture.get('current')} item={item}/>
+    return <ScalarVal pictureData={pictureData} picID={selectedPicture.get('current')} item={item}/>
   }).toJS();
   var arrayValues = pictureData.get('arrays').map((item) => {
-    return <ArrayVal picID={selectedPicture.get('current')} item={item}/>;
+    return <ArrayVal pictureData={pictureData} picID={selectedPicture.get('current')} item={item}/>;
   }).toJS();
 
   return (

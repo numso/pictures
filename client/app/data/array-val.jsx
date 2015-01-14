@@ -64,12 +64,12 @@ var ArrayVal = React.createClass({
     return (
       <div className="array-val" onClick={this.onClick}>
         <div className="evaluated">
-          {getArr(i && i.evaluated).map((item) => {
+          {getArr(i && i.get('evaluated')).map((item) => {
             return <div className="data__indice">{item}</div>
           })}
         </div>
         <div className="value" style={{height:25}}>
-          {generateValueMarkup(i && i.value || '', i)}
+          {generateValueMarkup(i && i.get('value') || '', i, this.props.pictureData)}
         </div>
       </div>
     );
@@ -79,8 +79,8 @@ var ArrayVal = React.createClass({
 
 module.exports = ArrayVal;
 
-function generateValueMarkup(val, item) {
-  var map = getMap();
+function generateValueMarkup(val, item, pictureData) {
+  var map = getMap(pictureData);
   var re = /[as]_[0-9]*/;
   var chunks = val.split(/\s/);
 
@@ -98,15 +98,16 @@ function generateValueMarkup(val, item) {
 }
 
 
-function getMap() {
-  var data = store.getData(GETCUR());
+function getMap(pictureData) {
   var obj = {};
-  _.each(data.arrays, (a) => {
-    obj[a.id] = a.label;
-  });
-  _.each(data.scalars, (s) => {
-    obj[s.id] = s.label;
-  });
+  for (var i = 0; i < pictureData.get('scalars').size; i++) {
+    var item = pictureData.get('scalars').get(i);
+    obj[item.get('id')] = item.get('label');
+  }
+  for (var i = 0; i < pictureData.get('arrays').size; i++) {
+    var item = pictureData.get('arrays').get(i);
+    obj[item.get('id')] = item.get('label');
+  }
   return obj;
 }
 

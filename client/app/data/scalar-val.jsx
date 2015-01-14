@@ -60,7 +60,7 @@ var ScalarVal = React.createClass({
       <div className="scalar-val" onClick={this.onClick}>
         <div className="evaluated">{i && i.get('evaluated')}</div>
         <div className="value">
-          {generateValueMarkup((i && i.get('value')) || '', i)}
+          {generateValueMarkup((i && i.get('value')) || '', i, this.props.pictureData)}
         </div>
       </div>
     );
@@ -70,8 +70,8 @@ var ScalarVal = React.createClass({
 
 module.exports = ScalarVal;
 
-function generateValueMarkup(val, item) {
-  var map = getMap();
+function generateValueMarkup(val, item, pictureData) {
+  var map = getMap(pictureData);
   var re = /[as]_[0-9]*/;
   var chunks = val.split(/\s/);
 
@@ -88,16 +88,16 @@ function generateValueMarkup(val, item) {
   });
 }
 
-function getMap() {
-  console.log('need to get all pictureData');
-  var data = store.getData(GETCUR());
+function getMap(pictureData) {
   var obj = {};
-  _.each(data.arrays, (a) => {
-    obj[a.id] = a.label;
-  });
-  _.each(data.scalars, (s) => {
-    obj[s.id] = s.label;
-  });
+  for (var i = 0; i < pictureData.get('scalars').size; i++) {
+    var item = pictureData.get('scalars').get(i);
+    obj[item.get('id')] = item.get('label');
+  }
+  for (var i = 0; i < pictureData.get('arrays').size; i++) {
+    var item = pictureData.get('arrays').get(i);
+    obj[item.get('id')] = item.get('label');
+  }
   return obj;
 }
 

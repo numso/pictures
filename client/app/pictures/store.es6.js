@@ -59,3 +59,57 @@ function solarExample() {
     }
   };
 }
+
+
+
+
+
+var evaluator = require('../data/evaluator');
+
+function giveIDs(dataCursor) {
+  var scalars_id = dataCursor.get('scalars_id');
+  var len = dataCursor.get('scalars').size;
+  for (var i = 0; i < len; i++) {
+    var item = dataCursor.get('scalars').get(i);
+    if (!item.get('id')) {
+      item.update('id', () => ('s_' + scalars_id++));
+    }
+  }
+  dataCursor.update('scalars_id', () => scalars_id);
+
+  var arrays_id = dataCursor.get('arrays_id');
+  for (var i = 0; i < dataCursor.get('arrays').size; i++) {
+    var item = dataCursor.get('arrays').get(i);
+    if (!item.get('id')) {
+      item.update('id', () => ('a_' + arrays_id++));
+    }
+  }
+  dataCursor.update('arrays_id', () => arrays_id);
+}
+
+function evaluate(dataCursor) {
+  var ctx = {};
+  for (var i = 0; i < dataCursor.get('scalars').size; i++) {
+    var item = dataCursor.get('scalars').get(i);
+    ctx[item.get('id')] = item.get('value');
+  }
+  for (var i = 0; i < dataCursor.get('arrays').size; i++) {
+    var item = dataCursor.get('arrays').get(i);
+    ctx[item.get('id')] = item.get('value');
+  }
+  var data = evaluator.check(ctx);
+  for (var i = 0; i < dataCursor.get('scalars').size; i++) {
+    var item = dataCursor.get('scalars').get(i);
+    var id = item.get('id');
+    item.update('evaluated', () => data[id]);
+  }
+  for (var i = 0; i < dataCursor.get('arrays').size; i++) {
+    var item = dataCursor.get('arrays').get(i);
+    var id = item.get('id');
+    item.update('evaluated', () => data[id]);
+  }
+}
+
+// run these on load and on every update to pictures?
+giveIDs(state.cursor(['pictures', '0', 'data']));
+evaluate(state.cursor(['pictures', '0', 'data']));
