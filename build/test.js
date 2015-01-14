@@ -46,14 +46,14 @@
 
 	"use strict";
 
-	__webpack_require__(24);
-
-	__webpack_require__(11);
-	__webpack_require__(12);
 	__webpack_require__(13);
 
+	__webpack_require__(1);
+	__webpack_require__(2);
+	__webpack_require__(3);
 
-	var $ = __webpack_require__(28);
+
+	var $ = __webpack_require__(18);
 
 	$("h1").click(function () {
 	  $(this).closest("div").find(".demo-box").toggle();
@@ -62,20 +62,10 @@
 	});
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(23);
+	var $ = __webpack_require__(15);
 
 	var obj = {
 	  tag: 'yayahoo',
@@ -158,10 +148,10 @@
 
 
 /***/ },
-/* 12 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(23);
+	var $ = __webpack_require__(15);
 
 	var originalX;
 	var originalNum = 5;
@@ -196,7 +186,7 @@
 
 
 /***/ },
-/* 13 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -212,8 +202,8 @@
 
 	// --- set up globals ----------------------------------------------------------
 
-	var d3 = __webpack_require__(33);
-	var $ = __webpack_require__(28);
+	var d3 = __webpack_require__(29);
+	var $ = __webpack_require__(18);
 
 	var size = 500;
 	var blue = "#56a7e1";
@@ -411,33 +401,25 @@
 	}
 
 /***/ },
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = document.getElementById.bind(document);
-	module.exports = $;
-
-
-/***/ },
-/* 24 */
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(25);
+	var content = __webpack_require__(14);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(27)(content, {});
+	var update = __webpack_require__(17)(content, {});
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
@@ -451,15 +433,23 @@
 	}
 
 /***/ },
-/* 25 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(39)();
+	exports = module.exports = __webpack_require__(36)();
 	exports.push([module.id, "* {\n  font-family: sans-serif;\n}\nh1 {\n  cursor: pointer;\n}\n.tag {\n  background-color: #abbbd9;\n  border-radius: 15px;\n  color: #fff;\n  cursor: pointer;\n  padding: 2px 10px;\n  margin: 2px 0;\n  margin-right: 10px;\n  font-size: 12px;\n  letter-spacing: 2px;\n  display: inline-block;\n  min-width: 20px;\n  min-height: 12px;\n}\n#demo3 {\n  width: 700px;\n}\n#demo3 .container {\n  background: #eee;\n}\n#demo3 .container .row {\n  display: flex;\n}\n#demo3 .container .row .expr {\n  flex: 1;\n  white-space: nowrap;\n  overflow: auto;\n}\n#demo3 .container .row .expr::-webkit-scrollbar {\n  display: none;\n}\n#demo3 .container .row .expr input {\n  width: 100%;\n}\n#demo3 .container .row .expr:hover {\n  background-color: #ccc;\n  cursor: pointer;\n}\n#demo4 {\n  width: 700px;\n}\n#demo4 .container {\n  background: #eee;\n  display: flex;\n}\n#demo4 .container .expressions {\n  flex: 1;\n  overflow: auto;\n}\n#demo4 .container .expressions::-webkit-scrollbar {\n  display: none;\n}\n#demo4 .container .expr {\n  width: 100%;\n  height: 22px;\n  white-space: nowrap;\n}\n#demo4 .container .expr input {\n  width: 100%;\n}\n#demo4 .container .expr:hover {\n  background-color: #ccc;\n  cursor: pointer;\n}\n#demo5 svg {\n  border: 1px solid;\n}\n", ""]);
 
 /***/ },
-/* 26 */,
-/* 27 */
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = document.getElementById.bind(document);
+	module.exports = $;
+
+
+/***/ },
+/* 16 */,
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -655,7 +645,7 @@
 
 
 /***/ },
-/* 28 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -9866,11 +9856,17 @@
 
 
 /***/ },
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
@@ -19345,12 +19341,13 @@
 	}();
 
 /***/ },
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
 /* 34 */,
 /* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function() {
