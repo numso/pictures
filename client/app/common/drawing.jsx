@@ -18,6 +18,7 @@ function generateParts(steps, proportion=1, fontSize=16) {
 }
 
 function getMsg(s) {
+  if (!s) return '';
   var x1 = round(s.get('x1'));
   var x2 = round(s.get('x2'));
   var y1 = round(s.get('y1'));
