@@ -1,6 +1,6 @@
 var {component} = require('omniscient-tools');
 var immutable = require('immutable');
-var {generateParts} = require('../common/drawing');
+var {generateParts, getMsg} = require('../common/drawing');
 
 var startx = null;
 var starty;
@@ -20,13 +20,10 @@ module.exports = component(function ({mode, steps, selectedStep, bigPictureStuff
     if (_mode === 'circle') {
       var dist = distance(startx, starty, endx, endy);
       setPreview('circle', { type: 'circle', x1: startx, y1: starty, r: dist });
-      bigPictureStuff.update('msg', () => `Draw circle around (${startx}, ${starty}), ${Math.floor(dist)} px in radius.`);
     } else  if (_mode === 'rect') {
       setPreview('rect', { type: 'rect', x1: startx, y1: starty, x2: endx, y2: endy });
-      bigPictureStuff.update('msg', () => `Draw rect from (${startx}, ${starty}), ${endx - startx} px horizontally, ${endy - starty} px vertically.`);
     } else if (_mode === 'line') {
       setPreview('line', { type: 'line', x1: startx, y1: starty, x2: endx, y2: endy });
-      bigPictureStuff.update('msg', () => `Draw line from (${startx}, ${starty}), ${endx - startx} px horizontally, ${endy - starty} px vertically.`);
     }
   }
 
@@ -45,7 +42,6 @@ module.exports = component(function ({mode, steps, selectedStep, bigPictureStuff
       removePreview('line');
       addStep({ type: 'line', x1: startx, y1: starty, x2: endx, y2: endy });
     } else if (_mode === 'text') {
-      bigPictureStuff.update('msg', () => `Draw text at (${endx}, ${endy})`);
       addStep({ type: 'text', x1: endx, y1: endy });
     }
     startx = null;
@@ -73,9 +69,11 @@ module.exports = component(function ({mode, steps, selectedStep, bigPictureStuff
   var svgParts = generateParts(steps.slice(0, selectedStep.get('current') + 1));
   var previewParts = generateParts(bigPictureStuff.get('previews'));
 
+  var step = steps.get(selectedStep.get('current'));
+
   return (
     <div>
-      <div style={{textAlign: 'center', height: 18}}>{bigPictureStuff.get('msg')}</div>
+      <div style={{textAlign: 'center', height: 18}}>{getMsg(step)}</div>
       <div id="picture-box" className="picture --big">
         <svg width={720} height={900} onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}>
           {svgParts}
