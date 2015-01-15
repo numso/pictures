@@ -1,17 +1,10 @@
 var {component} = require('omniscient-tools');
-var {generateParts} = require('../common/drawing');
+var {generateParts, getMsg} = require('../common/drawing');
 
 module.exports = component(function ({steps, selected}) {
 
   function renderStep(s, i, steps) {
-    var msg = '';
-    switch (s.get('type')) {
-      case 'circle': msg = `Draw circle around (${s.get('x1')}, ${s.get('y1')}), ${Math.floor(s.get('r'))} px in radius.`; break;
-      case 'rect': msg = `Draw rect from (${s.get('x1')}, ${s.get('y1')}), ${s.get('x2') - s.get('x1')} px horizontally, ${s.get('y2') - s.get('y1')} px vertically.`; break;
-      case 'line': msg = `Draw line from (${s.get('x1')}, ${s.get('y1')}), ${s.get('x2') - s.get('x1')} px horizontally, ${s.get('y2') - s.get('y1')} px vertically.`; break;
-      case 'text': msg = `Draw text at (${s.get('x1')}, ${s.get('y1')})`; break;
-    }
-
+    var msg = getMsg(s);
     var svgParts = generateParts(steps.slice(0, i + 1), 1 / 9, 4);
 
     var style = {

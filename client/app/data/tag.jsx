@@ -1,6 +1,5 @@
 var React = require('react');
 var ContentEditable = require('../common/content-editable');
-var store = require('../stores/pictures');
 
 var Tag = React.createClass({
 
@@ -30,7 +29,7 @@ var Tag = React.createClass({
 
   updateLabel(newLbl) {
     this.props.item.label = newLbl;
-    store.setCur(store.getCur());
+    // store.setCur(store.getCur());
   },
 
   toggleShowChildren() {

@@ -1,5 +1,4 @@
 var React = require('react');
-var store = require('../stores/pictures');
 
 var originalNum, originalX, step, curNum;
 

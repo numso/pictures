@@ -45,17 +45,17 @@ function solarExample() {
     bigPictureStuff: { msg: '', previews: {} },
     data: {
       scalars: [
-        { id: 's_1', label: 'panels', value: '600', },
-        { id: 's_2', label: 'kW / panel', value: '0.2', },
-        { id: 's_3', label: 'power in kW', value: 's_1 * s_2', }
+        { label: 'panels', value: '600', },
+        { label: 'kW / panel', value: '0.2', },
+        { label: 'power in kW', value: 's_1 * s_2', }
       ],
       arrays: [
-        { id: 'a_1', label: 'sun hours', value: '[ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ]', },
-        { id: 'a_2', label: 'energy in kWh', value: 's_3 * a_1', },
-        { id: 'a_3', label: 'energy in MWh', value: 'a_2 / 1000' }
+        { label: 'sun hours', value: '[ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ]', },
+        { label: 'energy in kWh', value: 's_3 * a_1', },
+        { label: 'energy in MWh', value: 'a_2 / 1000' }
       ],
-      scalars_id: 4,
-      arrays_id: 4
+      scalars_id: 1,
+      arrays_id: 1
     }
   };
 }
@@ -65,6 +65,16 @@ function solarExample() {
 
 
 var evaluator = require('../data/evaluator');
+
+updatePicture(0);
+updatePicture(1);
+
+
+// run this function: 1) on page load, 2) on picture create, 3) on every update to picture
+function updatePicture(index) {
+  giveIDs(state.cursor(['pictures', index, 'data']));
+  evaluate(state.cursor(['pictures', index, 'data']));
+}
 
 function giveIDs(dataCursor) {
   var scalars_id = dataCursor.get('scalars_id');
@@ -109,7 +119,3 @@ function evaluate(dataCursor) {
     item.update('evaluated', () => data[id]);
   }
 }
-
-// run these on load and on every update to pictures?
-giveIDs(state.cursor(['pictures', '0', 'data']));
-evaluate(state.cursor(['pictures', '0', 'data']));

@@ -1,7 +1,6 @@
 var React = require('react');
 var ContentEditable = require('../common/content-editable');
 var Dragger = require('./dragger');
-var store = require('../stores/pictures');
 
 function getArr(item) {
   if (item && _.isArray(item)) return item;
@@ -109,11 +108,4 @@ function getMap(pictureData) {
     obj[item.get('id')] = item.get('label');
   }
   return obj;
-}
-
-
-
-var pStore = require('../pictures/store');
-function GETCUR() {
-  return pStore.state.cursor('selectedPicture').get('current');
 }
