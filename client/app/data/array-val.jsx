@@ -1,6 +1,7 @@
 var React = require('react');
 var ContentEditable = require('../common/content-editable');
 var Dragger = require('./dragger');
+var PictureStore = require('../pictures/store');
 
 function getArr(item) {
   if (item && _.isArray(item)) return item;
@@ -41,8 +42,8 @@ var ArrayVal = React.createClass({
   },
 
   updateValue(newValue) {
-    this.props.item.value = newValue;
-    // store.setCur(store.getCur());
+    this.props.item.update('value', () => newValue);
+    PictureStore.updatePicture(this.props.picID);
   },
 
   render() {
@@ -52,7 +53,7 @@ var ArrayVal = React.createClass({
   renderEditableArray() {
     return (
       <div className="array-val">
-        <ContentEditable text={this.props.item.value} onChange={this.onChange} onFinish={this.onFinish}/>
+        <ContentEditable text={this.props.item.get('value')} onChange={this.onChange} onFinish={this.onFinish}/>
       </div>
     );
   },
@@ -68,7 +69,7 @@ var ArrayVal = React.createClass({
           })}
         </div>
         <div className="value" style={{height:25}}>
-          {generateValueMarkup(i && i.get('value') || '', i, this.props.pictureData)}
+          {generateValueMarkup(i && i.get('value') || '', i, this.props.pictureData, this.props.picID)}
         </div>
       </div>
     );
@@ -78,7 +79,7 @@ var ArrayVal = React.createClass({
 
 module.exports = ArrayVal;
 
-function generateValueMarkup(val, item, pictureData) {
+function generateValueMarkup(val, item, pictureData, picID) {
   var map = getMap(pictureData);
   var re = /[as]_[0-9]*/;
   var chunks = val.split(/\s/);
@@ -90,7 +91,7 @@ function generateValueMarkup(val, item, pictureData) {
     if (!isNaN(parseFloat(chunk))) {
       var firstChunk = arr.slice(0, i).join(' ');
       var secondChunk = arr.slice(i + 1, arr.length).join(' ');
-      return <Dragger number={chunk} firstChunk={firstChunk} secondChunk={secondChunk} item={item}/>
+      return <Dragger number={chunk} firstChunk={firstChunk} secondChunk={secondChunk} item={item} picID={picID}/>
     }
     return (<span> {chunk} </span>);
   });

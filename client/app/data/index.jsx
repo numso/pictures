@@ -9,6 +9,8 @@ var ArrayVal = require('./array-val');
 
 var evaluator = require('./evaluator');
 
+var pictureStore = require('../pictures/store');
+
 function getArr(item) {
   if (item && _.isArray(item)) return item;
   return [];
@@ -26,13 +28,11 @@ module.exports = component(function ({pictureData, selectedPicture}) {
     createNew('arrays');
   }
 
-  console.log('TODO:: Fix these methods as well');
   function createNew(type) {
     pictureData.get(type).update((oldArr) => {
-      // IT NEEDS A GENERATED ID
-      return oldArr.push(Immutable.fromJS({ id: 's_4', label: 'item', value: '10' }));
+      return oldArr.push(Immutable.fromJS({ label: 'item', value: '10' }));
     });
-    evaluate(pictureData);
+    pictureStore.updatePicture(selectedPicture.get('current'));
   }
 
   function getArrayStats(item) {
@@ -48,8 +48,8 @@ module.exports = component(function ({pictureData, selectedPicture}) {
         {stats.map((stat) => {
           return (
             <div>
-              <div className="tag" draggable="true">{stat.name} {item.label}</div>
-              <span>{evaluator.round(stat.code(item.evaluated || []))}</span>
+              <div className="tag" draggable="true">{stat.name} {item.get('label')}</div>
+              <span>{evaluator.round(stat.code(item.get('evaluated') || []))}</span>
             </div>
           );
         })}
@@ -62,16 +62,13 @@ module.exports = component(function ({pictureData, selectedPicture}) {
   }, 0);
   var indices = _.range(1, Math.max(max + 1, 6));
 
-  var tags = [];
-  _.each(pictureData.get('scalars').toJS(), (item) => {
-    tags.push(<Tag item={item}/>);
-  });
-  tags.push(<CreateTag onClick={createScalar}>+</CreateTag>);
-  tags.push(<CreateTag>column</CreateTag>);
-  _.each(pictureData.get('arrays').toJS(), (item) => {
-    tags.push(<Tag item={item}>{getArrayStats(item)}</Tag>);
-  });
-  tags.push(<CreateTag onClick={createArray}>+</CreateTag>);
+  var scalarTags = pictureData.get('scalars').map((item) => {
+    return <Tag item={item}/>
+  }).toJS();
+
+  var arrayTags = pictureData.get('arrays').map((item) => {
+    return <Tag item={item}>{getArrayStats(item)}</Tag>
+  }).toJS();
 
   var scalarValues = pictureData.get('scalars').map((item) => {
     return <ScalarVal pictureData={pictureData} picID={selectedPicture.get('current')} item={item}/>
@@ -85,7 +82,11 @@ module.exports = component(function ({pictureData, selectedPicture}) {
       <div className="header">Data</div>
       <div className="container --data --flex">
         <div>
-          {tags}
+          {scalarTags}
+          <CreateTag onClick={createScalar}>+</CreateTag>
+          <CreateTag>column</CreateTag>
+          {arrayTags}
+          <CreateTag onClick={createArray}>+</CreateTag>
         </div>
         <div className="test-1">
           {scalarValues}

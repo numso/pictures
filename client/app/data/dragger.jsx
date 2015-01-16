@@ -1,5 +1,5 @@
 var React = require('react');
-
+var PictureStore = require('../pictures/store');
 var originalNum, originalX, step, curNum;
 
 var Dragger = React.createClass({
@@ -57,11 +57,13 @@ var Dragger = React.createClass({
     var hasComma = this.props.number[this.props.number.length - 1] === ',';
     if (hasComma) num += ',';
     var newVal = [this.props.firstChunk, num, this.props.secondChunk].join(' ').trim();
-    this.props.item.value = newVal;
+
+    this.props.item.update('value', () => newVal);
+    PictureStore.updatePicture(this.props.picID);
+
     this.setState({
       number: num
     });
-    // store.setCur(store.getCur());
   },
 
   onDragEnd(e) {

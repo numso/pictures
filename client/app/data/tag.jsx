@@ -5,14 +5,14 @@ var Tag = React.createClass({
 
   getInitialState() {
     return {
-      editting: false,
+      editing: false,
       showChildren: false
     };
   },
 
   onMouseUp() {
     this.setState({
-      editting: true
+      editing: true
     });
   },
 
@@ -23,13 +23,12 @@ var Tag = React.createClass({
   onFinish(lbl) {
     this.updateLabel(lbl);
     this.setState({
-      editting: false
+      editing: false
     });
   },
 
   updateLabel(newLbl) {
-    this.props.item.label = newLbl;
-    // store.setCur(store.getCur());
+    this.props.item.update('label', () => newLbl);
   },
 
   toggleShowChildren() {
@@ -39,21 +38,21 @@ var Tag = React.createClass({
   },
 
   render() {
-    return this.state.editting ? this.renderEditableTag() : this.renderTag();
+    return this.state.editing ? this.renderEditableTag() : this.renderTag();
   },
 
   renderEditableTag() {
     return (
       <div>
         <div className="tag" style={{ color: 'black' }}>
-          <ContentEditable text={this.props.item.label} onChange={this.onChange} onFinish={this.onFinish}/>
+          <ContentEditable text={this.props.item.get('label')} onChange={this.onChange} onFinish={this.onFinish}/>
         </div>
       </div>
     );
   },
 
   onDragStart() {
-    event.dataTransfer.setData('text/plain', this.props.item.id);
+    event.dataTransfer.setData('text/plain', this.props.item.get('id'));
   },
 
   renderTag() {
@@ -64,7 +63,7 @@ var Tag = React.createClass({
     return (
       <div>
         <div draggable="true" onDragStart={this.onDragStart} className={classes} onMouseUp={this.onMouseUp}>
-          {this.props.item.label}
+          {this.props.item.get('label')}
         </div>
         {this.props.children && <div className="tag__arrow" onClick={this.toggleShowChildren}/>}
         {this.state.showChildren && this.props.children}

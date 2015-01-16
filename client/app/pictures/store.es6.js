@@ -1,5 +1,6 @@
 var immutable = require('immutable');
 var immstruct = require('immstruct');
+var evaluator = require('../data/evaluator');
 
 exports.newPicture = function () {
   return {
@@ -60,21 +61,12 @@ function solarExample() {
   };
 }
 
+// --- Evaluation --------------------------------------------------------------
 
-
-
-
-var evaluator = require('../data/evaluator');
-
-updatePicture(0);
-updatePicture(1);
-
-
-// run this function: 1) on page load, 2) on picture create, 3) on every update to picture
-function updatePicture(index) {
+var updatePicture = exports.updatePicture = (index) => {
   giveIDs(state.cursor(['pictures', index, 'data']));
   evaluate(state.cursor(['pictures', index, 'data']));
-}
+};
 
 function giveIDs(dataCursor) {
   var scalars_id = dataCursor.get('scalars_id');
@@ -119,3 +111,7 @@ function evaluate(dataCursor) {
     item.update('evaluated', () => data[id]);
   }
 }
+
+// run this function: 1) on page load, 2) on picture create, 3) on every update to picture
+updatePicture(0);
+updatePicture(1);
