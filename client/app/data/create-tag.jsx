@@ -1,21 +1,11 @@
-var React = require('react');
+var {component} = require('omniscient-tools');
 
-var CreateTag = React.createClass({
+module.exports = component('CreateTag', function ({onClick}) {
 
-  getDefaultProps() {
-    return {
-      onClick: function () {}
-    };
-  },
-
-  render() {
-    return (
-      <div>
-        <span onClick={this.props.onClick} className="tag --create">{this.props.children}</span>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <span onClick={this.props.onClick} className="tag --create">{this.props.children}</span>
+    </div>
+  );
 
 });
-
-module.exports = CreateTag;
