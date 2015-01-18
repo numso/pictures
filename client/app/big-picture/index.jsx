@@ -5,7 +5,7 @@ var {generateParts, getMsg} = require('../common/drawing');
 var startx = null;
 var starty;
 
-module.exports = component(function ({mode, steps, selectedStep, bigPictureStuff}) {
+module.exports = component('BigPicture', function ({mode, steps, selectedStep, bigPictureStuff}) {
 
   function mouseDown(e) {
     startx = e.nativeEvent.offsetX;

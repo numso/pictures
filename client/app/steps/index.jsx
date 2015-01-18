@@ -1,7 +1,7 @@
 var {component} = require('omniscient-tools');
 var {generateParts, getMsg} = require('../common/drawing');
 
-module.exports = component(function ({steps, selected}) {
+module.exports = component('Steps', function ({steps, selected}) {
 
   function renderStep(s, i, steps) {
     var msg = getMsg(s);

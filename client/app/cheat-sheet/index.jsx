@@ -1,7 +1,7 @@
 var {component} = require('omniscient-tools');
 require('./hotkeys');
 
-module.exports = component(function ({labels, mode}) {
+module.exports = component('CheatSheet', function ({labels, mode}) {
 
   function isCurrent(item) {
     return item.get('label') === mode.get('current');

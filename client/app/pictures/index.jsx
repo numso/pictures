@@ -3,7 +3,7 @@ var Picture = require('./picture');
 var PicturesStore = require('./store');
 var immutable = require('immutable');
 
-module.exports = component(function ({selectedPicture, pictures}) {
+module.exports = component('Pictures', function ({selectedPicture, pictures}) {
 
   function addNew() {
     pictures.update((oldPictures) => {

@@ -16,7 +16,7 @@ function getArr(item) {
   return [];
 }
 
-module.exports = component(function ({pictureData, selectedPicture}) {
+module.exports = component('Data', function ({pictureData, selectedPicture}) {
 
   console.log('-------RENDER--------');
 

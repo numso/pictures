@@ -1,6 +1,6 @@
 var {component} = require('omniscient-tools');
 
-module.exports = component(function () {
+module.exports = component('Measurements', function () {
 
   return (
     <div>

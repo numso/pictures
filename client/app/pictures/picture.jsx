@@ -2,7 +2,7 @@ var {component} = require('omniscient-tools');
 var ContentEditable = require('../common/content-editable');
 var {generateParts} = require('../common/drawing');
 
-module.exports = component(function ({picture, selectedPicture, index}) {
+module.exports = component('Picture', function ({picture, selectedPicture, index}) {
 
   var title = picture.get('title');
 

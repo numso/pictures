@@ -15,13 +15,14 @@ function load() {
   // optionally load all stores from a backend or localstorage or firebase or something.
 }
 
+// TODO:: should be able to pass in optional displayName to handler...
 var Index = handler(load, function () {
   // When refactor is done (and you've chosen a better name than 'bigPictureStuff')
   // all the cursors should be passed into the app here instead of a random num.
   return <App foo={Math.random()}/>;
 });
 
-var App = component(function () {
+var App = component('App', function () {
   var curPicture = PictureStore.state.cursor('selectedPicture').get('current');
   var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture);
   var dataCursor = curPictureCursor.get('data');
