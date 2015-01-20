@@ -25,10 +25,10 @@ function getMsg(s) {
   var y2 = round(s.get('y2'));
   var r = round(s.get('r'));
   switch (s.get('type')) {
-    case 'circle': return `Draw circle around (${x1}, ${y1}), ${r} px in radius.`;
-    case 'rect': return `Draw rect from (${x1}, ${y1}), ${x2 - x1} px horizontally, ${y2 - y1} px vertically.`;
-    case 'line': return `Draw line from (${x1}, ${y1}), ${x2 - x1} px horizontally, ${y2 - y1} px vertically.`;
-    case 'text': return `Draw text at (${x1}, ${y1})`;
+    case 'circle': return `Draw circle around ( ${x1} , ${y1} ), ${r} px in radius.`;
+    case 'rect': return `Draw rect from ( ${x1} , ${y1} ), ${x2 - x1} px horizontally, ${y2 - y1} px vertically.`;
+    case 'line': return `Draw line from ( ${x1} , ${y1} ), ${x2 - x1} px horizontally, ${y2 - y1} px vertically.`;
+    case 'text': return `Draw text at ( ${x1} , ${y1} )`;
   }
   return '';
 }

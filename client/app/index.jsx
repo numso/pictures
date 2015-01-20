@@ -55,6 +55,8 @@ var App = component('App', function () {
             steps={stepsCursor}
             bigPictureStuff={bigPictureStuff}
             selectedStep={curStepSelectedCursor}
+            selectedPicture={PictureStore.state.cursor('selectedPicture')}
+            pictureData={dataCursor}
           />
         </div>
 

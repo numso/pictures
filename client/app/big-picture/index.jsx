@@ -1,11 +1,22 @@
 var {component} = require('omniscient-tools');
 var immutable = require('immutable');
 var {generateParts, getMsg} = require('../common/drawing');
+var evalStuff = require('../common/eval-stuff');
 
 var startx = null;
 var starty;
 
-module.exports = component('BigPicture', function ({mode, steps, selectedStep, bigPictureStuff}) {
+module.exports = component('BigPicture', function ({mode, steps, selectedStep, bigPictureStuff, pictureData, selectedPicture}) {
+
+  function _getMsg(step) {
+    var msg = getMsg(step);
+    var picID = selectedPicture.get('current');
+    var CURSOR_THAT_HAS_VALUE_PROP_TO_UPDATE = null;
+    msg = evalStuff.generateValueMarkup(msg, selectedPicture.cursor('foooey'), pictureData, picID);
+    // this kinda works? you can see numbers dragging. but it doesn't save anything.
+    // might need to override getMsg to return a string or list of components...
+    return msg;
+  }
 
   function mouseDown(e) {
     startx = e.nativeEvent.offsetX;
@@ -73,7 +84,7 @@ module.exports = component('BigPicture', function ({mode, steps, selectedStep, b
 
   return (
     <div>
-      <div style={{textAlign: 'center', height: 18}}>{getMsg(step)}</div>
+      <div style={{textAlign: 'center', height: 18}}>{_getMsg(step)}</div>
       <div id="picture-box" className="picture --big">
         <svg width={720} height={900} onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}>
           {svgParts}
