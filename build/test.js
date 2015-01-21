@@ -53,7 +53,7 @@
 	__webpack_require__(3);
 
 
-	var $ = __webpack_require__(24);
+	var $ = __webpack_require__(18);
 
 	$("h1").click(function () {
 	  $(this).closest("div").find(".demo-box").toggle();
@@ -202,8 +202,8 @@
 
 	// --- set up globals ----------------------------------------------------------
 
-	var d3 = __webpack_require__(29);
-	var $ = __webpack_require__(24);
+	var d3 = __webpack_require__(30);
+	var $ = __webpack_require__(18);
 
 	var size = 500;
 	var blue = "#56a7e1";
@@ -645,13 +645,7 @@
 
 
 /***/ },
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -9862,11 +9856,18 @@
 
 
 /***/ },
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
 /* 25 */,
 /* 26 */,
 /* 27 */,
 /* 28 */,
-/* 29 */
+/* 29 */,
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
@@ -19341,7 +19342,6 @@
 	}();
 
 /***/ },
-/* 30 */,
 /* 31 */,
 /* 32 */,
 /* 33 */,

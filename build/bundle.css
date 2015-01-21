@@ -133,6 +133,9 @@
 .newpicture:active {
   background-color: #afb8c8; }
 
+#bigPicture .scalar-val {
+  display: inline-block; }
+
 .data__indice {
   display: inline-block;
   font-size: 12px;
