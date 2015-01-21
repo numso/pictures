@@ -1,22 +1,14 @@
 var {component} = require('omniscient-tools');
 var immutable = require('immutable');
-var {generateParts, getMsg} = require('../common/drawing');
+var {generateParts, getDomMsg} = require('../common/drawing');
 var evalStuff = require('../common/eval-stuff');
+
+var PictureStore = require('../pictures/store');
 
 var startx = null;
 var starty;
 
 module.exports = component('BigPicture', function ({mode, steps, selectedStep, bigPictureStuff, pictureData, selectedPicture}) {
-
-  function _getMsg(step) {
-    var msg = getMsg(step);
-    var picID = selectedPicture.get('current');
-    var CURSOR_THAT_HAS_VALUE_PROP_TO_UPDATE = null;
-    msg = evalStuff.generateValueMarkup(msg, selectedPicture.cursor('foooey'), pictureData, picID);
-    // this kinda works? you can see numbers dragging. but it doesn't save anything.
-    // might need to override getMsg to return a string or list of components...
-    return msg;
-  }
 
   function mouseDown(e) {
     startx = e.nativeEvent.offsetX;
@@ -63,13 +55,24 @@ module.exports = component('BigPicture', function ({mode, steps, selectedStep, b
   }
 
   function addStep(step) {
+    for (var key in step) {
+      if (key !== 'type') {
+        step[key] = { value: step[key] }
+      }
+    }
     steps.update((oldSteps) => {
       return oldSteps.push(immutable.fromJS(step));
     });
     selectedStep.update('current', () => steps.size);
+    PictureStore.updatePicture(selectedPicture.get('current'));
   }
 
   function setPreview(key, preview) {
+    for (var _key in preview) {
+      if (_key !== 'type') {
+        preview[_key] = { evaluated: preview[_key] }
+      }
+    }
     bigPictureStuff.get('previews').update(key, () => immutable.fromJS(preview));
   }
 
@@ -83,8 +86,8 @@ module.exports = component('BigPicture', function ({mode, steps, selectedStep, b
   var step = steps.get(selectedStep.get('current'));
 
   return (
-    <div>
-      <div style={{textAlign: 'center', height: 18}}>{_getMsg(step)}</div>
+    <div id="bigPicture">
+      <div style={{textAlign: 'center', height: 18}}>{getDomMsg(step, pictureData, selectedPicture.get('current'))}</div>
       <div id="picture-box" className="picture --big">
         <svg width={720} height={900} onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}>
           {svgParts}

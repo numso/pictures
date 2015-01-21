@@ -1,36 +1,48 @@
+var ScalarVal = require('../data/scalar-val');
+
 function generateParts(steps, proportion=1, fontSize=16) {
   return steps.map((s) => {
     switch (s.get('type')) {
       case 'circle':
-        return <circle cx={proportion*s.get('x1')} cy={proportion*s.get('y1')} r={proportion*s.get('r')} fill="#cacaca"/>
+        return <circle cx={proportion*s.getIn(['x1', 'evaluated'])} cy={proportion*s.getIn(['y1', 'evaluated'])} r={proportion*s.getIn(['r', 'evaluated'])} fill="#cacaca"/>
       case 'rect':
-        var x = Math.min(s.get('x1'), s.get('x2'));
-        var y = Math.min(s.get('y1'), s.get('y2'));
-        var w = Math.abs(s.get('x1') - s.get('x2'));
-        var h = Math.abs(s.get('y1') - s.get('y2'));
+        var x = Math.min(s.getIn(['x1', 'evaluated']), s.getIn(['x2', 'evaluated']));
+        var y = Math.min(s.getIn(['y1', 'evaluated']), s.getIn(['y2', 'evaluated']));
+        var w = Math.abs(s.getIn(['x1', 'evaluated']) - s.getIn(['x2', 'evaluated']));
+        var h = Math.abs(s.getIn(['y1', 'evaluated']) - s.getIn(['y2', 'evaluated']));
         return <rect x={proportion*x} y={proportion*y} width={proportion*w} height={proportion*h} fill="#cacaca"/>
       case 'line':
-        return <line x1={proportion*s.get('x1')} y1={proportion*s.get('y1')} x2={proportion*s.get('x2')} y2={proportion*s.get('y2')} stroke="#cacaca"/>
+        return <line x1={proportion*s.getIn(['x1', 'evaluated'])} y1={proportion*s.getIn(['y1', 'evaluated'])} x2={proportion*s.getIn(['x2', 'evaluated'])} y2={proportion*s.getIn(['y2', 'evaluated'])} stroke="#cacaca"/>
       case 'text':
-        return <text fontSize={fontSize} x={proportion*s.get('x1')} y={proportion*s.get('y1')} fill="#cacaca">Hi!</text>
+        return <text fontSize={fontSize} x={proportion*s.getIn(['x1', 'evaluated'])} y={proportion*s.getIn(['y1', 'evaluated'])} fill="#cacaca">Hi!</text>
     }
   }).toJS();
 }
 
-function getMsg(s) {
+function getMsg(val, s) {
   if (!s) return '';
-  var x1 = round(s.get('x1'));
-  var x2 = round(s.get('x2'));
-  var y1 = round(s.get('y1'));
-  var y2 = round(s.get('y2'));
-  var r = round(s.get('r'));
+  var x1 = s.get('x1');
+  var x2 = s.get('x2');
+  var y1 = s.get('y1');
+  var y2 = s.get('y2');
+  var r = s.get('r');
   switch (s.get('type')) {
-    case 'circle': return `Draw circle around ( ${x1} , ${y1} ), ${r} px in radius.`;
-    case 'rect': return `Draw rect from ( ${x1} , ${y1} ), ${x2 - x1} px horizontally, ${y2 - y1} px vertically.`;
-    case 'line': return `Draw line from ( ${x1} , ${y1} ), ${x2 - x1} px horizontally, ${y2 - y1} px vertically.`;
-    case 'text': return `Draw text at ( ${x1} , ${y1} )`;
+    case 'circle': return (<span>Draw circle around ( {val(x1)} , {val(y1)} ), {val(r)} px in radius.</span>);
+    case 'rect': return (<span>Draw rect from ( {val(x1)} , {val(y1)} ), {getVal(x2) - getVal(x1)} px horizontally, {getVal(y2) - getVal(y1)} px vertically.</span>);
+    case 'line': return (<span>Draw line from ( {val(x1)} , {val(y1)} ), {getVal(x2) - getVal(x1)} px horizontally, {getVal(y2) - getVal(y1)} px vertically.</span>);
+    case 'text': return (<span>Draw text at ( {val(x1)} , {val(y1)} )</span>);
   }
   return '';
+}
+
+function getVal(numCursor) {
+  return round(numCursor.get('evaluated'));
+}
+
+function getDom(pictureData, picID) {
+  return (numCursor) => {
+    return <ScalarVal pictureData={pictureData} picID={picID} item={numCursor}/>
+  };
 }
 
 function round(num, mult=10) {
@@ -39,5 +51,10 @@ function round(num, mult=10) {
 
 module.exports = {
   generateParts,
-  getMsg
+  getMsg: function (s) {
+    return getMsg(getVal, s);
+  },
+  getDomMsg: function (s, pictureData, picID) {
+    return getMsg(getDom(pictureData, picID), s);
+  }
 };

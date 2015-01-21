@@ -39,7 +39,7 @@ function solarExample() {
     title: {
       current: 'Solar Data'
     },
-    steps: [ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ].map((month, i) => ({ type: 'rect', x1: i * (720 / 12) + 4, x2: (i + 1) * (720 / 12) - 4, y1: 900 - month / 159 * 900, y2: 900 })),
+    steps: [ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ].map((month, i) => ({ type: 'rect', x1: { value: i * (720 / 12) + 4 }, x2: { value: (i + 1) * (720 / 12) - 4 }, y1: { value: 900 - month / 159 * 900 }, y2: { value: 900 } })),
     selectedStep: {
       current: 11
     },
@@ -64,8 +64,11 @@ function solarExample() {
 // --- Evaluation --------------------------------------------------------------
 
 var updatePicture = exports.updatePicture = (index) => {
-  giveIDs(state.cursor(['pictures', index, 'data']));
-  evaluate(state.cursor(['pictures', index, 'data']));
+  var dataCursor = state.cursor(['pictures', index, 'data']);
+  var stepsCursor = state.cursor(['pictures', index, 'steps']);
+  giveIDs(dataCursor);
+  var dataCursor = state.cursor(['pictures', index, 'data']);
+  evaluate(dataCursor, stepsCursor);
 };
 
 function giveIDs(dataCursor) {
@@ -89,7 +92,7 @@ function giveIDs(dataCursor) {
   dataCursor.update('arrays_id', () => arrays_id);
 }
 
-function evaluate(dataCursor) {
+function evaluate(dataCursor, stepsCursor) {
   var ctx = {};
   for (var i = 0; i < dataCursor.get('scalars').size; i++) {
     var item = dataCursor.get('scalars').get(i);
@@ -98,6 +101,14 @@ function evaluate(dataCursor) {
   for (var i = 0; i < dataCursor.get('arrays').size; i++) {
     var item = dataCursor.get('arrays').get(i);
     ctx[item.get('id')] = item.get('value');
+  }
+  for (var i = 0; i < stepsCursor.size; i++) {
+    var item = stepsCursor.get(i);
+    item.forEach((val, key) => {
+      if (key === 'type') return;
+      var id = 'step-' + i + '-' + key;
+      ctx[id] = val.get('value');
+    });
   }
   var data = evaluator.check(ctx);
   for (var i = 0; i < dataCursor.get('scalars').size; i++) {
@@ -109,6 +120,14 @@ function evaluate(dataCursor) {
     var item = dataCursor.get('arrays').get(i);
     var id = item.get('id');
     item.update('evaluated', () => data[id]);
+  }
+  for (var i = 0; i < stepsCursor.size; i++) {
+    var item = stepsCursor.get(i);
+    item.forEach((val, key) => {
+      if (key === 'type') return;
+      var id = 'step-' + i + '-' + key;
+      val.update('evaluated', () => data[id]);
+    });
   }
 }
 

@@ -1,6 +1,7 @@
 var Dragger = require('../data/dragger');
 
 exports.generateValueMarkup = function (val, item, pictureData, picID) {
+  val = '' + val;
   var map = exports.getMap(pictureData);
   var re = /[as]_[0-9]*/;
   var chunks = val.split(/\s/);
