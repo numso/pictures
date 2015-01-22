@@ -39,7 +39,13 @@ function solarExample() {
     title: {
       current: 'Solar Data'
     },
-    steps: [ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ].map((month, i) => ({ type: 'rect', x1: { value: i * (720 / 12) + 4 }, x2: { value: (i + 1) * (720 / 12) - 4 }, y1: { value: 900 - month / 159 * 900 }, y2: { value: 900 } })),
+    steps: _.range(0, 12).map((i) => ({
+      type: 'rect',
+      x1: { value: i * 60 + 4 },
+      x2: { value: (i + 1) * 60 - 4 }, // TODO:: get columns worksing so i can just be a column num
+      y1: { value: `900 - a_1[${i}] / 159 * 900` },
+      y2: { value: 900 }
+    })),
     selectedStep: {
       current: 11
     },
