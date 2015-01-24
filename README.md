@@ -52,7 +52,7 @@ Make sure you have node installed. Optionally, you can install a live-reload plu
  - [x] `Feature` Use of Array Reductions in equations
  - [ ] Better Styling (emphasis added above)
  - [ ] `Feature` Ability to delete data elements
- - [ ] Better way to store data? It's a mess right now...
+ - [x] Better way to store data? It's a mess right now... (cursors)
  - [ ] Revisit Usability when it's all done.
 
 ####Picture
