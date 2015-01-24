@@ -43,7 +43,7 @@ function solarExample() {
       type: 'rect',
       x1: { value: i * 60 + 4 },
       x2: { value: (i + 1) * 60 - 4 }, // TODO:: get columns worksing so i can just be a column num
-      y1: { value: `900 - a_1[${i}] / ar_1_max * 900` },
+      y1: { value: `900 - a_3[${i}] / ar_3_max * 900` },
       y2: { value: 900 }
     })),
     selectedStep: {
