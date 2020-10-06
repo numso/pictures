@@ -1,6 +1,6 @@
 import ScalarVal from '../data/scalar-val'
 
-function generateParts (steps, proportion = 1, fontSize = 16) {
+export function generateParts (steps, proportion = 1, fontSize = 16) {
   return steps
     .map(s => {
       switch (s.get('type')) {
@@ -63,7 +63,7 @@ function generateParts (steps, proportion = 1, fontSize = 16) {
     .toJS()
 }
 
-function getMsg (val, s) {
+function getMsgInner (val, s) {
   if (!s) return ''
   var x1 = s.get('x1')
   var x2 = s.get('x2')
@@ -117,12 +117,10 @@ function round (num, mult = 10) {
   return Math.floor(num * mult) / mult
 }
 
-export default {
-  generateParts,
-  getMsg: function (s) {
-    return getMsg(getVal, s)
-  },
-  getDomMsg: function (s, pictureData, picID) {
-    return getMsg(getDom(pictureData, picID), s)
-  }
+export function getMsg (s) {
+  return getMsgInner(getVal, s)
+}
+
+export function getDomMsg (s, pictureData, picID) {
+  return getMsgInner(getDom(pictureData, picID), s)
 }

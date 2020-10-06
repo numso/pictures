@@ -22,14 +22,13 @@ export default component('BigPicture', function ({
   }
 
   function mouseMove (e) {
-    var _mode = mode.get('current')
     if (startx === null) return
     var endx = e.nativeEvent.offsetX
     var endy = e.nativeEvent.offsetY
-    if (_mode === 'circle') {
+    if (mode === 'circle') {
       var dist = distance(startx, starty, endx, endy)
       setPreview('circle', { type: 'circle', x1: startx, y1: starty, r: dist })
-    } else if (_mode === 'rect') {
+    } else if (mode === 'rect') {
       setPreview('rect', {
         type: 'rect',
         x1: startx,
@@ -37,7 +36,7 @@ export default component('BigPicture', function ({
         x2: endx,
         y2: endy
       })
-    } else if (_mode === 'line') {
+    } else if (mode === 'line') {
       setPreview('line', {
         type: 'line',
         x1: startx,
@@ -49,20 +48,19 @@ export default component('BigPicture', function ({
   }
 
   function mouseUp (e) {
-    var _mode = mode.get('current')
     var endx = e.nativeEvent.offsetX
     var endy = e.nativeEvent.offsetY
-    if (_mode === 'circle') {
+    if (mode === 'circle') {
       var dist = distance(startx, starty, endx, endy)
       removePreview('circle')
       addStep({ type: 'circle', x1: startx, y1: starty, r: dist })
-    } else if (_mode === 'rect') {
+    } else if (mode === 'rect') {
       removePreview('rect')
       addStep({ type: 'rect', x1: startx, y1: starty, x2: endx, y2: endy })
-    } else if (_mode === 'line') {
+    } else if (mode === 'line') {
       removePreview('line')
       addStep({ type: 'line', x1: startx, y1: starty, x2: endx, y2: endy })
-    } else if (_mode === 'text') {
+    } else if (mode === 'text') {
       addStep({ type: 'text', x1: endx, y1: endy })
     }
     startx = null
