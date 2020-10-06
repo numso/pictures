@@ -1,53 +1,47 @@
-import { component } from 'omniscient-tools'
+import React from 'react'
+
 import ContentEditable from '../common/content-editable'
 import { generateParts } from '../common/drawing'
 
-export default component('Picture', function ({
+export default function Picture ({
   picture,
-  selectedPicture,
-  index
+  selected,
+  setSelected,
+  updateTitle
 }) {
-  var title = picture.get('title')
+  const [[editing, tempTitle], setState] = React.useState([false, ''])
 
   function onMouseUp () {
-    title.update('editing', () => title.get('current'))
+    setState([true, picture.title])
   }
 
-  function onChange (_title) {
-    title.update('current', () => _title)
+  function onChange (title) {
+    setState([true, title])
   }
 
-  function onFinish (_title) {
-    title.update('current', () => _title)
-    title.remove('editing')
+  function onFinish (title) {
+    setState([false, ''])
+    updateTitle(title)
   }
 
-  function selectPicture () {
-    selectedPicture.update('current', () => index)
-  }
-
-  function isSelected () {
-    return selectedPicture.get('current') === index
-  }
-
-  var classes = isSelected() ? 'picture --selected' : 'picture'
+  var classes = selected ? 'picture --selected' : 'picture'
 
   return (
     <div>
-      <div className={classes} onClick={selectPicture}>
-        <svg width={220}>{generateParts(picture.get('steps'), 1 / 6, 5)}</svg>
+      <div className={classes} onClick={setSelected}>
+        <svg width={220}>{generateParts(picture.steps, 1 / 6, 5)}</svg>
       </div>
       <div style={{ textAlign: 'center', marginBottom: 15 }}>
-        {title.get('editing') ? (
+        {editing ? (
           <ContentEditable
-            text={title.get('editing')}
+            text={tempTitle}
             onChange={onChange}
             onFinish={onFinish}
           />
         ) : (
-          <div onMouseUp={onMouseUp}>{title.get('current')}</div>
+          <div onMouseUp={onMouseUp}>{picture.title}</div>
         )}
       </div>
     </div>
   )
-})
+}

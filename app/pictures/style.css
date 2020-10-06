@@ -19,35 +19,6 @@
   cursor: default;
 }
 
-.newpicture {
-  background-color: #d7dce5;
-  border-radius: 100px;
-  padding: 20px;
-  height: 0;
-  width: 0;
-  display: inline-block;
-  border: 1px solid #888;
-  position: relative;
-  vertical-align: top;
-  margin-top: 70px;
-  cursor: pointer;
-}
-
-.newpicture__content {
-  color: #888;
-  position: relative;
-  top: -9px;
-  left: -5px;
-}
-
-.newpicture:hover {
-  background-color: #c2cad8;
-}
-
-.newpicture:active {
-  background-color: #afb8c8;
-}
-
 #bigPicture .scalar-val {
   display: inline-block;
 }

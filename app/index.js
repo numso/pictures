@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import usePictureState from './use-picture-state'
+
 import PictureStore from './pictures/store'
 
 import Pictures from './pictures'
@@ -13,6 +15,7 @@ import './common/style.css'
 
 function App () {
   const [drawMode, setDrawMode] = React.useState('line')
+  const pictureState = usePictureState()
 
   var curPicture = PictureStore.state.cursor('selectedPicture').get('current')
   var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture)
@@ -23,8 +26,11 @@ function App () {
   return (
     <div>
       <Pictures
-        pictures={PictureStore.state.cursor('pictures')}
-        selectedPicture={PictureStore.state.cursor('selectedPicture')}
+        selected={pictureState.selected}
+        setSelected={pictureState.setSelected}
+        pictures={pictureState.pictures}
+        addNew={pictureState.addNew}
+        updatePicture={pictureState.updatePicture}
       />
 
       <div
