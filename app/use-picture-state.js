@@ -36,6 +36,29 @@ export default function usePictureState () {
         arrays_id: 1
       }
     }),
+    resolve({
+      title: 'Sine Wave',
+      steps: [
+        {
+          type: 'circle',
+          x1: { value: 's_2' },
+          y1: { value: 's_3' },
+          r: { value: 50 }
+        }
+      ],
+      selectedStep: 1,
+      bigPictureStuff: { msg: '', previews: {} },
+      data: {
+        scalars: [
+          { label: 'drag me', value: '60' },
+          { label: 'x', value: '3 * s_1' },
+          { label: 'y', value: '400 + Math.sin( s_1 / 10) * 100' }
+        ],
+        arrays: [],
+        scalars_id: 1,
+        arrays_id: 1
+      }
+    }),
     newPicture()
   ])
 
