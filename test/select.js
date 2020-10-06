@@ -1,2 +1,2 @@
-var $ = document.getElementById.bind(document);
-module.exports = $;
+var $ = document.getElementById.bind(document)
+export default $

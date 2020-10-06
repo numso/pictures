@@ -1,14 +1,14 @@
-require('./style');
+import $ from 'jquery'
 
-require('./tags');
-require('./drag-num');
-require('./drawing');
-
-
-var $ = require('jquery');
+import './tags'
+import './drag-num'
+import './drawing'
 
 $('h1').click(function () {
-  $(this).closest('div').find('.demo-box').toggle()
-  var pm = $(this).find('.plus-minus');
-  pm.text(pm.text() === '+' ? '-' : '+');
-});
+  $(this)
+    .closest('div')
+    .find('.demo-box')
+    .toggle()
+  var pm = $(this).find('.plus-minus')
+  pm.text(pm.text() === '+' ? '-' : '+')
+})
