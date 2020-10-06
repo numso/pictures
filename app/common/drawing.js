@@ -1,9 +1,10 @@
+import _ from 'lodash'
 import React from 'react'
 
-// import ScalarVal from '../data/scalar-val'
+import ScalarVal from '../data/scalar-val'
 
 export function generateParts (steps, proportion = 1, fontSize = 16) {
-  return steps.map(s => {
+  return _.map(steps, s => {
     switch (s.type) {
       case 'circle':
         return (
@@ -55,12 +56,12 @@ export function generateParts (steps, proportion = 1, fontSize = 16) {
 
 function getMsgInner (val, s) {
   if (!s) return ''
-  var x1 = s.get('x1')
-  var x2 = s.get('x2')
-  var y1 = s.get('y1')
-  var y2 = s.get('y2')
-  var r = s.get('r')
-  switch (s.get('type')) {
+  var x1 = s.x1
+  var x2 = s.x2
+  var y1 = s.y1
+  var y2 = s.y2
+  var r = s.r
+  switch (s.type) {
     case 'circle':
       return (
         <span>
@@ -92,15 +93,17 @@ function getMsgInner (val, s) {
 }
 
 function getVal (numCursor) {
-  return round(numCursor.get('evaluated'))
+  return round(numCursor.evaluated)
 }
 
-function getDom (pictureData, picID) {
-  return numCursor => {
-    return (
-      <ScalarVal pictureData={pictureData} picID={picID} item={numCursor} />
-    )
-  }
+function getDom (pictureData, updatePicture) {
+  return numCursor => (
+    <ScalarVal
+      pictureData={pictureData}
+      updatePicture={updatePicture}
+      item={numCursor}
+    />
+  )
 }
 
 function round (num, mult = 10) {
@@ -111,6 +114,6 @@ export function getMsg (s) {
   return getMsgInner(getVal, s)
 }
 
-export function getDomMsg (s, pictureData, picID) {
-  return getMsgInner(getDom(pictureData, picID), s)
+export function getDomMsg (s, pictureData, updatePicture) {
+  return getMsgInner(getDom(pictureData, updatePicture), s)
 }

@@ -1,11 +1,11 @@
-import { component } from 'omniscient-tools'
+import React from 'react'
 
-export default component('CreateTag', function ({ onClick }) {
+export default function CreateTag ({ onClick, children }) {
   return (
     <div>
-      <span onClick={this.props.onClick} className='tag --create'>
-        {this.props.children}
+      <span onClick={onClick} className='tag --create'>
+        {children}
       </span>
     </div>
   )
-})
+}

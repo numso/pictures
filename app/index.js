@@ -2,9 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import usePictureState from './use-picture-state'
-
-import PictureStore from './pictures/store'
-
 import Pictures from './pictures'
 import Data from './data'
 import Steps from './steps'
@@ -16,13 +13,20 @@ import './common/style.css'
 function App () {
   const [drawMode, setDrawMode] = React.useState('line')
   const pictureState = usePictureState()
-
-  var curPicture = PictureStore.state.cursor('selectedPicture').get('current')
-  var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture)
-  var dataCursor = curPictureCursor.get('data')
-  var stepsCursor = curPictureCursor.get('steps')
-  var curStepSelectedCursor = curPictureCursor.get('selectedStep')
-  var bigPictureStuff = curPictureCursor.get('bigPictureStuff')
+  React.useEffect(() => {
+    const deleteHandler = e => {
+      // 39 === ' (apostrophe)
+      if (e.keyCode !== 39) return
+      pictureState.updatePicture(pictureState.selected, picture => {
+        picture.steps.splice(picture.selectedStep, 1)
+        if (picture.selectedStep >= picture.steps.length) {
+          picture.selectedStep = picture.steps.length - 1
+        }
+      })
+    }
+    document.addEventListener('keypress', deleteHandler)
+    return () => document.removeEventListener('keypress', deleteHandler)
+  }, [])
   return (
     <div>
       <Pictures
@@ -37,10 +41,19 @@ function App () {
         style={{ width: 400, display: 'inline-block', verticalAlign: 'top' }}
       >
         <Data
-          selectedPicture={PictureStore.state.cursor('selectedPicture')}
-          pictureData={dataCursor}
+          picture={pictureState.pictures[pictureState.selected]}
+          updatePicture={updater =>
+            pictureState.updatePicture(pictureState.selected, updater)
+          }
         />
-        <Steps steps={stepsCursor} selected={curStepSelectedCursor} />
+        <Steps
+          picture={pictureState.pictures[pictureState.selected]}
+          setSelected={i =>
+            pictureState.updatePicture(pictureState.selected, picture => {
+              picture.selectedStep = i
+            })
+          }
+        />
         <Measurements />
       </div>
 
@@ -48,11 +61,10 @@ function App () {
         <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
           <BigPicture
             mode={drawMode}
-            steps={stepsCursor}
-            bigPictureStuff={bigPictureStuff}
-            selectedStep={curStepSelectedCursor}
-            selectedPicture={PictureStore.state.cursor('selectedPicture')}
-            pictureData={dataCursor}
+            picture={pictureState.pictures[pictureState.selected]}
+            updatePicture={updater =>
+              pictureState.updatePicture(pictureState.selected, updater)
+            }
           />
         </div>
 
@@ -67,22 +79,3 @@ function App () {
 }
 
 ReactDOM.render(<App />, document.getElementById('app'))
-
-// just a quick test for removing steps
-// should be moved somewhere else....
-// also, keypress's should be paused while editing stuff
-document.addEventListener('keypress', e => {
-  if (e.keyCode === 39) {
-    // ' (apostrophe)
-    var curPicture = PictureStore.state.cursor('selectedPicture').get('current')
-    var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture)
-    var stepsCursor = curPictureCursor.get('steps')
-    var selectedStep = curPictureCursor.get('selectedStep').get('current')
-    stepsCursor = stepsCursor.remove(selectedStep)
-    if (selectedStep >= stepsCursor.size) {
-      curPictureCursor
-        .get('selectedStep')
-        .update('current', () => stepsCursor.size - 1)
-    }
-  }
-})

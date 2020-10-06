@@ -1,68 +1,58 @@
 import React from 'react'
+
 import ContentEditable from '../common/content-editable'
 
-var Tag = React.createClass({
-  getInitialState () {
-    return {
-      editing: false,
-      showChildren: false
-    }
-  },
+export default class Tag extends React.Component {
+  state = {
+    editing: false,
+    showChildren: false
+  }
 
   onMouseUp () {
-    this.setState({
-      editing: true
-    })
-  },
+    this.setState({ editing: true })
+  }
 
   onChange (lbl) {
     this.updateLabel(lbl)
-  },
+  }
 
   onFinish (lbl) {
     this.updateLabel(lbl)
-    this.setState({
-      editing: false
-    })
-  },
+    this.setState({ editing: false })
+  }
 
   updateLabel (newLbl) {
-    this.props.item.update('label', () => newLbl)
-  },
+    this.props.updateLabel(newLbl)
+  }
 
   toggleShowChildren () {
-    this.setState({
-      showChildren: !this.state.showChildren
-    })
-  },
+    this.setState({ showChildren: !this.state.showChildren })
+  }
 
   render () {
     return this.state.editing ? this.renderEditableTag() : this.renderTag()
-  },
+  }
 
   renderEditableTag () {
     return (
       <div>
         <div className='tag' style={{ color: 'black' }}>
           <ContentEditable
-            text={this.props.item.get('label')}
+            text={this.props.item.label}
             onChange={this.onChange}
             onFinish={this.onFinish}
           />
         </div>
       </div>
     )
-  },
+  }
 
   onDragStart () {
-    event.dataTransfer.setData('text/plain', this.props.item.get('id'))
-  },
+    event.dataTransfer.setData('text/plain', this.props.item.id)
+  }
 
   renderTag () {
-    var classes = React.addons.classSet({
-      tag: true,
-      '--array': this.props.children
-    })
+    var classes = this.props.children ? 'tag --array' : 'tag'
     return (
       <div>
         <div
@@ -71,7 +61,7 @@ var Tag = React.createClass({
           className={classes}
           onMouseUp={this.onMouseUp}
         >
-          {this.props.item.get('label')}
+          {this.props.item.label}
         </div>
         {this.props.children && (
           <div className='tag__arrow' onClick={this.toggleShowChildren} />
@@ -80,6 +70,4 @@ var Tag = React.createClass({
       </div>
     )
   }
-})
-
-export default Tag
+}

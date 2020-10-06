@@ -30,7 +30,7 @@ export default function CheatSheet ({ mode, setMode }) {
       if (item) setMode(item.label)
     }
     document.addEventListener('keydown', hotkeys)
-    return () => document.removeEventListener(hotkeys)
+    return () => document.removeEventListener('keydown', hotkeys)
   }, [])
   return (
     <div>

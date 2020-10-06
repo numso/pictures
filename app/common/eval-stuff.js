@@ -1,6 +1,9 @@
+import _ from 'lodash'
+import React from 'react'
+
 import Dragger from '../data/dragger'
 
-export function generateValueMarkup (val, item, pictureData, picID) {
+export function generateValueMarkup (val, item, pictureData) {
   val = '' + val
   var map = getMap(pictureData)
   var re = /[as]_[0-9]*/
@@ -19,7 +22,6 @@ export function generateValueMarkup (val, item, pictureData, picID) {
           firstChunk={firstChunk}
           secondChunk={secondChunk}
           item={item}
-          picID={picID}
         />
       )
     }
@@ -29,13 +31,13 @@ export function generateValueMarkup (val, item, pictureData, picID) {
 
 export function getMap (pictureData) {
   var obj = {}
-  for (var i = 0; i < pictureData.get('scalars').size; i++) {
-    var item = pictureData.get('scalars').get(i)
-    obj[item.get('id')] = item.get('label')
+  for (var i = 0; i < pictureData.scalars.size; i++) {
+    var item = pictureData.scalars[i]
+    obj[item.id] = item.label
   }
-  for (var i = 0; i < pictureData.get('arrays').size; i++) {
-    var item = pictureData.get('arrays').get(i)
-    obj[item.get('id')] = item.get('label')
+  for (var i = 0; i < pictureData.arrays.size; i++) {
+    var item = pictureData.arrays[i]
+    obj[item.id] = item.label
   }
   return obj
 }

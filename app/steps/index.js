@@ -1,7 +1,8 @@
-import { component } from 'omniscient-tools'
+import React from 'react'
+
 import { generateParts, getMsg } from '../common/drawing'
 
-export default component('Steps', function ({ steps, selected }) {
+export default function Steps ({ picture, setSelected }) {
   function renderStep (s, i, steps) {
     var msg = getMsg(s)
     var svgParts = generateParts(steps.slice(0, i + 1), 1 / 9, 4)
@@ -19,30 +20,24 @@ export default component('Steps', function ({ steps, selected }) {
       cursor: 'pointer'
     }
 
-    if (selected.get('current') === i) {
+    if (picture.selectedStep === i) {
       item.backgroundColor = '#a0af0b'
     }
 
     return (
-      <li style={item} onClick={onClick(i)}>
+      <li style={item} onClick={() => setSelected(i)}>
         <svg style={style}>{svgParts}</svg>
         <p style={{ float: 'right', width: 240 }}>{msg}</p>
       </li>
     )
   }
 
-  function onClick (_selected) {
-    return function () {
-      selected.update('current', () => _selected)
-    }
-  }
-
   return (
     <div>
       <div className='header'>Steps</div>
       <div className='container --data'>
-        <ul>{steps.map(renderStep).toJS()}</ul>
+        <ul>{picture.steps.map(renderStep)}</ul>
       </div>
     </div>
   )
-})
+}

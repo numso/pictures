@@ -1,50 +1,29 @@
 import React from 'react'
 
-import PictureStore from '../pictures/store'
-
 var originalNum, originalX, step, curNum
 
-var Dragger = React.createClass({
-  getDefaultProps () {
-    return {
-      number: 0,
-      firstChunk: '',
-      secondChunk: ''
-    }
-  },
+export default class Dragger extends React.Component {
+  state = { number: 0, isDragging: false }
 
   componentWillReceiveProps (nextProps) {
     if (!this.state.isDragging) {
-      this.setState({
-        number: nextProps.number
-      })
+      this.setState({ number: nextProps.number })
     }
-  },
-
-  getInitialState () {
-    return {
-      number: 0,
-      isDragging: false
-    }
-  },
+  }
 
   componentDidMount () {
-    this.setState({
-      number: this.props.number
-    })
-  },
+    this.setState({ number: this.props.number })
+  }
 
-  onDragStart (e) {
-    this.setState({
-      isDragging: true
-    })
+  onDragStart = e => {
+    this.setState({ isDragging: true })
     originalNum = parseFloat(this.state.number)
     originalX = e.clientX
     step = 10
     // e.dataTransfer.setDragImage(document.getElementById('blank'), 0, 0);
-  },
+  }
 
-  onDrag (e) {
+  onDrag = e => {
     if (e.clientX === 0) return
     var delta = e.clientX - originalX
     var num = Math.floor(originalNum + (delta / 20) * step)
@@ -52,9 +31,9 @@ var Dragger = React.createClass({
       curNum = num
       this.setNum(curNum)
     }
-  },
+  }
 
-  setNum (num) {
+  setNum = num => {
     var hasComma = this.props.number[this.props.number.length - 1] === ','
     if (hasComma) num += ','
     var newVal = [this.props.firstChunk, num, this.props.secondChunk]
@@ -62,18 +41,12 @@ var Dragger = React.createClass({
       .trim()
 
     this.props.item.update('value', () => newVal)
-    PictureStore.updatePicture(this.props.picID)
+    // TODO;; resolve this
 
-    this.setState({
-      number: num
-    })
-  },
+    this.setState({ number: num })
+  }
 
-  onDragEnd (e) {
-    this.setState({
-      isDragging: false
-    })
-  },
+  onDragEnd = e => this.setState({ isDragging: false })
 
   render () {
     return (
@@ -87,6 +60,4 @@ var Dragger = React.createClass({
       </span>
     )
   }
-})
-
-export default Dragger
+}

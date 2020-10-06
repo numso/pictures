@@ -1,6 +1,5 @@
-import { component } from 'omniscient-tools'
-import Immutable from 'immutable'
 import _ from 'lodash'
+import React from 'react'
 
 import Tag from './tag'
 import CreateTag from './create-tag'
@@ -8,16 +7,14 @@ import ScalarVal from './scalar-val'
 import ArrayVal from './array-val'
 import './style.css'
 
-import evaluator from './evaluator'
-
-import pictureStore from '../pictures/store'
+import * as evaluator from './evaluator'
 
 function getArr (item) {
   if (item && _.isArray(item)) return item
   return []
 }
 
-export default component('Data', function ({ pictureData, selectedPicture }) {
+export default function Data ({ picture, updatePicture }) {
   console.log('-------RENDER--------')
 
   function createScalar () {
@@ -29,10 +26,8 @@ export default component('Data', function ({ pictureData, selectedPicture }) {
   }
 
   function createNew (type) {
-    pictureData.get(type).update(oldArr => {
-      return oldArr.push(Immutable.fromJS({ label: 'item', value: '10' }))
-    })
-    pictureStore.updatePicture(selectedPicture.get('current'))
+    picture.data[type].push({ label: 'item', value: '10' })
+    // TODO;; resolve this
   }
 
   function getArrayStats (item) {
@@ -80,11 +75,9 @@ export default component('Data', function ({ pictureData, selectedPicture }) {
           return (
             <div>
               <div className='tag' draggable='true'>
-                {stat.name} {item.get('label')}
+                {stat.name} {item.label}
               </div>
-              <span>
-                {evaluator.round(stat.code(item.get('evaluated') || []))}
-              </span>
+              <span>{evaluator.round(stat.code(item.evaluated || []))}</span>
             </div>
           )
         })}
@@ -92,52 +85,45 @@ export default component('Data', function ({ pictureData, selectedPicture }) {
     )
   }
 
-  var max = pictureData
-    .get('arrays')
-    .toJS()
-    .reduce((memo, item) => {
-      return Math.max(memo, getArr(item.evaluated).length)
-    }, 0)
+  var max = picture.data.arrays.reduce((memo, item) => {
+    return Math.max(memo, getArr(item.evaluated).length)
+  }, 0)
   var indices = _.range(1, Math.max(max + 1, 6))
 
-  var scalarTags = pictureData
-    .get('scalars')
-    .map(item => {
-      return <Tag item={item} />
-    })
-    .toJS()
+  var scalarTags = picture.data.scalars.map(item => (
+    <Tag
+      item={item}
+      updateLabel={() => {
+        throw new Error('Not implemented')
+      }}
+    />
+  ))
 
-  var arrayTags = pictureData
-    .get('arrays')
-    .map(item => {
-      return <Tag item={item}>{getArrayStats(item)}</Tag>
-    })
-    .toJS()
+  var arrayTags = picture.data.arrays.map(item => (
+    <Tag
+      item={item}
+      updateLabel={() => {
+        throw new Error('Not implemented')
+      }}
+    >
+      {getArrayStats(item)}
+    </Tag>
+  ))
 
-  var scalarValues = pictureData
-    .get('scalars')
-    .map(item => {
-      return (
-        <ScalarVal
-          pictureData={pictureData}
-          picID={selectedPicture.get('current')}
-          item={item}
-        />
-      )
-    })
-    .toJS()
-  var arrayValues = pictureData
-    .get('arrays')
-    .map(item => {
-      return (
-        <ArrayVal
-          pictureData={pictureData}
-          picID={selectedPicture.get('current')}
-          item={item}
-        />
-      )
-    })
-    .toJS()
+  var scalarValues = picture.data.scalars.map(item => (
+    <ScalarVal
+      pictureData={picture.data}
+      // updatePicture={updatePicture}
+      item={item}
+    />
+  ))
+  var arrayValues = picture.data.arrays.map(item => (
+    <ArrayVal
+      pictureData={picture.data}
+      // updatePicture={updatePicture}
+      item={item}
+    />
+  ))
 
   return (
     <div className='data'>
@@ -155,9 +141,9 @@ export default component('Data', function ({ pictureData, selectedPicture }) {
           <div style={{ minHeight: 22 }}></div>
           <div className='arr-section'>
             <div>
-              {indices.map(i => {
-                return <div className='data__indice --header'>{i}</div>
-              })}
+              {indices.map(i => (
+                <div className='data__indice --header'>{i}</div>
+              ))}
             </div>
             {arrayValues}
           </div>
@@ -165,4 +151,4 @@ export default component('Data', function ({ pictureData, selectedPicture }) {
       </div>
     </div>
   )
-})
+}

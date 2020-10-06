@@ -1,11 +1,12 @@
 import _ from 'lodash'
 import React from 'react'
+import { useImmer } from 'use-immer'
 
 import * as evaluator from './data/evaluator'
 
 export default function usePictureState () {
   const [selected, setSelected] = React.useState(0)
-  const [pictures, setPictures] = React.useState(() => [
+  const [pictures, updatePictures] = useImmer(() => [
     resolve({
       title: 'Solar Data',
       steps: _.range(0, 12).map(i => ({
@@ -42,14 +43,14 @@ export default function usePictureState () {
     selected,
     setSelected,
     pictures,
-    addNew: () => setPictures(pictures => [...pictures, newPicture()]),
-    updatePicture: (i, updater) => {
-      setPictures(pictures => {
-        const cloned = [...pictures]
-        cloned[i] = updater(pictures[i])
-        return cloned
+    addNew: () =>
+      updatePictures(pictures => {
+        pictures.push(newPicture())
+      }),
+    updatePicture: (i, updater) =>
+      updatePictures(pictures => {
+        updater(pictures[i])
       })
-    }
   }
 }
 

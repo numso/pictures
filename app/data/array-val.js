@@ -1,65 +1,47 @@
+import _ from 'lodash'
 import React from 'react'
+
 import ContentEditable from '../common/content-editable'
-import PictureStore from '../pictures/store'
-import evalStuff from '../common/eval-stuff'
+import * as evalStuff from '../common/eval-stuff'
 
 function getArr (item) {
   if (item && _.isArray(item)) return item
   return []
 }
 
-var ArrayVal = React.createClass({
-  getInitialState () {
-    return {
-      editting: false
-    }
-  },
+// TODO;; make sure this gets keyed correctly
+export default class ArrayVal extends React.Component {
+  state = { editting: false }
 
-  onClick () {
-    this.setState({
-      editting: true
-    })
-  },
+  onClick = () => this.setState({ editting: true })
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.picID !== this.props.picID) {
-      this.setState({
-        editting: false
-      })
-    }
-  },
+  onChange = val => this.updateValue(val)
 
-  onChange (val) {
+  onFinish = val => {
     this.updateValue(val)
-  },
+    this.setState({ editting: false })
+  }
 
-  onFinish (val) {
-    this.updateValue(val)
-    this.setState({
-      editting: false
-    })
-  },
-
-  updateValue (newValue) {
+  updateValue = newValue => {
     this.props.item.update('value', () => newValue)
-    PictureStore.updatePicture(this.props.picID)
-  },
+    // TODO;; resolve this
+  }
 
   render () {
     return this.state.editting ? this.renderEditableArray() : this.renderArray()
-  },
+  }
 
   renderEditableArray () {
     return (
       <div className='array-val'>
         <ContentEditable
-          text={this.props.item.get('value')}
+          text={this.props.item.value}
           onChange={this.onChange}
           onFinish={this.onFinish}
         />
       </div>
     )
-  },
+  }
 
   renderArray () {
     // TODO:: parse out numbers and render draggable numbers in their place in value section
@@ -67,21 +49,18 @@ var ArrayVal = React.createClass({
     return (
       <div className='array-val' onClick={this.onClick}>
         <div className='evaluated'>
-          {getArr(i && i.get('evaluated')).map(item => {
+          {getArr(i && i.evaluated).map(item => {
             return <div className='data__indice'>{item}</div>
           })}
         </div>
         <div className='value' style={{ height: 25 }}>
           {evalStuff.generateValueMarkup(
-            (i && i.get('value')) || '',
+            (i && i.value) || '',
             i,
-            this.props.pictureData,
-            this.props.picID
+            this.props.pictureData
           )}
         </div>
       </div>
     )
   }
-})
-
-export default ArrayVal
+}

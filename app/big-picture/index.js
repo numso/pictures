@@ -1,21 +1,11 @@
-import { component } from 'omniscient-tools'
-import immutable from 'immutable'
-import { generateParts, getDomMsg } from '../common/drawing'
-import evalStuff from '../common/eval-stuff'
+import React from 'react'
 
-import PictureStore from '../pictures/store'
+import { generateParts, getDomMsg } from '../common/drawing'
 
 var startx = null
 var starty
 
-export default component('BigPicture', function ({
-  mode,
-  steps,
-  selectedStep,
-  bigPictureStuff,
-  pictureData,
-  selectedPicture
-}) {
+export default function BigPicture ({ mode, picture, updatePicture }) {
   function mouseDown (e) {
     startx = e.nativeEvent.offsetX
     starty = e.nativeEvent.offsetY
@@ -72,39 +62,39 @@ export default component('BigPicture', function ({
 
   function addStep (step) {
     for (var key in step) {
-      if (key !== 'type') {
-        step[key] = { value: step[key] }
-      }
+      if (key !== 'type') step[key] = { value: step[key] }
     }
-    steps.update(oldSteps => {
-      return oldSteps.push(immutable.fromJS(step))
+    updatePicture(picture => {
+      picture.steps.push(step)
+      picture.selectedStep = picture.steps.length
+      // TODO;; resolve this picture
     })
-    selectedStep.update('current', () => steps.size)
-    PictureStore.updatePicture(selectedPicture.get('current'))
   }
 
   function setPreview (key, preview) {
     for (var _key in preview) {
-      if (_key !== 'type') {
-        preview[_key] = { evaluated: preview[_key] }
-      }
+      if (_key !== 'type') preview[_key] = { evaluated: preview[_key] }
     }
-    bigPictureStuff.get('previews').update(key, () => immutable.fromJS(preview))
+    updatePicture(picture => {
+      picture.bigPictureStuff.previews[key] = preview
+    })
   }
 
   function removePreview (key) {
-    bigPictureStuff.get('previews').remove(key)
+    updatePicture(picture => {
+      delete picture.bigPictureStuff.previews[key]
+    })
   }
 
-  var svgParts = generateParts(steps.slice(0, selectedStep.get('current') + 1))
-  var previewParts = generateParts(bigPictureStuff.get('previews'))
+  var svgParts = generateParts(picture.steps.slice(0, picture.selectedStep + 1))
+  var previewParts = generateParts(picture.bigPictureStuff.previews)
 
-  var step = steps.get(selectedStep.get('current'))
+  var step = picture.steps[picture.selectedStep]
 
   return (
     <div id='bigPicture'>
       <div style={{ textAlign: 'center', height: 18 }}>
-        {getDomMsg(step, pictureData, selectedPicture.get('current'))}
+        {getDomMsg(step, picture.data, updatePicture)}
       </div>
       <div id='picture-box' className='picture --big'>
         <svg
@@ -120,4 +110,4 @@ export default component('BigPicture', function ({
       </div>
     </div>
   )
-})
+}
