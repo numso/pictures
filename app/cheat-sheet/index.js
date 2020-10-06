@@ -1,4 +1,4 @@
-import { keyBy, groupBy } from 'lodash'
+import _ from 'lodash'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
@@ -20,13 +20,12 @@ const menu = [
   // { category: 'modifiers', label: 'clip',  hotkey: 'k' }
 ]
 
-const hotKeyMap = keyBy(menu, 'hotkey')
-const categories = groupBy(menu, 'category')
+const hotKeyMap = _.keyBy(menu, 'hotkey')
+const categories = _.groupBy(menu, 'category')
 
 export default function CheatSheet ({ mode, setMode }) {
   React.useEffect(() => {
     const hotkeys = e => {
-      // TODO;; check that this works as expected
       const item = hotKeyMap[e.key]
       if (item) setMode(item.label)
     }
@@ -35,11 +34,14 @@ export default function CheatSheet ({ mode, setMode }) {
   }, [])
   return (
     <div>
-      {categories.map((items, key) => (
+      {_.map(categories, (items, key) => (
         <Section>
           <Title>{key}</Title>
           {items.map(item => (
-            <Group selected={item.label === mode} onClick={setMode(item.label)}>
+            <Group
+              selected={item.label === mode}
+              onClick={() => setMode(item.label)}
+            >
               <Item selected={item.label === mode}>{item.label}</Item>
               <Hotkey>{item.hotkey}</Hotkey>
             </Group>

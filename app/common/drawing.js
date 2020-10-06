@@ -1,66 +1,56 @@
-import ScalarVal from '../data/scalar-val'
+import React from 'react'
+
+// import ScalarVal from '../data/scalar-val'
 
 export function generateParts (steps, proportion = 1, fontSize = 16) {
-  return steps
-    .map(s => {
-      switch (s.get('type')) {
-        case 'circle':
-          return (
-            <circle
-              cx={proportion * s.getIn(['x1', 'evaluated'])}
-              cy={proportion * s.getIn(['y1', 'evaluated'])}
-              r={proportion * s.getIn(['r', 'evaluated'])}
-              fill='#cacaca'
-            />
-          )
-        case 'rect':
-          var x = Math.min(
-            s.getIn(['x1', 'evaluated']),
-            s.getIn(['x2', 'evaluated'])
-          )
-          var y = Math.min(
-            s.getIn(['y1', 'evaluated']),
-            s.getIn(['y2', 'evaluated'])
-          )
-          var w = Math.abs(
-            s.getIn(['x1', 'evaluated']) - s.getIn(['x2', 'evaluated'])
-          )
-          var h = Math.abs(
-            s.getIn(['y1', 'evaluated']) - s.getIn(['y2', 'evaluated'])
-          )
-          return (
-            <rect
-              x={proportion * x}
-              y={proportion * y}
-              width={proportion * w}
-              height={proportion * h}
-              fill='#cacaca'
-            />
-          )
-        case 'line':
-          return (
-            <line
-              x1={proportion * s.getIn(['x1', 'evaluated'])}
-              y1={proportion * s.getIn(['y1', 'evaluated'])}
-              x2={proportion * s.getIn(['x2', 'evaluated'])}
-              y2={proportion * s.getIn(['y2', 'evaluated'])}
-              stroke='#cacaca'
-            />
-          )
-        case 'text':
-          return (
-            <text
-              fontSize={fontSize}
-              x={proportion * s.getIn(['x1', 'evaluated'])}
-              y={proportion * s.getIn(['y1', 'evaluated'])}
-              fill='#cacaca'
-            >
-              Hi!
-            </text>
-          )
-      }
-    })
-    .toJS()
+  return steps.map(s => {
+    switch (s.type) {
+      case 'circle':
+        return (
+          <circle
+            cx={proportion * s.x1.evaluated}
+            cy={proportion * s.y1.evaluated}
+            r={proportion * s.r.evaluated}
+            fill='#cacaca'
+          />
+        )
+      case 'rect':
+        var x = Math.min(s.x1.evaluated, s.x2.evaluated)
+        var y = Math.min(s.y1.evaluated, s.y2.evaluated)
+        var w = Math.abs(s.x1.evaluated - s.x2.evaluated)
+        var h = Math.abs(s.y1.evaluated - s.y2.evaluated)
+        return (
+          <rect
+            x={proportion * x}
+            y={proportion * y}
+            width={proportion * w}
+            height={proportion * h}
+            fill='#cacaca'
+          />
+        )
+      case 'line':
+        return (
+          <line
+            x1={proportion * s.x1.evaluated}
+            y1={proportion * s.y1.evaluated}
+            x2={proportion * s.x2.evaluated}
+            y2={proportion * s.y2.evaluated}
+            stroke='#cacaca'
+          />
+        )
+      case 'text':
+        return (
+          <text
+            fontSize={fontSize}
+            x={proportion * s.x1.evaluated}
+            y={proportion * s.y1.evaluated}
+            fill='#cacaca'
+          >
+            Hi!
+          </text>
+        )
+    }
+  })
 }
 
 function getMsgInner (val, s) {

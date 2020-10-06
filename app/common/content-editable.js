@@ -1,38 +1,34 @@
 import React from 'react'
 
-var ContentEditable = React.createClass({
-  getDefaultProps () {
-    return {
-      onChange: function () {},
-      onFinish: function () {}
-    }
-  },
+export default class ContentEditable extends React.Component {
+  ref = React.createRef()
 
   componentDidMount () {
     setTimeout(() => {
-      selectElementContents(this.getDOMNode())
+      selectElementContents(this.ref.current)
     })
-  },
+  }
 
   shouldComponentUpdate () {
     return false
-  },
+  }
 
-  onInput () {
-    var text = (this.getDOMNode().innerText || '').trim()
-    this.props.onChange(text)
-  },
+  onInput = () => {
+    var text = (this.ref.current.innerText || '').trim()
+    this.props.onChange && this.props.onChange(text)
+  }
 
-  onKeyDown (e) {
+  onKeyDown = e => {
     if (e.keyCode === 13) {
-      var text = (this.getDOMNode().innerText || '').trim()
-      this.props.onFinish(text)
+      var text = (this.ref.current.innerText || '').trim()
+      this.props.onFinish && this.props.onFinish(text)
     }
-  },
+  }
 
   render () {
     return (
       <span
+        ref={this.ref}
         style={{
           backgroundColor: 'white',
           minWidth: 50,
@@ -45,9 +41,7 @@ var ContentEditable = React.createClass({
       ></span>
     )
   }
-})
-
-export default ContentEditable
+}
 
 function selectElementContents (el) {
   var range = document.createRange()

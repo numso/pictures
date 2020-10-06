@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Picture from './picture'
-import PicturesStore from './store'
 import './style.css'
 
 export default function Pictures ({
@@ -19,7 +18,7 @@ export default function Pictures ({
         {pictures.map((picture, i) => (
           <Picture
             picture={picture}
-            selected={selected}
+            selected={selected === i}
             setSelected={() => setSelected(i)}
             updateTitle={title =>
               updatePicture(i, picture => ({ ...picture, title }))

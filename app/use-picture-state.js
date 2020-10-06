@@ -1,9 +1,12 @@
-import evaluator from '../data/evaluator'
+import _ from 'lodash'
+import React from 'react'
+
+import * as evaluator from './data/evaluator'
 
 export default function usePictureState () {
   const [selected, setSelected] = React.useState(0)
-  const [pictures, setPictures] = React.useState([
-    {
+  const [pictures, setPictures] = React.useState(() => [
+    resolve({
       title: 'Solar Data',
       steps: _.range(0, 12).map(i => ({
         type: 'rect',
@@ -31,7 +34,7 @@ export default function usePictureState () {
         scalars_id: 1,
         arrays_id: 1
       }
-    },
+    }),
     newPicture()
   ])
 
@@ -51,7 +54,7 @@ export default function usePictureState () {
 }
 
 function newPicture () {
-  return {
+  return resolve({
     title: 'untitled',
     steps: [],
     selectedStep: 0,
@@ -62,79 +65,61 @@ function newPicture () {
       scalars_id: 1,
       arrays_id: 1
     }
-  }
+  })
 }
 
 // --- Evaluation --------------------------------------------------------------
 
-function updatePicture (index) {
-  var dataCursor = state.cursor(['pictures', index, 'data'])
-  var stepsCursor = state.cursor(['pictures', index, 'steps'])
-  giveIDs(dataCursor)
-  var dataCursor = state.cursor(['pictures', index, 'data'])
-  evaluate(dataCursor, stepsCursor)
+// run this function: 1) on page load, 2) on picture create, 3) on every update to picture
+function resolve (picture) {
+  giveIDs(picture.data)
+  evaluate(picture.data, picture.steps)
+  return picture
 }
 
-function giveIDs (dataCursor) {
-  var scalars_id = dataCursor.get('scalars_id')
-  var len = dataCursor.get('scalars').size
-  for (var i = 0; i < len; i++) {
-    var item = dataCursor.get('scalars').get(i)
-    if (!item.get('id')) {
-      item.update('id', () => 's_' + scalars_id++)
-    }
+function giveIDs (data) {
+  for (var i = 0; i < data.scalars.length; i++) {
+    var item = data.scalars[i]
+    if (!item.id) item.id = `s_${data.scalars_id++}`
   }
-  dataCursor.update('scalars_id', () => scalars_id)
 
-  var arrays_id = dataCursor.get('arrays_id')
-  for (var i = 0; i < dataCursor.get('arrays').size; i++) {
-    var item = dataCursor.get('arrays').get(i)
-    if (!item.get('id')) {
-      item.update('id', () => 'a_' + arrays_id++)
-    }
+  for (var i = 0; i < data.arrays.length; i++) {
+    var item = data.arrays[i]
+    if (!item.id) item.id = `a_${data.arrays_id++}`
   }
-  dataCursor.update('arrays_id', () => arrays_id)
 }
 
 function evaluate (dataCursor, stepsCursor) {
   var ctx = {}
-  for (var i = 0; i < dataCursor.get('scalars').size; i++) {
-    var item = dataCursor.get('scalars').get(i)
-    ctx[item.get('id')] = item.get('value')
+  for (var i = 0; i < dataCursor.scalars.length; i++) {
+    var item = dataCursor.scalars[i]
+    ctx[item.id] = item.value
   }
-  for (var i = 0; i < dataCursor.get('arrays').size; i++) {
-    var item = dataCursor.get('arrays').get(i)
-    ctx[item.get('id')] = item.get('value')
+  for (var i = 0; i < dataCursor.arrays.length; i++) {
+    var item = dataCursor.arrays[i]
+    ctx[item.id] = item.value
   }
-  for (var i = 0; i < stepsCursor.size; i++) {
-    var item = stepsCursor.get(i)
-    item.forEach((val, key) => {
-      if (key === 'type') return
-      var id = 'step-' + i + '-' + key
-      ctx[id] = val.get('value')
-    })
+  for (var i = 0; i < stepsCursor.length; i++) {
+    var item = stepsCursor[i]
+    for (const key in item) {
+      if (key !== 'type') ctx[`step-${i}-${key}`] = item[key].value
+    }
   }
   var data = evaluator.check(ctx)
-  for (var i = 0; i < dataCursor.get('scalars').size; i++) {
-    var item = dataCursor.get('scalars').get(i)
-    var id = item.get('id')
-    item.update('evaluated', () => data[id])
+  for (var i = 0; i < dataCursor.scalars.length; i++) {
+    var item = dataCursor.scalars[i]
+    var id = item.id
+    item.evaluated = data[id]
   }
-  for (var i = 0; i < dataCursor.get('arrays').size; i++) {
-    var item = dataCursor.get('arrays').get(i)
-    var id = item.get('id')
-    item.update('evaluated', () => data[id])
+  for (var i = 0; i < dataCursor.arrays.length; i++) {
+    var item = dataCursor.arrays[i]
+    var id = item.id
+    item.evaluated = data[id]
   }
-  for (var i = 0; i < stepsCursor.size; i++) {
-    var item = stepsCursor.get(i)
-    item.forEach((val, key) => {
-      if (key === 'type') return
-      var id = 'step-' + i + '-' + key
-      val.update('evaluated', () => data[id])
-    })
+  for (var i = 0; i < stepsCursor.length; i++) {
+    var item = stepsCursor[i]
+    for (const key in item) {
+      if (key !== 'type') item[key].evaluated = data[`step-${i}-${key}`]
+    }
   }
 }
-
-// run this function: 1) on page load, 2) on picture create, 3) on every update to picture
-updatePicture(0)
-updatePicture(1)

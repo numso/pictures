@@ -52,14 +52,16 @@ export function simple (ctx, data) {
 export function injected (ctx, data, max) {
   _.each(ctx, function (val, key) {
     try {
-      var result = eval(PREAMBLE + 'with(data){' + val + '}')
+      var result = window.dangerDangerDanger(PREAMBLE, val, data)
       if (key[0] === 'a' && !_.isArray(result)) {
         result = evaluateArray(data, val, max)
         if (_.isArray(result)) data[key] = result
       } else {
         data[key] = result
       }
-    } catch (e) {}
+    } catch (error) {
+      if (error.message.includes('with statement')) throw error
+    }
   })
   return data
 }
@@ -69,7 +71,7 @@ function evaluateArray (data, expr, max) {
   var arr = []
   for (var i = 0; i < max; i++) {
     var newExpr = expr.replace(/(a_\d*)/g, '$&[' + i + ']')
-    arr[i] = eval(PREAMBLE + 'with(data){' + newExpr + '}')
+    arr[i] = window.dangerDangerDanger(PREAMBLE, newExpr, data)
   }
   return !max ? null : arr
 }

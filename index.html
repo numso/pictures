@@ -4,10 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Drawing Dynamic Visualizations</title>
-    <link rel="stylesheet" type="text/css" href="build/bundle.css" />
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      window.dangerDangerDanger = (a, b, data) =>
+        eval(a + 'with(data){' + b + '}')
+    </script>
     <script type="module" src="/app/index.js"></script>
   </body>
 </html>
