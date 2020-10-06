@@ -1,4 +1,4 @@
-@include component(picture) {
+.picture {
   margin: 20px;
   margin-bottom: 5px;
   display: inline-block;
@@ -7,19 +7,19 @@
   height: 150px;
   box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-
-  @include option(selected) {
-    box-shadow: 0 0 20px 2px rgb(30, 79, 234)
-  }
-
-  @include option(big) {
-    width: 720px;
-    height: 900px;
-    cursor: default;
-  }
 }
 
-@include component(newpicture) {
+.picture.\-\-selected {
+  box-shadow: 0 0 20px 2px rgb(30, 79, 234);
+}
+
+.picture.\-\-big {
+  width: 720px;
+  height: 900px;
+  cursor: default;
+}
+
+.newpicture {
   background-color: #d7dce5;
   border-radius: 100px;
   padding: 20px;
@@ -31,13 +31,13 @@
   vertical-align: top;
   margin-top: 70px;
   cursor: pointer;
+}
 
-  @include part(content) {
-    color: #888;
-    position: relative;
-    top: -9px;
-    left: -5px;
-  }
+.newpicture__content {
+  color: #888;
+  position: relative;
+  top: -9px;
+  left: -5px;
 }
 
 .newpicture:hover {

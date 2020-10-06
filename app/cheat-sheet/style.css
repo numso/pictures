@@ -1,0 +1,37 @@
+.cheatsheet__section {
+  margin-bottom: 20px;
+}
+
+.cheatsheet__title {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: underline;
+  padding-right: 40px;
+  text-align: right;
+}
+
+.cheatsheet__group {
+  text-align: right;
+  padding-right: 20px;
+  cursor: pointer;
+}
+
+.cheatsheet__group.\-\-selected {
+  background-color: #ccc;
+}
+
+.cheatsheet__item {
+  display: inline-block;
+  color: #ccc;
+}
+
+.cheatsheet__hotkey {
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.cheatsheet__group.\-\-selected .cheatsheet__item {
+  color: white;
+}

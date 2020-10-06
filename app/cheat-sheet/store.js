@@ -1,17 +1,16 @@
-var immstruct = require('immstruct');
+import immstruct from 'immstruct'
 
-var state = exports.state = immstruct({
-
+export var state = immstruct({
   labels: {
     draw: [
-      { label: 'line',    hotkey: 'x' },
+      { label: 'line', hotkey: 'x' },
       // { label: 'path',    hotkey: 'a' },
-      { label: 'rect',    hotkey: 'r' },
-      { label: 'circle',  hotkey: 'c' },
-      { label: 'text',    hotkey: 't' },
+      { label: 'rect', hotkey: 'r' },
+      { label: 'circle', hotkey: 'c' },
+      { label: 'text', hotkey: 't' }
       // { label: 'magnet',  hotkey: 'u' },
       // { label: 'picture', hotkey: 'p' }
-    ],
+    ]
     // adjust: [
     //   { label: 'move',      hotkey: 'v' },
     //   { label: 'scale',     hotkey: 's' },
@@ -31,17 +30,19 @@ var state = exports.state = immstruct({
   mode: {
     current: 'line'
   }
+})
 
-});
-
-function codeFromLetter(str) {
-  return str.toUpperCase().charCodeAt(0);
+function codeFromLetter (str) {
+  return str.toUpperCase().charCodeAt(0)
 }
 
-exports.getItemFor = (code) => {
+export const getItemFor = code => {
   return state.current.get('labels').reduce((memo, set) => {
-    return memo || set.find((item) => {
-      return codeFromLetter(item.get('hotkey')) === code;
-    });
-  }, undefined);
-};
+    return (
+      memo ||
+      set.find(item => {
+        return codeFromLetter(item.get('hotkey')) === code
+      })
+    )
+  }, undefined)
+}

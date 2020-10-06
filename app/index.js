@@ -1,17 +1,20 @@
-var React = window.React = require('react/addons');
-var {component, handler} = require('omniscient-tools');
+import React from 'react'
+import { component, handler } from 'omniscient-tools'
 
-var PictureStore = require('./pictures/store');
-var CheatSheetStore = require('./cheat-sheet/store');
+import PictureStore from './pictures/store'
+import CheatSheetStore from './cheat-sheet/store'
 
-var Pictures = require('./pictures');
-var Data = require('./data');
-var Steps = require('./steps');
-var BigPicture = require('./big-picture');
-var Measurements = require('./measurements');
-var CheatSheet = require('./cheat-sheet');
+import Pictures from './pictures'
+import Data from './data'
+import Steps from './steps'
+import BigPicture from './big-picture'
+import Measurements from './measurements'
+import CheatSheet from './cheat-sheet'
+import './common/style.css'
 
-function load() {
+window.React = React
+
+function load () {
   // optionally load all stores from a backend or localstorage or firebase or something.
 }
 
@@ -19,16 +22,16 @@ function load() {
 var Index = handler(load, function () {
   // When refactor is done (and you've chosen a better name than 'bigPictureStuff')
   // all the cursors should be passed into the app here instead of a random num.
-  return <App foo={Math.random()}/>;
-});
+  return <App foo={Math.random()} />
+})
 
 var App = component('App', function () {
-  var curPicture = PictureStore.state.cursor('selectedPicture').get('current');
-  var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture);
-  var dataCursor = curPictureCursor.get('data');
-  var stepsCursor = curPictureCursor.get('steps');
-  var curStepSelectedCursor = curPictureCursor.get('selectedStep');
-  var bigPictureStuff = curPictureCursor.get('bigPictureStuff');
+  var curPicture = PictureStore.state.cursor('selectedPicture').get('current')
+  var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture)
+  var dataCursor = curPictureCursor.get('data')
+  var stepsCursor = curPictureCursor.get('steps')
+  var curStepSelectedCursor = curPictureCursor.get('selectedStep')
+  var bigPictureStuff = curPictureCursor.get('bigPictureStuff')
   return (
     <div>
       <Pictures
@@ -36,16 +39,15 @@ var App = component('App', function () {
         selectedPicture={PictureStore.state.cursor('selectedPicture')}
       />
 
-      <div style={{ width: 400, display: 'inline-block', verticalAlign: 'top' }}>
+      <div
+        style={{ width: 400, display: 'inline-block', verticalAlign: 'top' }}
+      >
         <Data
           selectedPicture={PictureStore.state.cursor('selectedPicture')}
           pictureData={dataCursor}
         />
-        <Steps
-          steps={stepsCursor}
-          selected={curStepSelectedCursor}
-        />
-        <Measurements/>
+        <Steps steps={stepsCursor} selected={curStepSelectedCursor} />
+        <Measurements />
       </div>
 
       <div style={{ display: 'inline-block', paddingTop: 20 }}>
@@ -60,7 +62,9 @@ var App = component('App', function () {
           />
         </div>
 
-        <div style={{ display: 'inline-block', position: 'absolute', right: 0 }}>
+        <div
+          style={{ display: 'inline-block', position: 'absolute', right: 0 }}
+        >
           <CheatSheet
             labels={CheatSheetStore.state.cursor('labels')}
             mode={CheatSheetStore.state.cursor('mode')}
@@ -68,31 +72,33 @@ var App = component('App', function () {
         </div>
       </div>
     </div>
-  );
+  )
+})
 
-});
-
-function render(a, b) {
-  React.render(<Index/>, document.body);
+function render (a, b) {
+  React.render(<Index />, document.body)
 }
 
-PictureStore.state.on('swap', render);
-CheatSheetStore.state.on('swap', render);
+PictureStore.state.on('swap', render)
+CheatSheetStore.state.on('swap', render)
 
-render();
+render()
 
 // just a quick test for removing steps
 // should be moved somewhere else....
 // also, keypress's should be paused while editing stuff
-document.addEventListener('keypress', (e) => {
-  if (e.keyCode === 39) { // ' (apostrophe)
-    var curPicture = PictureStore.state.cursor('selectedPicture').get('current');
-    var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture);
-    var stepsCursor = curPictureCursor.get('steps');
-    var selectedStep = curPictureCursor.get('selectedStep').get('current');
-    stepsCursor = stepsCursor.remove(selectedStep);
+document.addEventListener('keypress', e => {
+  if (e.keyCode === 39) {
+    // ' (apostrophe)
+    var curPicture = PictureStore.state.cursor('selectedPicture').get('current')
+    var curPictureCursor = PictureStore.state.cursor('pictures').get(curPicture)
+    var stepsCursor = curPictureCursor.get('steps')
+    var selectedStep = curPictureCursor.get('selectedStep').get('current')
+    stepsCursor = stepsCursor.remove(selectedStep)
     if (selectedStep >= stepsCursor.size) {
-      curPictureCursor.get('selectedStep').update('current', () => stepsCursor.size - 1);
+      curPictureCursor
+        .get('selectedStep')
+        .update('current', () => stepsCursor.size - 1)
     }
   }
-});
+})
