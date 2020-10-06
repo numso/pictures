@@ -1,10 +1,10 @@
-import { component } from 'omniscient-tools'
+import React from 'react'
 
-export default component('Measurements', function () {
+export default function Measurements () {
   return (
     <div>
       <div className='header'>Measurements</div>
       <div className='container --data'>measurements go here</div>
     </div>
   )
-})
+}
