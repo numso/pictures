@@ -1,11 +1,8 @@
 # Drawing Dynamic Visualizations
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/numso/pictures?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Circle CI](https://circleci.com/gh/numso/pictures/tree/master.svg?style=badge)](https://circleci.com/gh/numso/pictures/tree/master)
 
 Based on [Drawing Dynamic Visualizations](http://vimeo.com/66085662) by Bret Victor.
 
-Hosted at [pictures.bydall.in](http://pictures.bydall.in)
+Hosted at [pictures.dallinosmun.com](https://pictures.dallinosmun.com)
 
 I've seen quite a few of Bret Victor's videos and they always blow me away. I want to explore and come up with my own creative tools. I've decided to recreate one of his tools to help me more fully grasp the concepts he explains. Right now I'm stuck in old programming paradigms and I need help to open up my mind. There's no better way to understand something than to create it yourself.
 
@@ -13,21 +10,16 @@ I've seen quite a few of Bret Victor's videos and they always blow me away. I wa
 
 ## Goals
 
- - Have Fun.
- - Gain better understanding of next-gen creation tools.
- - Extract out library for storing/evaluating visual equations. (i.e. "(energy in KWh) / 1000" )
- - Extract out library for dragging numbers to adjust them.
+- Have Fun.
+- Gain better understanding of next-gen creation tools.
+- Extract out library for storing/evaluating visual equations. (i.e. "(energy in KWh) / 1000" )
+- Extract out library for dragging numbers to adjust them.
 
 ## To Hack On It
 
-Make sure you have node installed. Optionally, you can install a live-reload plugin in your browser.
-
- - `gem install sass`
- - `npm install -g webpack`
- - `npm install`
- - `webpack -w`
- - `npm run sass`
- - optional: `npm run lr` (this starts live reload)
+- Install node
+- `yarn global add js.new` or `npm i -g js.new`
+- `js.new`
 
 ## Todo
 
@@ -35,42 +27,44 @@ Make sure you have node installed. Optionally, you can install a live-reload plu
 
 ####Data
 
- - [x] Setup basic styles and layout
- - [x] Refactor layout styles to flexbox maybe?
- - [x] Get basic elements in
- - [x] Put IDs on data elements, reference all by id instead of by label
- - [ ] Should IDs be wrapped in {} for easier regex / discovery / manipulation ?
- - [x] Evaluate arrays and scalars in the same context
- - [x] Use Regex to pull out any 'tagged items'
- - [ ] Switch out `with(ctx)` for `fn.call(ctx)`. Put `use strict` back in
- - [x] Create new evaluators for array items (see note below)
- - [x] `Feature` Ability to change numbers by clicking and dragging them
- - [x] `Feature` See tags as a GUI element in equation (viewing)
- - [ ] `Feature` See tags as a GUI element in equation (editing)
- - [x] `Feature` Ability to drag / drop tags into the equation
- - [x] `Feature` Dropdown of Array Reductions (min, max, avg, etc)
- - [x] `Feature` Use of Array Reductions in equations
- - [ ] Better Styling (emphasis added above)
- - [ ] `Feature` Ability to delete data elements
- - [x] Better way to store data? It's a mess right now... (cursors)
- - [ ] Revisit Usability when it's all done.
+- [x] Setup basic styles and layout
+- [x] Refactor layout styles to flexbox maybe?
+- [x] Get basic elements in
+- [x] Put IDs on data elements, reference all by id instead of by label
+- [ ] Should IDs be wrapped in {} for easier regex / discovery / manipulation ?
+- [x] Evaluate arrays and scalars in the same context
+- [x] Use Regex to pull out any 'tagged items'
+- [ ] Switch out `with(ctx)` for `fn.call(ctx)`. Put `use strict` back in
+- [x] Create new evaluators for array items (see note below)
+- [x] `Feature` Ability to change numbers by clicking and dragging them
+- [x] `Feature` See tags as a GUI element in equation (viewing)
+- [ ] `Feature` See tags as a GUI element in equation (editing)
+- [x] `Feature` Ability to drag / drop tags into the equation
+- [x] `Feature` Dropdown of Array Reductions (min, max, avg, etc)
+- [x] `Feature` Use of Array Reductions in equations
+- [ ] Better Styling (emphasis added above)
+- [ ] `Feature` Ability to delete data elements
+- [x] Better way to store data? It's a mess right now... (cursors)
+- [ ] Revisit Usability when it's all done.
 
 ####Picture
 
- - [ ] Bug: Draw shape from other shape, uses wrong coord system
+- [ ] Bug: Draw shape from other shape, uses wrong coord system
 
 ##Evaluator Notes
 
 Still need to think about:
- - array min, max, avg, etc
- - cacheing unchanged results
+
+- array min, max, avg, etc
+- cacheing unchanged results
 
 Steps
- 1. Eval everything you can with just a plain old js eval
- 2. Eval everything you can using previously eval'ed vars as context
- 3. Recursively do step 2 until:
-   1. You've eval'ed every var
-   2. You're not making progress
+
+1.  Eval everything you can with just a plain old js eval
+2.  Eval everything you can using previously eval'ed vars as context
+3.  Recursively do step 2 until:
+4.  You've eval'ed every var
+5.  You're not making progress
 
 ###Contexts
 
@@ -88,14 +82,14 @@ _.each(regexVar, function () {
 ###Arrays
 
 ```javascript
-var arr = [];
+var arr = []
 for (var i = 0; i < maxLengthOfArrays; i++) {
   try {
     arr[i] = eval(getCodesAt(i))
   } catch (e) {}
 }
 
-function getCodesAt(i) {
+function getCodesAt (i) {
   // Possible Input: {a-1} + {a-2} * {s-1} / 1000
   // Read as: array1 + array2 * scalar1 / 1000
   // convert this to `this.array1[${i}] + this.array2[${i}] * this.scalar1 / 1000`
