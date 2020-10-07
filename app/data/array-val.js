@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import styled from 'styled-components'
 
 import ContentEditable from '../common/content-editable'
 import * as evalStuff from '../common/eval-stuff'
@@ -9,7 +10,7 @@ function getArr (item) {
   return []
 }
 
-export default class ArrayVal extends React.Component {
+export default class ArrayValue extends React.Component {
   state = { editting: false }
 
   onClick = () => this.setState({ editting: true })
@@ -29,13 +30,13 @@ export default class ArrayVal extends React.Component {
 
   renderEditableArray () {
     return (
-      <div className='array-val'>
+      <ArrayVal>
         <ContentEditable
           text={this.props.item.value}
           onChange={this.onChange}
           onFinish={this.onFinish}
         />
-      </div>
+      </ArrayVal>
     )
   }
 
@@ -43,21 +44,55 @@ export default class ArrayVal extends React.Component {
     // TODO:: parse out numbers and render draggable numbers in their place in value section
     var i = this.props.item
     return (
-      <div className='array-val' onClick={this.onClick}>
-        <div className='evaluated'>
-          {getArr(i && i.evaluated).map(item => {
-            return <div className='data__indice'>{item}</div>
-          })}
-        </div>
-        <div className='value' style={{ height: 25 }}>
+      <ArrayVal onClick={this.onClick}>
+        <Evaluated>
+          {getArr(i && i.evaluated).map(item => (
+            <DataIndice>{item}</DataIndice>
+          ))}
+        </Evaluated>
+        <Value>
           {evalStuff.generateValueMarkup(
             (i && i.value) || '',
             i,
             this.props.pictureData,
             this.props.updateItem
           )}
-        </div>
-      </div>
+        </Value>
+      </ArrayVal>
     )
   }
 }
+
+const ArrayVal = styled.div`
+  min-height: 22px;
+  cursor: pointer;
+  &:hover {
+    background-color: #aaa;
+  }
+`
+
+const Evaluated = styled.div`
+  ${ArrayVal}:hover & {
+    display: none;
+  }
+`
+
+const Value = styled.div`
+  display: none;
+  ${ArrayVal}:hover & {
+    display: block;
+  }
+  height: 25px;
+`
+
+const DataIndice = styled.div`
+  display: inline-block;
+  font-size: 12px;
+  width: 40px;
+  height: 22px;
+  border-left: 1px solid;
+  text-align: center;
+  &:last-of-type {
+    border-right: 1px solid;
+  }
+`

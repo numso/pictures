@@ -1,6 +1,8 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { generateParts, getMsg } from '../common/drawing'
+import { Header, Container } from '../common/container'
 
 export default function Steps ({ picture, setSelected }) {
   function renderStep (s, i, steps) {
@@ -34,10 +36,16 @@ export default function Steps ({ picture, setSelected }) {
 
   return (
     <div>
-      <div className='header'>Steps</div>
-      <div className='container --data'>
+      <Header>Steps</Header>
+      <MyContainer>
         <ul>{picture.steps.map(renderStep)}</ul>
-      </div>
+      </MyContainer>
     </div>
   )
 }
+
+const MyContainer = styled(Container)`
+  min-height: 300px;
+  max-height: 420px;
+  overflow: auto;
+`

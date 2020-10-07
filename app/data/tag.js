@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ContentEditable from '../common/content-editable'
+import * as T from '../common/tag'
 
 export default class Tag extends React.Component {
   state = {
@@ -29,13 +30,13 @@ export default class Tag extends React.Component {
   renderEditableTag () {
     return (
       <div>
-        <div className='tag' style={{ color: 'black' }}>
+        <T.Basic style={{ color: 'black' }}>
           <ContentEditable
             text={this.props.item.label}
             onChange={this.onChange}
             onFinish={this.onFinish}
           />
-        </div>
+        </T.Basic>
       </div>
     )
   }
@@ -44,20 +45,17 @@ export default class Tag extends React.Component {
     event.dataTransfer.setData('text/plain', this.props.item.id)
 
   renderTag () {
-    var classes = this.props.children ? 'tag --array' : 'tag'
+    const TagComponent = this.props.children ? T.Array : T.Basic
     return (
       <div>
-        <div
+        <TagComponent
           draggable='true'
           onDragStart={this.onDragStart}
-          className={classes}
           onMouseUp={this.onMouseUp}
         >
           {this.props.item.label}
-        </div>
-        {this.props.children && (
-          <div className='tag__arrow' onClick={this.toggleShowChildren} />
-        )}
+        </TagComponent>
+        {this.props.children && <T.Arrow onClick={this.toggleShowChildren} />}
         {this.state.showChildren && this.props.children}
       </div>
     )

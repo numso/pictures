@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 
+import * as Tag from './tag'
 import Dragger from '../data/dragger'
 
 export function generateValueMarkup (val, item, pictureData, updateItem) {
@@ -11,7 +12,7 @@ export function generateValueMarkup (val, item, pictureData, updateItem) {
 
   return _.map(chunks, (chunk, i, arr) => {
     if (re.test(chunk)) {
-      return <div className='tag'>{map[chunk]}</div>
+      return <Tag.Basic>{map[chunk]}</Tag.Basic>
     }
     if (!isNaN(parseFloat(chunk))) {
       var firstChunk = arr.slice(0, i).join(' ')

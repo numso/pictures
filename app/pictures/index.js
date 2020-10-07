@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Picture from './picture'
-import './style.css'
+import { Header, Container } from '../common/container'
 
 export default function Pictures ({
   selected,
@@ -13,8 +13,8 @@ export default function Pictures ({
 }) {
   return (
     <div>
-      <div className='header'>Pictures</div>
-      <div className='container --pictures'>
+      <Header>Pictures</Header>
+      <MyContainer>
         {pictures.map((picture, i) => (
           <Picture
             picture={picture}
@@ -26,10 +26,15 @@ export default function Pictures ({
         <NewPicture onClick={addNew}>
           <span>+</span>
         </NewPicture>
-      </div>
+      </MyContainer>
     </div>
   )
 }
+
+const MyContainer = styled(Container)`
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset;
+  display: flex;
+`
 
 const NewPicture = styled.div`
   background-color: #d7dce5;

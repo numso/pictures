@@ -1,11 +1,13 @@
 import React from 'react'
 
+import * as Tag from '../common/tag'
+
 export default function CreateTag ({ onClick, children }) {
   return (
     <div>
-      <span onClick={onClick} className='tag --create'>
+      <Tag.Create as='span' onClick={onClick}>
         {children}
-      </span>
+      </Tag.Create>
     </div>
   )
 }

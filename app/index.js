@@ -8,7 +8,6 @@ import Steps from './steps'
 import BigPicture from './big-picture'
 import Measurements from './measurements'
 import CheatSheet from './cheat-sheet'
-import './common/style.css'
 
 function App () {
   const [drawMode, setDrawMode] = React.useState('line')

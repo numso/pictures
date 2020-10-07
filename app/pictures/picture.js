@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import ContentEditable from '../common/content-editable'
 import { generateParts } from '../common/drawing'
@@ -24,13 +25,11 @@ export default function Picture ({
     updateTitle(title)
   }
 
-  var classes = selected ? 'picture --selected' : 'picture'
-
   return (
     <div>
-      <div className={classes} onClick={setSelected}>
+      <Wrapper selected={selected} onClick={setSelected}>
         <svg width={220}>{generateParts(picture.steps, 1 / 6, 5)}</svg>
-      </div>
+      </Wrapper>
       <div style={{ textAlign: 'center', marginBottom: 15 }}>
         {editing ? (
           <ContentEditable
@@ -45,3 +44,15 @@ export default function Picture ({
     </div>
   )
 }
+
+const Wrapper = styled.div`
+  margin: 20px;
+  margin-bottom: 5px;
+  display: inline-block;
+  background-color: white;
+  width: 220px;
+  height: 150px;
+  box-shadow: 0 0 20px 2px
+    ${p => (p.selected ? 'rgb(30, 79, 234)' : 'rgba(0, 0, 0, 0.3)')};
+  cursor: pointer;
+`

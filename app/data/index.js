@@ -1,11 +1,13 @@
 import _ from 'lodash'
 import React from 'react'
+import styled from 'styled-components'
 
 import Tag from './tag'
 import CreateTag from './create-tag'
 import ScalarVal from './scalar-val'
 import ArrayVal from './array-val'
-import './style.css'
+import { Header, Container } from '../common/container'
+import * as T from '../common/tag'
 
 import * as evaluator from './evaluator'
 
@@ -71,18 +73,18 @@ export default function Data ({ picture, updatePicture }) {
       }
     ]
     return (
-      <div className='test-box'>
+      <TestBox>
         {stats.map(stat => {
           return (
             <div>
-              <div className='tag' draggable='true'>
+              <T.Basic draggable='true'>
                 {stat.name} {item.label}
-              </div>
+              </T.Basic>
               <span>{evaluator.round(stat.code(item.evaluated || []))}</span>
             </div>
           )
         })}
-      </div>
+      </TestBox>
     )
   }
 
@@ -141,9 +143,9 @@ export default function Data ({ picture, updatePicture }) {
   ))
 
   return (
-    <div className='data'>
-      <div className='header'>Data</div>
-      <div className='container --data --flex'>
+    <div>
+      <Header>Data</Header>
+      <MyContainer>
         <div>
           {scalarTags}
           <CreateTag onClick={createScalar}>+</CreateTag>
@@ -151,19 +153,58 @@ export default function Data ({ picture, updatePicture }) {
           {arrayTags}
           <CreateTag onClick={createArray}>+</CreateTag>
         </div>
-        <div className='test-1'>
+        <Test1>
           {scalarValues}
           <div style={{ minHeight: 22 }}></div>
-          <div className='arr-section'>
+          <ArrSection>
             <div>
               {indices.map(i => (
-                <div className='data__indice --header'>{i}</div>
+                <DataIndiceHeader>{i}</DataIndiceHeader>
               ))}
             </div>
             {arrayValues}
-          </div>
-        </div>
-      </div>
+          </ArrSection>
+        </Test1>
+      </MyContainer>
     </div>
   )
 }
+
+const MyContainer = styled(Container)`
+  min-height: 300px;
+  max-height: 420px;
+  overflow: auto;
+  display: flex;
+`
+
+const TestBox = styled.div`
+  box-shadow: 0 0 20px 2px;
+  display: inline-block;
+  padding: 6px;
+  border-radius: 3px;
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+`
+
+const Test1 = styled.div`
+  flex: 1;
+  white-space: nowrap;
+`
+
+const ArrSection = styled.div`
+  overflow: auto;
+`
+
+const DataIndiceHeader = styled.div`
+  display: inline-block;
+  font-size: 12px;
+  width: 40px;
+  height: 22px;
+  border-left: 1px solid;
+  text-align: center;
+  background-color: #ccc;
+  &:last-of-type {
+    border-right: 1px solid;
+  }
+`

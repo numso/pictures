@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { generateParts, getDomMsg } from '../common/drawing'
 
@@ -96,11 +97,11 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
     })
 
   return (
-    <div id='bigPicture'>
+    <Wrapper>
       <div style={{ textAlign: 'center', height: 18 }}>
         {getDomMsg(step, picture.data, updateStep)}
       </div>
-      <div id='picture-box' className='bigPicture'>
+      <Container>
         <svg
           width={720}
           height={900}
@@ -111,7 +112,19 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
           {svgParts}
           {previewParts}
         </svg>
-      </div>
-    </div>
+      </Container>
+    </Wrapper>
   )
 }
+
+// TODO;; stop depending on this className
+const Wrapper = styled.div`
+  & .scalar-val {
+    display: inline-block;
+  }
+`
+
+const Container = styled.div`
+  width: 720px;
+  height: 900px;
+`
