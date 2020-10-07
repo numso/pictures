@@ -3,7 +3,7 @@ module.exports = config => {
     ...config,
     template: 'react',
     outputDir: '.dist',
-    ignore: /^\./,
+    ignore: /^\.|\.md$/,
     skipTransform: /\.html$|\.toml$/
   }
 }
