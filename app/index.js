@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import styled from 'styled-components'
 
 import usePictureState from './use-picture-state'
 import Pictures from './pictures'
@@ -36,9 +37,7 @@ function App () {
         setTitle={pictureState.updatePictureTitle}
       />
 
-      <div
-        style={{ width: 400, display: 'inline-block', verticalAlign: 'top' }}
-      >
+      <Sidebar>
         <Data
           picture={pictureState.pictures[pictureState.selected]}
           updatePicture={pictureState.updatePicture}
@@ -48,25 +47,45 @@ function App () {
           setSelected={pictureState.setSelectedStep}
         />
         <Measurements />
-      </div>
+      </Sidebar>
 
-      <div style={{ display: 'inline-block', paddingTop: 20 }}>
-        <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
+      <MainArea>
+        <BigPictureWrapper>
           <BigPicture
             mode={drawMode}
             picture={pictureState.pictures[pictureState.selected]}
             updatePicture={pictureState.updatePicture}
           />
-        </div>
+        </BigPictureWrapper>
 
-        <div
-          style={{ display: 'inline-block', position: 'absolute', right: 0 }}
-        >
+        <CheatSheetWrapper>
           <CheatSheet mode={drawMode} setMode={setDrawMode} />
-        </div>
-      </div>
+        </CheatSheetWrapper>
+      </MainArea>
     </div>
   )
 }
+
+const Sidebar = styled.div`
+  width: 400px;
+  display: inline-block;
+  vertical-align: top;
+`
+
+const MainArea = styled.div`
+  display: inline-block;
+  padding-top: 20px;
+`
+
+const BigPictureWrapper = styled.div`
+  display: inline-block;
+  vertical-align: top;
+`
+
+const CheatSheetWrapper = styled.div`
+  display: inline-block;
+  position: absolute;
+  right: 0;
+`
 
 ReactDOM.render(<App />, document.getElementById('app'))

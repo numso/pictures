@@ -155,7 +155,7 @@ export default function Data ({ picture, updatePicture }) {
         </div>
         <Test1>
           {scalarValues}
-          <div style={{ minHeight: 22 }}></div>
+          <Spacer />
           <ArrSection>
             <div>
               {indices.map(i => (
@@ -169,6 +169,10 @@ export default function Data ({ picture, updatePicture }) {
     </div>
   )
 }
+
+const Spacer = styled.div`
+  min-height: 22px;
+`
 
 const MyContainer = styled(Container)`
   min-height: 300px;

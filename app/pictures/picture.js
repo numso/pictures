@@ -30,7 +30,7 @@ export default function Picture ({
       <Wrapper selected={selected} onClick={setSelected}>
         <svg width={220}>{generateParts(picture.steps, 1 / 6, 5)}</svg>
       </Wrapper>
-      <div style={{ textAlign: 'center', marginBottom: 15 }}>
+      <Label>
         {editing ? (
           <ContentEditable
             text={tempTitle}
@@ -40,7 +40,7 @@ export default function Picture ({
         ) : (
           <div onMouseUp={onMouseUp}>{picture.title}</div>
         )}
-      </div>
+      </Label>
     </div>
   )
 }
@@ -55,4 +55,9 @@ const Wrapper = styled.div`
   box-shadow: 0 0 20px 2px
     ${p => (p.selected ? 'rgb(30, 79, 234)' : 'rgba(0, 0, 0, 0.3)')};
   cursor: pointer;
+`
+
+const Label = styled.div`
+  text-align: center;
+  margin-bottom: 15px;
 `

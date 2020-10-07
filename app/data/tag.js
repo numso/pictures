@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import ContentEditable from '../common/content-editable'
 import * as T from '../common/tag'
@@ -30,13 +31,13 @@ export default class Tag extends React.Component {
   renderEditableTag () {
     return (
       <div>
-        <T.Basic style={{ color: 'black' }}>
+        <MyT>
           <ContentEditable
             text={this.props.item.label}
             onChange={this.onChange}
             onFinish={this.onFinish}
           />
-        </T.Basic>
+        </MyT>
       </div>
     )
   }
@@ -61,3 +62,7 @@ export default class Tag extends React.Component {
     )
   }
 }
+
+const MyT = styled(T.Basic)`
+  color: black;
+`

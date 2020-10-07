@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 export default class ContentEditable extends React.Component {
   ref = React.createRef()
@@ -27,18 +28,13 @@ export default class ContentEditable extends React.Component {
 
   render () {
     return (
-      <span
+      <EditableArea
         ref={this.ref}
-        style={{
-          backgroundColor: 'white',
-          minWidth: 50,
-          display: 'inline-block'
-        }}
         onInput={this.onInput}
         onKeyDown={this.onKeyDown}
         contentEditable={true}
         dangerouslySetInnerHTML={{ __html: this.props.text }}
-      ></span>
+      />
     )
   }
 }
@@ -50,3 +46,9 @@ function selectElementContents (el) {
   sel.removeAllRanges()
   sel.addRange(range)
 }
+
+const EditableArea = styled.span`
+  background-color: white;
+  min-width: 50px;
+  display: inline-block;
+`

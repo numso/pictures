@@ -98,9 +98,7 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
 
   return (
     <Wrapper>
-      <div style={{ textAlign: 'center', height: 18 }}>
-        {getDomMsg(step, picture.data, updateStep)}
-      </div>
+      <DomMessage>{getDomMsg(step, picture.data, updateStep)}</DomMessage>
       <Container>
         <svg
           width={720}
@@ -127,4 +125,9 @@ const Wrapper = styled.div`
 const Container = styled.div`
   width: 720px;
   height: 900px;
+`
+
+const DomMessage = styled.div`
+  text-align: center;
+  height: 18px;
 `
