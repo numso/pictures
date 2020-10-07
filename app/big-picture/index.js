@@ -66,8 +66,7 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
     }
     updatePicture(picture => {
       picture.steps.push(step)
-      picture.selectedStep = picture.steps.length
-      // TODO;; resolve this picture
+      picture.selectedStep = picture.steps.length - 1
     })
   }
 
@@ -91,10 +90,15 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
 
   var step = picture.steps[picture.selectedStep]
 
+  const updateStep = updater =>
+    updatePicture(picture => {
+      updater(picture.steps[picture.selectedStep])
+    })
+
   return (
     <div id='bigPicture'>
       <div style={{ textAlign: 'center', height: 18 }}>
-        {getDomMsg(step, picture.data, updatePicture)}
+        {getDomMsg(step, picture.data, updateStep)}
       </div>
       <div id='picture-box' className='picture --big'>
         <svg

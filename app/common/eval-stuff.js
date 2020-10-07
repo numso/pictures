@@ -3,7 +3,7 @@ import React from 'react'
 
 import Dragger from '../data/dragger'
 
-export function generateValueMarkup (val, item, pictureData) {
+export function generateValueMarkup (val, item, pictureData, updateItem) {
   val = '' + val
   var map = getMap(pictureData)
   var re = /[as]_[0-9]*/
@@ -22,6 +22,7 @@ export function generateValueMarkup (val, item, pictureData) {
           firstChunk={firstChunk}
           secondChunk={secondChunk}
           item={item}
+          updateItem={updateItem}
         />
       )
     }

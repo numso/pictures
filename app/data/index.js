@@ -26,8 +26,9 @@ export default function Data ({ picture, updatePicture }) {
   }
 
   function createNew (type) {
-    picture.data[type].push({ label: 'item', value: '10' })
-    // TODO;; resolve this
+    updatePicture(picture => {
+      picture.data[type].push({ label: 'item', value: '10' })
+    })
   }
 
   function getArrayStats (item) {
@@ -110,18 +111,28 @@ export default function Data ({ picture, updatePicture }) {
     </Tag>
   ))
 
-  var scalarValues = picture.data.scalars.map(item => (
+  var scalarValues = picture.data.scalars.map((item, i) => (
     <ScalarVal
+      key={item.id}
       pictureData={picture.data}
-      // updatePicture={updatePicture}
       item={item}
+      updateItem={newItem => {
+        updatePicture(picture => {
+          picture.data.scalars[i].value = newItem
+        })
+      }}
     />
   ))
-  var arrayValues = picture.data.arrays.map(item => (
+  var arrayValues = picture.data.arrays.map((item, i) => (
     <ArrayVal
+      key={item.id}
       pictureData={picture.data}
-      // updatePicture={updatePicture}
       item={item}
+      updateItem={newItem => {
+        updatePicture(picture => {
+          picture.data.arrays[i].value = newItem
+        })
+      }}
     />
   ))
 

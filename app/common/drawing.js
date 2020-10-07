@@ -65,27 +65,30 @@ function getMsgInner (val, s) {
     case 'circle':
       return (
         <span>
-          Draw circle around ( {val(x1)} , {val(y1)} ), {val(r)} px in radius.
+          Draw circle around ( {val(x1, 'x1')} , {val(y1, 'y1')} ),{' '}
+          {val(r, 'r')} px in radius.
         </span>
       )
     case 'rect':
       return (
         <span>
-          Draw rect from ( {val(x1)} , {val(y1)} ), {getVal(x2) - getVal(x1)} px
-          horizontally, {getVal(y2) - getVal(y1)} px vertically.
+          Draw rect from ( {val(x1, 'x1')} , {val(y1, 'y1')} ),{' '}
+          {getVal(x2) - getVal(x1)} px horizontally, {getVal(y2) - getVal(y1)}{' '}
+          px vertically.
         </span>
       )
     case 'line':
       return (
         <span>
-          Draw line from ( {val(x1)} , {val(y1)} ), {getVal(x2) - getVal(x1)} px
-          horizontally, {getVal(y2) - getVal(y1)} px vertically.
+          Draw line from ( {val(x1, 'x1')} , {val(y1, 'y1')} ),{' '}
+          {getVal(x2) - getVal(x1)} px horizontally, {getVal(y2) - getVal(y1)}{' '}
+          px vertically.
         </span>
       )
     case 'text':
       return (
         <span>
-          Draw text at ( {val(x1)} , {val(y1)} )
+          Draw text at ( {val(x1, 'x1')} , {val(y1, 'y1')} )
         </span>
       )
   }
@@ -96,12 +99,16 @@ function getVal (numCursor) {
   return round(numCursor.evaluated)
 }
 
-function getDom (pictureData, updatePicture) {
-  return numCursor => (
+function getDom (pictureData, updateStep) {
+  return (numCursor, key) => (
     <ScalarVal
       pictureData={pictureData}
-      updatePicture={updatePicture}
       item={numCursor}
+      updateItem={newItem =>
+        updateStep(step => {
+          step[key].value = newItem
+        })
+      }
     />
   )
 }
@@ -114,6 +121,6 @@ export function getMsg (s) {
   return getMsgInner(getVal, s)
 }
 
-export function getDomMsg (s, pictureData, updatePicture) {
-  return getMsgInner(getDom(pictureData, updatePicture), s)
+export function getDomMsg (s, pictureData, updateStep) {
+  return getMsgInner(getDom(pictureData, updateStep), s)
 }

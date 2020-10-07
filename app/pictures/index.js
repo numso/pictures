@@ -9,7 +9,7 @@ export default function Pictures ({
   setSelected,
   pictures,
   addNew,
-  updatePicture
+  setTitle
 }) {
   return (
     <div>
@@ -20,9 +20,7 @@ export default function Pictures ({
             picture={picture}
             selected={selected === i}
             setSelected={() => setSelected(i)}
-            updateTitle={title =>
-              updatePicture(i, picture => ({ ...picture, title }))
-            }
+            updateTitle={title => setTitle(i, title)}
           />
         ))}
         <NewPicture onClick={addNew}>

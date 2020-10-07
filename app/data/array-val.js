@@ -9,7 +9,6 @@ function getArr (item) {
   return []
 }
 
-// TODO;; make sure this gets keyed correctly
 export default class ArrayVal extends React.Component {
   state = { editting: false }
 
@@ -22,10 +21,7 @@ export default class ArrayVal extends React.Component {
     this.setState({ editting: false })
   }
 
-  updateValue = newValue => {
-    this.props.item.update('value', () => newValue)
-    // TODO;; resolve this
-  }
+  updateValue = newValue => this.props.updateItem(newValue)
 
   render () {
     return this.state.editting ? this.renderEditableArray() : this.renderArray()
@@ -57,7 +53,8 @@ export default class ArrayVal extends React.Component {
           {evalStuff.generateValueMarkup(
             (i && i.value) || '',
             i,
-            this.props.pictureData
+            this.props.pictureData,
+            this.props.updateItem
           )}
         </div>
       </div>

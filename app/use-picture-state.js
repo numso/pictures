@@ -46,7 +46,7 @@ export default function usePictureState () {
           r: { value: 50 }
         }
       ],
-      selectedStep: 1,
+      selectedStep: 0,
       bigPictureStuff: { msg: '', previews: {} },
       data: {
         scalars: [
@@ -65,14 +65,24 @@ export default function usePictureState () {
   return {
     selected,
     setSelected,
+    selectedPicture: pictures[selected],
     pictures,
     addNew: () =>
       updatePictures(pictures => {
         pictures.push(newPicture())
       }),
-    updatePicture: (i, updater) =>
+    updatePictureTitle: (i, title) =>
       updatePictures(pictures => {
-        updater(pictures[i])
+        pictures[i].title = title
+      }),
+    setSelectedStep: i =>
+      updatePictures(pictures => {
+        pictures[selected].selectedStep = i
+      }),
+    updatePicture: updater =>
+      updatePictures(pictures => {
+        updater(pictures[selected])
+        resolve(pictures[selected])
       })
   }
 }
@@ -94,7 +104,6 @@ function newPicture () {
 
 // --- Evaluation --------------------------------------------------------------
 
-// run this function: 1) on page load, 2) on picture create, 3) on every update to picture
 function resolve (picture) {
   giveIDs(picture.data)
   evaluate(picture.data, picture.steps)

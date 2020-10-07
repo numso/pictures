@@ -17,7 +17,7 @@ function App () {
     const deleteHandler = e => {
       // 39 === ' (apostrophe)
       if (e.keyCode !== 39) return
-      pictureState.updatePicture(pictureState.selected, picture => {
+      pictureState.updatePicture(picture => {
         picture.steps.splice(picture.selectedStep, 1)
         if (picture.selectedStep >= picture.steps.length) {
           picture.selectedStep = picture.steps.length - 1
@@ -26,7 +26,7 @@ function App () {
     }
     document.addEventListener('keypress', deleteHandler)
     return () => document.removeEventListener('keypress', deleteHandler)
-  }, [])
+  })
   return (
     <div>
       <Pictures
@@ -34,7 +34,7 @@ function App () {
         setSelected={pictureState.setSelected}
         pictures={pictureState.pictures}
         addNew={pictureState.addNew}
-        updatePicture={pictureState.updatePicture}
+        setTitle={pictureState.updatePictureTitle}
       />
 
       <div
@@ -42,17 +42,11 @@ function App () {
       >
         <Data
           picture={pictureState.pictures[pictureState.selected]}
-          updatePicture={updater =>
-            pictureState.updatePicture(pictureState.selected, updater)
-          }
+          updatePicture={pictureState.updatePicture}
         />
         <Steps
           picture={pictureState.pictures[pictureState.selected]}
-          setSelected={i =>
-            pictureState.updatePicture(pictureState.selected, picture => {
-              picture.selectedStep = i
-            })
-          }
+          setSelected={pictureState.setSelectedStep}
         />
         <Measurements />
       </div>
@@ -62,9 +56,7 @@ function App () {
           <BigPicture
             mode={drawMode}
             picture={pictureState.pictures[pictureState.selected]}
-            updatePicture={updater =>
-              pictureState.updatePicture(pictureState.selected, updater)
-            }
+            updatePicture={pictureState.updatePicture}
           />
         </div>
 

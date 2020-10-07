@@ -4,7 +4,6 @@ import React from 'react'
 import ContentEditable from '../common/content-editable'
 import * as evalStuff from '../common/eval-stuff'
 
-// TODO;; make sure this gets keyed correctly
 export default class ScalarVal extends React.Component {
   state = { editing: false }
 
@@ -17,10 +16,7 @@ export default class ScalarVal extends React.Component {
     this.setState({ editing: false })
   }
 
-  updateValue = newValue => {
-    this.props.item.update('value', () => newValue)
-    // TODO;; resolve this item
-  }
+  updateValue = newValue => this.props.updateItem(newValue)
 
   render () {
     return this.state.editing
@@ -49,7 +45,8 @@ export default class ScalarVal extends React.Component {
           {evalStuff.generateValueMarkup(
             (i && i.value) || '',
             i,
-            this.props.pictureData
+            this.props.pictureData,
+            this.props.updateItem
           )}
         </div>
       </div>

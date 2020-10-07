@@ -40,8 +40,7 @@ export default class Dragger extends React.Component {
       .join(' ')
       .trim()
 
-    this.props.item.update('value', () => newVal)
-    // TODO;; resolve this
+    this.props.updateItem(newVal)
 
     this.setState({ number: num })
   }
