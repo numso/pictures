@@ -5,54 +5,28 @@ import styled from 'styled-components'
 import ContentEditable from '../common/content-editable'
 import * as evalStuff from '../common/eval-stuff'
 
-export default class ScalarValue extends React.Component {
-  state = { editing: false }
-
-  onClick = () => this.setState({ editing: true })
-
-  onChange = val => this.updateValue(val)
-
-  onFinish = val => {
-    this.updateValue(val)
-    this.setState({ editing: false })
+export default function ScalarValue ({ item, updateItem, pictureData }) {
+  const [editing, setEditing] = React.useState(false)
+  const onFinish = val => {
+    updateItem(val)
+    setEditing(false)
   }
-
-  updateValue = newValue => this.props.updateItem(newValue)
-
-  render () {
-    return this.state.editing
-      ? this.renderEditableScalar()
-      : this.renderScalar()
-  }
-
-  renderEditableScalar () {
-    return (
-      <ScalarVal>
-        <ContentEditable
-          text={this.props.item.value}
-          onChange={this.onChange}
-          onFinish={this.onFinish}
-        />
-      </ScalarVal>
-    )
-  }
-
-  renderScalar () {
-    var i = this.props.item
-    return (
-      <ScalarVal onClick={this.onClick}>
-        <Evaluated>{i && i.evaluated}</Evaluated>
-        <Value>
-          {evalStuff.generateValueMarkup(
-            (i && i.value) || '',
-            i,
-            this.props.pictureData,
-            this.props.updateItem
-          )}
-        </Value>
-      </ScalarVal>
-    )
-  }
+  return editing ? (
+    <ScalarVal>
+      <ContentEditable
+        text={item.value}
+        onChange={updateItem}
+        onFinish={onFinish}
+      />
+    </ScalarVal>
+  ) : (
+    <ScalarVal onClick={() => setEditing(true)}>
+      <Evaluated>{item?.evaluated}</Evaluated>
+      <Value>
+        {evalStuff.generateValueMarkup(item, updateItem, pictureData)}
+      </Value>
+    </ScalarVal>
+  )
 }
 
 const ScalarVal = styled.div.attrs({ className: 'scalar-val' })`

@@ -1,55 +1,50 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { generateParts, getMsg } from '../common/drawing'
-import { Header, Container } from '../common/container'
+import { Panel } from '../common/panel'
 
 export default function Steps ({ picture, setSelected }) {
   return (
-    <div>
-      <Header>Steps</Header>
-      <MyContainer>
-        <ul>
-          {picture.steps.map((s, i, steps) => (
-            <Item
-              selected={picture.selectedStep === i}
-              onClick={() => setSelected(i)}
-            >
-              <svg>{generateParts(steps.slice(0, i + 1), 1 / 9, 4)}</svg>
-              <p>{getMsg(s)}</p>
-            </Item>
-          ))}
-        </ul>
-      </MyContainer>
-    </div>
+    <Panel title='Steps'>
+      <Wrapper>
+        {picture.steps.map((s, i, steps) => (
+          <Item
+            selected={picture.selectedStep === i}
+            onClick={() => setSelected(i)}
+          >
+            <svg>{generateParts(steps.slice(0, i + 1), 1 / 9, 4)}</svg>
+            <p>{getMsg(s)}</p>
+          </Item>
+        ))}
+      </Wrapper>
+    </Panel>
   )
 }
 
-const MyContainer = styled(Container)`
+const Wrapper = styled.ul`
   min-height: 300px;
   max-height: 420px;
-  overflow: auto;
 `
 
 const Item = styled.li`
-  padding: 10px 0;
+  display: flex;
+  padding: 8px 0;
   cursor: pointer;
-  ${p =>
-    p.selected &&
-    css`
-      background: #a0af0b;
-    `}
+  background: ${p => (p.selected ? '#a0af0b' : 'initial')};
+  &:hover {
+    background: ${p => (p.selected ? '#a0af0b' : 'rgba(0, 0, 0, 0.04)')};
+  }
 
   & > svg {
-    background: white;
+    background: #fff;
     height: 100px;
     width: 150px;
-    display: inline-block;
+    flex-shrink: 0;
     box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.5);
   }
 
   & > p {
-    float: right;
-    width: 240px;
+    padding: 8px;
   }
 `

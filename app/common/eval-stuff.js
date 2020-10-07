@@ -4,16 +4,13 @@ import React from 'react'
 import * as Tag from './tag'
 import Dragger from '../data/dragger'
 
-export function generateValueMarkup (val, item, pictureData, updateItem) {
-  val = '' + val
+export function generateValueMarkup (item, updateItem, pictureData) {
+  const chunks = ('' + (item?.value || '')).split(/\s/)
   var map = getMap(pictureData)
   var re = /[as]_[0-9]*/
-  var chunks = val.split(/\s/)
 
   return _.map(chunks, (chunk, i, arr) => {
-    if (re.test(chunk)) {
-      return <Tag.Basic>{map[chunk]}</Tag.Basic>
-    }
+    if (re.test(chunk)) return <Tag.Basic>{map[chunk]}</Tag.Basic>
     if (!isNaN(parseFloat(chunk))) {
       var firstChunk = arr.slice(0, i).join(' ')
       var secondChunk = arr.slice(i + 1, arr.length).join(' ')
@@ -33,13 +30,11 @@ export function generateValueMarkup (val, item, pictureData, updateItem) {
 
 export function getMap (pictureData) {
   var obj = {}
-  for (var i = 0; i < pictureData.scalars.length; i++) {
-    var item = pictureData.scalars[i]
+  _.forEach(pictureData.scalars, item => {
     obj[item.id] = item.label
-  }
-  for (var i = 0; i < pictureData.arrays.length; i++) {
-    var item = pictureData.arrays[i]
+  })
+  _.forEach(pictureData.arrays, item => {
     obj[item.id] = item.label
-  }
+  })
   return obj
 }

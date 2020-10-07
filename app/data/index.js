@@ -6,7 +6,7 @@ import Tag from './tag'
 import CreateTag from './create-tag'
 import ScalarVal from './scalar-val'
 import ArrayVal from './array-val'
-import { Header, Container } from '../common/container'
+import { Panel } from '../common/panel'
 import * as T from '../common/tag'
 
 import * as evaluator from './evaluator'
@@ -143,9 +143,8 @@ export default function Data ({ picture, updatePicture }) {
   ))
 
   return (
-    <div>
-      <Header>Data</Header>
-      <MyContainer>
+    <Panel title='Data'>
+      <Wrapper>
         <div>
           {scalarTags}
           <CreateTag onClick={createScalar}>+</CreateTag>
@@ -165,8 +164,8 @@ export default function Data ({ picture, updatePicture }) {
             {arrayValues}
           </ArrSection>
         </Test1>
-      </MyContainer>
-    </div>
+      </Wrapper>
+    </Panel>
   )
 }
 
@@ -174,11 +173,10 @@ const Spacer = styled.div`
   min-height: 22px;
 `
 
-const MyContainer = styled(Container)`
+const Wrapper = styled.div`
+  display: flex;
   min-height: 300px;
   max-height: 420px;
-  overflow: auto;
-  display: flex;
 `
 
 const TestBox = styled.div`

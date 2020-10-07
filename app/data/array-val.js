@@ -10,57 +10,32 @@ function getArr (item) {
   return []
 }
 
-export default class ArrayValue extends React.Component {
-  state = { editting: false }
-
-  onClick = () => this.setState({ editting: true })
-
-  onChange = val => this.updateValue(val)
-
-  onFinish = val => {
-    this.updateValue(val)
-    this.setState({ editting: false })
+export default function ArrayValue ({ item, updateItem, pictureData }) {
+  const [editing, setEditing] = React.useState(false)
+  const onFinish = val => {
+    updateItem(val)
+    setEditing(false)
   }
-
-  updateValue = newValue => this.props.updateItem(newValue)
-
-  render () {
-    return this.state.editting ? this.renderEditableArray() : this.renderArray()
-  }
-
-  renderEditableArray () {
-    return (
-      <ArrayVal>
-        <ContentEditable
-          text={this.props.item.value}
-          onChange={this.onChange}
-          onFinish={this.onFinish}
-        />
-      </ArrayVal>
-    )
-  }
-
-  renderArray () {
-    // TODO:: parse out numbers and render draggable numbers in their place in value section
-    var i = this.props.item
-    return (
-      <ArrayVal onClick={this.onClick}>
-        <Evaluated>
-          {getArr(i && i.evaluated).map(item => (
-            <DataIndice>{item}</DataIndice>
-          ))}
-        </Evaluated>
-        <Value>
-          {evalStuff.generateValueMarkup(
-            (i && i.value) || '',
-            i,
-            this.props.pictureData,
-            this.props.updateItem
-          )}
-        </Value>
-      </ArrayVal>
-    )
-  }
+  return editing ? (
+    <ArrayVal>
+      <ContentEditable
+        text={item.value}
+        onChange={updateItem}
+        onFinish={onFinish}
+      />
+    </ArrayVal>
+  ) : (
+    <ArrayVal onClick={() => setEditing(true)}>
+      <Evaluated>
+        {getArr(item?.evaluated).map(item => (
+          <DataIndice>{item}</DataIndice>
+        ))}
+      </Evaluated>
+      <Value>
+        {evalStuff.generateValueMarkup(item, updateItem, pictureData)}
+      </Value>
+    </ArrayVal>
+  )
 }
 
 const ArrayVal = styled.div`

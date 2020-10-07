@@ -46,10 +46,8 @@ export default function Picture ({
 }
 
 const Wrapper = styled.div`
-  margin: 20px;
-  margin-bottom: 5px;
-  display: inline-block;
-  background-color: white;
+  margin: 16px 16px 4px;
+  background-color: #fff;
   width: 220px;
   height: 150px;
   box-shadow: 0 0 20px 2px
@@ -59,5 +57,5 @@ const Wrapper = styled.div`
 
 const Label = styled.div`
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 `

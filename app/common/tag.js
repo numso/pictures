@@ -33,7 +33,7 @@ export const Create = styled(Basic)`
 `
 
 export const Array = styled(Basic)`
-  margin-right: 10px;
+  margin-right: 8px;
 `
 
 export const Arrow = styled.div`

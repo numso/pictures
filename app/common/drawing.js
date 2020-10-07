@@ -3,15 +3,15 @@ import React from 'react'
 
 import ScalarVal from '../data/scalar-val'
 
-export function generateParts (steps, proportion = 1, fontSize = 16) {
+export function generateParts (steps, scale = 1, fontSize = 16) {
   return _.map(steps, s => {
     switch (s.type) {
       case 'circle':
         return (
           <circle
-            cx={proportion * s.x1.evaluated}
-            cy={proportion * s.y1.evaluated}
-            r={proportion * s.r.evaluated}
+            cx={scale * s.x1.evaluated}
+            cy={scale * s.y1.evaluated}
+            r={scale * s.r.evaluated}
             fill='#cacaca'
           />
         )
@@ -22,20 +22,20 @@ export function generateParts (steps, proportion = 1, fontSize = 16) {
         var h = Math.abs(s.y1.evaluated - s.y2.evaluated)
         return (
           <rect
-            x={proportion * x}
-            y={proportion * y}
-            width={proportion * w}
-            height={proportion * h}
+            x={scale * x}
+            y={scale * y}
+            width={scale * w}
+            height={scale * h}
             fill='#cacaca'
           />
         )
       case 'line':
         return (
           <line
-            x1={proportion * s.x1.evaluated}
-            y1={proportion * s.y1.evaluated}
-            x2={proportion * s.x2.evaluated}
-            y2={proportion * s.y2.evaluated}
+            x1={scale * s.x1.evaluated}
+            y1={scale * s.y1.evaluated}
+            x2={scale * s.x2.evaluated}
+            y2={scale * s.y2.evaluated}
             stroke='#cacaca'
           />
         )
@@ -43,8 +43,8 @@ export function generateParts (steps, proportion = 1, fontSize = 16) {
         return (
           <text
             fontSize={fontSize}
-            x={proportion * s.x1.evaluated}
-            y={proportion * s.y1.evaluated}
+            x={scale * s.x1.evaluated}
+            y={scale * s.y1.evaluated}
             fill='#cacaca'
           >
             Hi!

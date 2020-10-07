@@ -1,19 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Header, Container } from '../common/container'
+import { Panel } from '../common/panel'
 
 export default function Measurements () {
   return (
-    <div>
-      <Header>Measurements</Header>
-      <MyContainer>measurements go here</MyContainer>
-    </div>
+    <Panel title='Measurements'>
+      <Wrapper>measurements go here</Wrapper>
+    </Panel>
   )
 }
 
-const MyContainer = styled(Container)`
+const Wrapper = styled.div`
   min-height: 300px;
   max-height: 420px;
-  overflow: auto;
 `

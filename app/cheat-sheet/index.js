@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 const menu = [
   { category: 'draw', label: 'line', hotkey: 'x' },
@@ -33,27 +33,33 @@ export default function CheatSheet ({ mode, setMode }) {
     return () => document.removeEventListener('keydown', hotkeys)
   }, [])
   return (
-    <div>
-      {_.map(categories, (items, key) => (
+    <Wrapper>
+      {_.map(categories, (items, title) => (
         <Section>
-          <Title>{key}</Title>
+          <Title>{title}</Title>
           {items.map(item => (
-            <Group
+            <Item
               selected={item.label === mode}
               onClick={() => setMode(item.label)}
             >
-              <Item selected={item.label === mode}>{item.label}</Item>
+              <div>{item.label}</div>
               <Hotkey>{item.hotkey}</Hotkey>
-            </Group>
+            </Item>
           ))}
         </Section>
       ))}
-    </div>
+    </Wrapper>
   )
 }
 
+const Wrapper = styled.div`
+  position: absolute;
+  top: 16px;
+  right: 0;
+`
+
 const Section = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 `
 
 const Title = styled.div`
@@ -61,28 +67,25 @@ const Title = styled.div`
   font-weight: bold;
   font-size: 14px;
   text-decoration: underline;
-  padding-right: 40px;
-  text-align: right;
 `
 
-const Group = styled.div`
-  text-align: right;
-  padding-right: 20px;
+const Item = styled.button`
+  border: none;
+  font-size: 16px;
+  width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px 4px 8px;
   cursor: pointer;
-  ${p =>
-    p.selected &&
-    css`
-      background-color: #ccc;
-    `}
-`
-
-const Item = styled.div`
-  display: inline-block;
+  background: ${p => (p.selected ? '#ccc' : '#fff')};
   color: ${p => (p.selected ? 'white' : '#ccc')};
+  &:hover {
+    background: ${p => (p.selected ? '#ccc' : '#eee')};
+  }
 `
 
 const Hotkey = styled.div`
-  display: inline-block;
-  margin-left: 10px;
   font-weight: bold;
+  color: black;
 `

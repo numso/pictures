@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Picture from './picture'
-import { Header, Container } from '../common/container'
+import { Panel } from '../common/panel'
 
 export default function Pictures ({
   selected,
@@ -12,9 +12,8 @@ export default function Pictures ({
   setTitle
 }) {
   return (
-    <div>
-      <Header>Pictures</Header>
-      <MyContainer>
+    <Panel title='Pictures'>
+      <Flex>
         {pictures.map((picture, i) => (
           <Picture
             picture={picture}
@@ -23,44 +22,34 @@ export default function Pictures ({
             updateTitle={title => setTitle(i, title)}
           />
         ))}
-        <NewPicture onClick={addNew}>
-          <span>+</span>
-        </NewPicture>
-      </MyContainer>
-    </div>
+        <NewPicture onClick={addNew}>+</NewPicture>
+      </Flex>
+    </Panel>
   )
 }
 
-const MyContainer = styled(Container)`
+const Flex = styled.div`
   box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset;
   display: flex;
+  align-items: center;
 `
 
-const NewPicture = styled.div`
+const NewPicture = styled.button`
   background-color: #d7dce5;
-  border-radius: 100px;
-  padding: 20px;
-  height: 0;
-  width: 0;
-  display: inline-block;
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
   border: 1px solid #888;
-  position: relative;
-  vertical-align: top;
-  margin-top: 70px;
   cursor: pointer;
-
   &:hover {
     background-color: #c2cad8;
   }
-
   &:active {
     background-color: #afb8c8;
-  }
-
-  & > span {
-    color: #888;
-    position: relative;
-    top: -9px;
-    left: -5px;
   }
 `
