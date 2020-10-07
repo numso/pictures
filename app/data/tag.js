@@ -8,26 +8,19 @@ export default class Tag extends React.Component {
     showChildren: false
   }
 
-  onMouseUp () {
-    this.setState({ editing: true })
-  }
+  onMouseUp = () => this.setState({ editing: true })
 
-  onChange (lbl) {
-    this.updateLabel(lbl)
-  }
+  onChange = lbl => this.updateLabel(lbl)
 
-  onFinish (lbl) {
+  onFinish = lbl => {
     this.updateLabel(lbl)
     this.setState({ editing: false })
   }
 
-  updateLabel (newLbl) {
-    this.props.updateLabel(newLbl)
-  }
+  updateLabel = newLbl => this.props.updateLabel(newLbl)
 
-  toggleShowChildren () {
+  toggleShowChildren = () =>
     this.setState({ showChildren: !this.state.showChildren })
-  }
 
   render () {
     return this.state.editing ? this.renderEditableTag() : this.renderTag()
@@ -47,9 +40,8 @@ export default class Tag extends React.Component {
     )
   }
 
-  onDragStart () {
+  onDragStart = () =>
     event.dataTransfer.setData('text/plain', this.props.item.id)
-  }
 
   renderTag () {
     var classes = this.props.children ? 'tag --array' : 'tag'

@@ -91,20 +91,24 @@ export default function Data ({ picture, updatePicture }) {
   }, 0)
   var indices = _.range(1, Math.max(max + 1, 6))
 
-  var scalarTags = picture.data.scalars.map(item => (
+  var scalarTags = picture.data.scalars.map((item, i) => (
     <Tag
       item={item}
-      updateLabel={() => {
-        throw new Error('Not implemented')
+      updateLabel={label => {
+        updatePicture(picture => {
+          picture.data.scalars[i].label = label
+        })
       }}
     />
   ))
 
-  var arrayTags = picture.data.arrays.map(item => (
+  var arrayTags = picture.data.arrays.map((item, i) => (
     <Tag
       item={item}
-      updateLabel={() => {
-        throw new Error('Not implemented')
+      updateLabel={label => {
+        updatePicture(picture => {
+          picture.data.arrays[i].label = label
+        })
       }}
     >
       {getArrayStats(item)}

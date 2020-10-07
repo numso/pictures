@@ -13,10 +13,9 @@
   box-shadow: 0 0 20px 2px rgb(30, 79, 234);
 }
 
-.picture.\-\-big {
+.bigPicture {
   width: 720px;
   height: 900px;
-  cursor: default;
 }
 
 #bigPicture .scalar-val {

@@ -32,11 +32,11 @@ export function generateValueMarkup (val, item, pictureData, updateItem) {
 
 export function getMap (pictureData) {
   var obj = {}
-  for (var i = 0; i < pictureData.scalars.size; i++) {
+  for (var i = 0; i < pictureData.scalars.length; i++) {
     var item = pictureData.scalars[i]
     obj[item.id] = item.label
   }
-  for (var i = 0; i < pictureData.arrays.size; i++) {
+  for (var i = 0; i < pictureData.arrays.length; i++) {
     var item = pictureData.arrays[i]
     obj[item.id] = item.label
   }

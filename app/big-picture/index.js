@@ -100,7 +100,7 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
       <div style={{ textAlign: 'center', height: 18 }}>
         {getDomMsg(step, picture.data, updateStep)}
       </div>
-      <div id='picture-box' className='picture --big'>
+      <div id='picture-box' className='bigPicture'>
         <svg
           width={720}
           height={900}
