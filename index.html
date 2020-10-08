@@ -19,8 +19,7 @@
   <body>
     <div id="app"></div>
     <script>
-      window.dangerDangerDanger = (a, b, data) =>
-        eval(a + 'with(data){' + b + '}')
+      window.dangerEval = (a, b, data) => eval(a + b)
     </script>
     <script type="module" src="/app/index.js"></script>
   </body>

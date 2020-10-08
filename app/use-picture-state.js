@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { nanoid } from 'nanoid'
 import React from 'react'
 import { useImmer } from 'use-immer'
 
@@ -8,55 +9,52 @@ export default function usePictureState () {
   const [selected, setSelected] = React.useState(0)
   const [pictures, updatePictures] = useImmer(() => [
     resolve({
+      id: nanoid(),
       title: 'Solar Data',
       steps: _.range(0, 12).map(i => ({
+        id: nanoid(),
         type: 'rect',
         x1: { value: i * 60 + 4 },
         x2: { value: (i + 1) * 60 - 4 }, // TODO:: get columns worksing so i can just be a column num
-        y1: { value: `900 - a_3[${i}] / ar_3_max * 900` },
+        y1: { value: `900 - {a:3:${i}} / {a:3:max} * 900` },
         y2: { value: 900 }
       })),
-      selectedStep: 11,
-      bigPictureStuff: { msg: '', previews: {} },
       data: {
         scalars: [
-          { label: 'panels', value: '600' },
-          { label: 'kW / panel', value: '0.2' },
-          { label: 'power in kW', value: 's_1 * s_2' }
+          { id: 's:1', label: 'panels', value: 600 },
+          { id: 's:2', label: 'kW / panel', value: 0.2 },
+          { id: 's:3', label: 'power in kW', value: '{s:1} * {s:2}' }
         ],
         arrays: [
           {
+            id: 'a:1',
             label: 'sun hours',
-            value: '[ 53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65 ]'
+            value: [53, 86, 134, 155, 159, 155, 130, 143, 126, 112, 81, 65]
           },
-          { label: 'energy in kWh', value: 's_3 * a_1' },
-          { label: 'energy in MWh', value: 'a_2 / 1000' }
-        ],
-        scalars_id: 1,
-        arrays_id: 1
+          { id: 'a:2', label: 'energy in kWh', value: '{s:3} * {a:1}' },
+          { id: 'a:3', label: 'energy in MWh', value: '{a:2} / 1000' }
+        ]
       }
     }),
     resolve({
+      id: nanoid(),
       title: 'Sine Wave',
       steps: [
         {
+          id: nanoid(),
           type: 'circle',
-          x1: { value: 's_2' },
-          y1: { value: 's_3' },
+          x1: { value: '{s:2}' },
+          y1: { value: '{s:3}' },
           r: { value: 50 }
         }
       ],
-      selectedStep: 0,
-      bigPictureStuff: { msg: '', previews: {} },
       data: {
         scalars: [
-          { label: 'drag me', value: '60' },
-          { label: 'x', value: '3 * s_1' },
-          { label: 'y', value: '400 + Math.sin( s_1 / 10) * 100' }
+          { id: 's:1', label: 'drag me', value: 60 },
+          { id: 's:2', label: 'x', value: '3 * {s:1}' },
+          { id: 's:3', label: 'y', value: '400 + Math.sin( {s:1} / 10 ) * 100' }
         ],
-        arrays: [],
-        scalars_id: 1,
-        arrays_id: 1
+        arrays: []
       }
     }),
     newPicture()
@@ -75,10 +73,6 @@ export default function usePictureState () {
       updatePictures(pictures => {
         pictures[i].title = title
       }),
-    setSelectedStep: i =>
-      updatePictures(pictures => {
-        pictures[selected].selectedStep = i
-      }),
     updatePicture: updater =>
       updatePictures(pictures => {
         updater(pictures[selected])
@@ -89,15 +83,12 @@ export default function usePictureState () {
 
 function newPicture () {
   return resolve({
+    id: nanoid(),
     title: 'untitled',
     steps: [],
-    selectedStep: 0,
-    bigPictureStuff: { msg: '', previews: {} },
     data: {
-      scalars: [{ label: 'parameter', value: '1' }],
-      arrays: [{ label: 'item', value: '[1,2,3,4,5]' }],
-      scalars_id: 1,
-      arrays_id: 1
+      scalars: [{ id: `s:${nanoid()}`, label: 'parameter', value: 1 }],
+      arrays: [{ id: `a:${nanoid()}`, label: 'item', value: [1, 2, 3, 4, 5] }]
     }
   })
 }
@@ -105,54 +96,27 @@ function newPicture () {
 // --- Evaluation --------------------------------------------------------------
 
 function resolve (picture) {
-  giveIDs(picture.data)
-  evaluate(picture.data, picture.steps)
+  evaluate(picture)
   return picture
 }
 
-function giveIDs (data) {
-  for (var i = 0; i < data.scalars.length; i++) {
-    var item = data.scalars[i]
-    if (!item.id) item.id = `s_${data.scalars_id++}`
-  }
-
-  for (var i = 0; i < data.arrays.length; i++) {
-    var item = data.arrays[i]
-    if (!item.id) item.id = `a_${data.arrays_id++}`
-  }
-}
-
-function evaluate (dataCursor, stepsCursor) {
-  var ctx = {}
-  for (var i = 0; i < dataCursor.scalars.length; i++) {
-    var item = dataCursor.scalars[i]
-    ctx[item.id] = item.value
-  }
-  for (var i = 0; i < dataCursor.arrays.length; i++) {
-    var item = dataCursor.arrays[i]
-    ctx[item.id] = item.value
-  }
-  for (var i = 0; i < stepsCursor.length; i++) {
-    var item = stepsCursor[i]
+function evaluate ({ data, steps }) {
+  var ctx = _.mapValues(
+    _.keyBy([...data.scalars, ...data.arrays], i => `{${i.id}}`),
+    'value'
+  )
+  _.forEach(steps, ({ id, type, ...item }) => {
     for (const key in item) {
-      if (key !== 'type') ctx[`step-${i}-${key}`] = item[key].value
+      ctx[`${id}:${key}`] = item[key].value
     }
-  }
-  var data = evaluator.check(ctx)
-  for (var i = 0; i < dataCursor.scalars.length; i++) {
-    var item = dataCursor.scalars[i]
-    var id = item.id
-    item.evaluated = data[id]
-  }
-  for (var i = 0; i < dataCursor.arrays.length; i++) {
-    var item = dataCursor.arrays[i]
-    var id = item.id
-    item.evaluated = data[id]
-  }
-  for (var i = 0; i < stepsCursor.length; i++) {
-    var item = stepsCursor[i]
+  })
+  var resolved = evaluator.check(ctx)
+  _.forEach([...data.scalars, ...data.arrays], item => {
+    item.evaluated = resolved[`{${item.id}}`]
+  })
+  _.forEach(steps, ({ id, type, ...item }) => {
     for (const key in item) {
-      if (key !== 'type') item[key].evaluated = data[`step-${i}-${key}`]
+      item[key].evaluated = resolved[`${id}:${key}`]
     }
-  }
+  })
 }

@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -6,7 +7,12 @@ import { generateParts, getDomMsg } from '../common/drawing'
 var startx = null
 var starty
 
-export default function BigPicture ({ mode, picture, updatePicture }) {
+export default function BigPicture ({
+  mode,
+  picture,
+  selectedStep,
+  updatePicture
+}) {
   function mouseDown (e) {
     startx = e.nativeEvent.offsetX
     starty = e.nativeEvent.offsetY
@@ -18,23 +24,11 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
     var endy = e.nativeEvent.offsetY
     if (mode === 'circle') {
       var dist = distance(startx, starty, endx, endy)
-      setPreview('circle', { type: 'circle', x1: startx, y1: starty, r: dist })
+      updatePreview('circle', { x1: startx, y1: starty, r: dist })
     } else if (mode === 'rect') {
-      setPreview('rect', {
-        type: 'rect',
-        x1: startx,
-        y1: starty,
-        x2: endx,
-        y2: endy
-      })
+      updatePreview('rect', { x1: startx, y1: starty, x2: endx, y2: endy })
     } else if (mode === 'line') {
-      setPreview('line', {
-        type: 'line',
-        x1: startx,
-        y1: starty,
-        x2: endx,
-        y2: endy
-      })
+      updatePreview('line', { x1: startx, y1: starty, x2: endx, y2: endy })
     }
   }
 
@@ -43,17 +37,15 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
     var endy = e.nativeEvent.offsetY
     if (mode === 'circle') {
       var dist = distance(startx, starty, endx, endy)
-      removePreview('circle')
-      addStep({ type: 'circle', x1: startx, y1: starty, r: dist })
+      addStep('circle', { x1: startx, y1: starty, r: dist })
     } else if (mode === 'rect') {
-      removePreview('rect')
-      addStep({ type: 'rect', x1: startx, y1: starty, x2: endx, y2: endy })
+      addStep('rect', { x1: startx, y1: starty, x2: endx, y2: endy })
     } else if (mode === 'line') {
-      removePreview('line')
-      addStep({ type: 'line', x1: startx, y1: starty, x2: endx, y2: endy })
+      addStep('line', { x1: startx, y1: starty, x2: endx, y2: endy })
     } else if (mode === 'text') {
-      addStep({ type: 'text', x1: endx, y1: endy })
+      addStep('text', { x1: endx, y1: endy })
     }
+    setPreview(null)
     startx = null
   }
 
@@ -61,39 +53,34 @@ export default function BigPicture ({ mode, picture, updatePicture }) {
     return Math.sqrt(Math.pow(x2 - x, 2) + Math.pow(y2 - y, 2))
   }
 
-  function addStep (step) {
+  function prep (step, name) {
     for (var key in step) {
-      if (key !== 'type') step[key] = { value: step[key] }
+      step[key] = { [name]: step[key] }
     }
+  }
+
+  function addStep (type, step) {
+    prep(step, 'value')
     updatePicture(picture => {
-      picture.steps.push(step)
-      picture.selectedStep = picture.steps.length - 1
+      picture.steps.push({ id: nanoid(), type, ...step })
     })
   }
 
-  function setPreview (key, preview) {
-    for (var _key in preview) {
-      if (_key !== 'type') preview[_key] = { evaluated: preview[_key] }
-    }
-    updatePicture(picture => {
-      picture.bigPictureStuff.previews[key] = preview
-    })
+  const [preview, setPreview] = React.useState(null)
+
+  function updatePreview (type, step) {
+    prep(step, 'evaluated')
+    setPreview({ id: 'preview', type, ...step })
   }
 
-  function removePreview (key) {
-    updatePicture(picture => {
-      delete picture.bigPictureStuff.previews[key]
-    })
-  }
+  var svgParts = generateParts(picture.steps.slice(0, selectedStep + 1))
+  var previewParts = generateParts(preview && [preview])
 
-  var svgParts = generateParts(picture.steps.slice(0, picture.selectedStep + 1))
-  var previewParts = generateParts(picture.bigPictureStuff.previews)
-
-  var step = picture.steps[picture.selectedStep]
+  var step = picture.steps[selectedStep]
 
   const updateStep = updater =>
     updatePicture(picture => {
-      updater(picture.steps[picture.selectedStep])
+      updater(picture.steps[selectedStep])
     })
 
   return (

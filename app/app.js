@@ -11,16 +11,19 @@ import CheatSheet from './cheat-sheet'
 
 export default function App () {
   const [drawMode, setDrawMode] = React.useState('line')
+  // const [selectedPictureId, setSelectedPictureId] = React.useState(null)
+  const [selectedStep, setSelectedStep] = React.useState(0)
   const pictureState = usePictureState()
+  const picture = pictureState.pictures[pictureState.selected]
+  React.useEffect(() => {
+    setSelectedStep(picture.steps.length - 1)
+  }, [picture.id, picture.steps.length])
   React.useEffect(() => {
     const deleteHandler = e => {
       // 39 === ' (apostrophe)
       if (e.keyCode !== 39) return
       pictureState.updatePicture(picture => {
-        picture.steps.splice(picture.selectedStep, 1)
-        if (picture.selectedStep >= picture.steps.length) {
-          picture.selectedStep = picture.steps.length - 1
-        }
+        picture.steps.splice(selectedStep, 1)
       })
     }
     document.addEventListener('keypress', deleteHandler)
@@ -43,7 +46,8 @@ export default function App () {
           />
           <Steps
             picture={pictureState.pictures[pictureState.selected]}
-            setSelected={pictureState.setSelectedStep}
+            selectedStep={selectedStep}
+            setSelectedStep={setSelectedStep}
           />
           <Measurements />
         </Sidebar>
@@ -53,6 +57,7 @@ export default function App () {
             mode={drawMode}
             picture={pictureState.pictures[pictureState.selected]}
             updatePicture={pictureState.updatePicture}
+            selectedStep={selectedStep}
           />
           <CheatSheet mode={drawMode} setMode={setDrawMode} />
         </MainArea>

@@ -4,17 +4,18 @@ import styled from 'styled-components'
 import { generateParts, getMsg } from '../common/drawing'
 import { Panel } from '../common/panel'
 
-export default function Steps ({ picture, setSelected }) {
+export default function Steps ({ picture, selectedStep, setSelectedStep }) {
   return (
     <Panel title='Steps'>
       <Wrapper>
-        {picture.steps.map((s, i, steps) => (
+        {picture.steps.map((step, i, steps) => (
           <Item
-            selected={picture.selectedStep === i}
-            onClick={() => setSelected(i)}
+            key={step.id}
+            selected={selectedStep === i}
+            onClick={() => setSelectedStep(i)}
           >
             <svg>{generateParts(steps.slice(0, i + 1), 1 / 9, 4)}</svg>
-            <p>{getMsg(s)}</p>
+            <p>{getMsg(step)}</p>
           </Item>
         ))}
       </Wrapper>

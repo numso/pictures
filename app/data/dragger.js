@@ -34,14 +34,10 @@ export default class Dragger extends React.Component {
   }
 
   setNum = num => {
-    var hasComma = this.props.number[this.props.number.length - 1] === ','
-    if (hasComma) num += ','
     var newVal = [this.props.firstChunk, num, this.props.secondChunk]
       .join(' ')
       .trim()
-
-    this.props.updateItem(newVal)
-
+    this.props.updateItem(this.props.parse(newVal))
     this.setState({ number: num })
   }
 

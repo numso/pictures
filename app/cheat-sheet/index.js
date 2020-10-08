@@ -39,6 +39,7 @@ export default function CheatSheet ({ mode, setMode }) {
           <Title>{title}</Title>
           {items.map(item => (
             <Item
+              key={item.label}
               selected={item.label === mode}
               onClick={() => setMode(item.label)}
             >

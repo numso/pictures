@@ -16,6 +16,7 @@ export default function Pictures ({
       <Flex>
         {pictures.map((picture, i) => (
           <Picture
+            key={picture.id}
             picture={picture}
             selected={selected === i}
             setSelected={() => setSelected(i)}

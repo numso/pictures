@@ -34,29 +34,32 @@ var PREAMBLE = 'var window={}; var document={}; var alert = function() {};'
  * }
  *
  */
-export function simple (ctx, data) {
-  _.each(ctx, function (val, key) {
+function simple (ctx, data) {
+  _.forEach(ctx, (val, key) => {
     try {
-      var result = eval(PREAMBLE + val)
-      if (key[0] === 'a' && !_.isArray(result)) {
+      if (/\{[as]:.*?\}/.test(val)) throw new Error()
+      var result = window.dangerEval(PREAMBLE, val, data)
+      if (key.startsWith('{a') && !_.isArray(result)) {
         // ahhh, didn't work
       } else {
         data[key] = result
       }
-    } catch (e) {}
+    } catch (error) {}
   })
   return data
 }
 
 // Evaluates expressions, but tries to inject known values into them
-export function injected (ctx, data, max) {
-  _.each(ctx, function (val, key) {
+function injected (ctx, data, max) {
+  _.forEach(ctx, (val, key) => {
     try {
-      var result = window.dangerDangerDanger(PREAMBLE, val, data)
-      if (key[0] === 'a' && !_.isArray(result)) {
+      val = val.replace(/\{[as]:[a-zA-Z0-9_-]*?(:[^\d]+)?\}/g, 'data["$&"]')
+      val = val.replace(/(\{[as]:[a-zA-Z0-9_-]*):(\d+)\}/g, 'data["$1}"][$2]')
+      var result = window.dangerEval(PREAMBLE, val, data)
+      if (key.startsWith('{a') && !_.isArray(result)) {
         result = evaluateArray(data, val, max)
         if (_.isArray(result)) data[key] = result
-      } else {
+      } else if (!isNaN(result)) {
         data[key] = result
       }
     } catch (error) {
@@ -67,11 +70,10 @@ export function injected (ctx, data, max) {
 }
 
 function evaluateArray (data, expr, max) {
-  expr = '' + expr
   var arr = []
   for (var i = 0; i < max; i++) {
-    var newExpr = expr.replace(/(a_\d*)/g, '$&[' + i + ']')
-    arr[i] = window.dangerDangerDanger(PREAMBLE, newExpr, data)
+    var newExpr = expr.replace(/({a:[a-zA-Z0-9_-]*?}"])/g, '$1[' + i + ']')
+    arr[i] = window.dangerEval(PREAMBLE, newExpr, data)
   }
   return !max ? null : arr
 }
@@ -79,47 +81,43 @@ function evaluateArray (data, expr, max) {
 function getArrayMax (data) {
   return _.reduce(
     data,
-    function (memo, item, key) {
-      if (key[0] !== 'a') return memo
-      if (key[1] !== '_') return memo
-      return Math.max(memo, item.length)
-    },
+    (memo, item) => (_.isArray(item) ? Math.max(memo, item.length) : memo),
     0
   )
 }
 
-export function round (item) {
-  return Math.round(item * 1000) / 1000
-}
+const round = num => Math.round(num * 1000) / 1000
 
 // strip out the already evaluated expresions from the "to-evaluate" object
-export function strip (obj1, obj2) {
+function strip (obj1, obj2) {
   var keys = _.keys(obj1)
-  _.each(keys, function (key) {
+  _.forEach(keys, key => {
     if (key in obj2) {
       delete obj1[key]
-      if (key[0] === 'a' && key[1] === '_') addTransforms(obj2, key)
+      if (key.startsWith('{a')) addTransforms(obj2, key)
     }
   })
   return obj1
 }
 
 function addTransforms (obj, key) {
-  var key2 = key.replace('a', 'ar')
-  obj[key2 + '_min'] = Math.min.apply(this, obj[key])
-  obj[key2 + '_avg'] =
-    obj[key].reduce(function (memo, num) {
-      return memo + num
-    }, 0) / obj[key].length
-  obj[key2 + '_max'] = Math.max.apply(this, obj[key])
-  obj[key2 + '_sum'] = obj[key].reduce(function (memo, num) {
-    return memo + num
-  }, 0)
-  obj[key2 + '_len'] = obj[key].length
+  var key2 = key.replace('}', '')
+  obj[`${key2}:min}`] = Math.min.apply(null, obj[key])
+  obj[`${key2}:sum}`] = obj[key].reduce((memo, num) => memo + num, 0)
+  obj[`${key2}:avg}`] = obj[`${key2}:sum}`] / obj[key].length
+  obj[`${key2}:max}`] = Math.max.apply(null, obj[key])
+  obj[`${key2}:len}`] = obj[key].length
 }
 
+// NOTE:: We expect expressions to be strings. If it is a number or an array it is assumed to be pre-evaluated.
 export function check (ctx) {
-  var data = simple(ctx, {})
+  var data = {}
+  for (const key in ctx) {
+    if (!_.isString(ctx[key])) data[key] = ctx[key]
+  }
+  ctx = strip(ctx, data)
+
+  data = simple(ctx, data)
   ctx = strip(ctx, data)
 
   var working = true
@@ -132,11 +130,11 @@ export function check (ctx) {
     working = len1 !== len2
   }
 
-  _.each(data, (item, key) => {
+  _.forEach(data, (item, key) => {
     if (_.isNumber(item)) {
       data[key] = round(item)
     } else if (_.isArray(item)) {
-      _.each(item, (item2, i) => {
+      _.forEach(item, (item2, i) => {
         if (_.isNumber(item2)) {
           item[i] = round(item2)
         }

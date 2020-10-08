@@ -95,15 +95,15 @@ function getMsgInner (val, s) {
   return ''
 }
 
-function getVal (numCursor) {
-  return round(numCursor.evaluated)
+function getVal (item) {
+  return round(item.evaluated)
 }
 
 function getDom (pictureData, updateStep) {
-  return (numCursor, key) => (
+  return (item, key) => (
     <ScalarVal
       pictureData={pictureData}
-      item={numCursor}
+      item={item}
       updateItem={newItem =>
         updateStep(step => {
           step[key].value = newItem

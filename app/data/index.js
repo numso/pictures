@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { nanoid } from 'nanoid'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -9,27 +10,27 @@ import ArrayVal from './array-val'
 import { Panel } from '../common/panel'
 import * as T from '../common/tag'
 
-import * as evaluator from './evaluator'
-
-function getArr (item) {
-  if (item && _.isArray(item)) return item
-  return []
-}
+const getArr = item => (_.isArray(item) ? item : [])
+const round = num => Math.round(num * 1000) / 1000
 
 export default function Data ({ picture, updatePicture }) {
-  console.log('-------RENDER--------')
-
   function createScalar () {
-    createNew('scalars')
+    updatePicture(picture => {
+      picture.data.scalars.push({
+        id: `s:${nanoid()}`,
+        label: 'item',
+        value: 10
+      })
+    })
   }
 
   function createArray () {
-    createNew('arrays')
-  }
-
-  function createNew (type) {
     updatePicture(picture => {
-      picture.data[type].push({ label: 'item', value: '10' })
+      picture.data.arrays.push({
+        id: `a:${nanoid()}`,
+        label: 'item',
+        value: [1, 2, 3]
+      })
     })
   }
 
@@ -37,53 +38,35 @@ export default function Data ({ picture, updatePicture }) {
     var stats = [
       {
         name: 'min',
-        code: function (arr) {
-          return Math.min.apply(this, arr)
-        }
+        code: arr => Math.min.apply(null, arr)
       },
       {
         name: 'avg',
-        code: function (arr) {
-          return (
-            arr.reduce(function (memo, num) {
-              return memo + num
-            }, 0) / arr.length
-          )
-        }
+        code: arr => arr.reduce((memo, num) => memo + num, 0) / arr.length
       },
       {
         name: 'max',
-        code: function (arr) {
-          return Math.max.apply(this, arr)
-        }
+        code: arr => Math.max.apply(null, arr)
       },
       {
         name: 'sum of',
-        code: function (arr) {
-          return arr.reduce(function (memo, num) {
-            return memo + num
-          }, 0)
-        }
+        code: arr => arr.reduce((memo, num) => memo + num, 0)
       },
       {
         name: '# of',
-        code: function (arr) {
-          return arr.length
-        }
+        code: arr => arr.length
       }
     ]
     return (
       <TestBox>
-        {stats.map(stat => {
-          return (
-            <div>
-              <T.Basic draggable='true'>
-                {stat.name} {item.label}
-              </T.Basic>
-              <span>{evaluator.round(stat.code(item.evaluated || []))}</span>
-            </div>
-          )
-        })}
+        {stats.map((stat, i) => (
+          <div key={i}>
+            <T.Basic draggable='true'>
+              {stat.name} {item.label}
+            </T.Basic>
+            <span>{round(stat.code(item.evaluated || []))}</span>
+          </div>
+        ))}
       </TestBox>
     )
   }
@@ -95,6 +78,7 @@ export default function Data ({ picture, updatePicture }) {
 
   var scalarTags = picture.data.scalars.map((item, i) => (
     <Tag
+      key={item.id}
       item={item}
       updateLabel={label => {
         updatePicture(picture => {
@@ -106,6 +90,7 @@ export default function Data ({ picture, updatePicture }) {
 
   var arrayTags = picture.data.arrays.map((item, i) => (
     <Tag
+      key={item.id}
       item={item}
       updateLabel={label => {
         updatePicture(picture => {
@@ -158,7 +143,7 @@ export default function Data ({ picture, updatePicture }) {
           <ArrSection>
             <div>
               {indices.map(i => (
-                <DataIndiceHeader>{i}</DataIndiceHeader>
+                <DataIndiceHeader key={i}>{i}</DataIndiceHeader>
               ))}
             </div>
             {arrayValues}

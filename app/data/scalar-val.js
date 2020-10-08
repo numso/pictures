@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -23,7 +22,10 @@ export default function ScalarValue ({ item, updateItem, pictureData }) {
     <ScalarVal onClick={() => setEditing(true)}>
       <Evaluated>{item?.evaluated}</Evaluated>
       <Value>
-        {evalStuff.generateValueMarkup(item, updateItem, pictureData)}
+        {evalStuff.generateValueMarkup(item, updateItem, pictureData, item => {
+          const num = parseFloat(item)
+          return isNaN(num) ? item : num
+        })}
       </Value>
     </ScalarVal>
   )

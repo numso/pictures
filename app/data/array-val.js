@@ -12,14 +12,22 @@ function getArr (item) {
 
 export default function ArrayValue ({ item, updateItem, pictureData }) {
   const [editing, setEditing] = React.useState(false)
+  const parse = item => {
+    try {
+      const val = JSON.parse(item)
+      if (!_.isArray(val)) throw new Error()
+      return val
+    } catch (error) {}
+    return item
+  }
   const onFinish = val => {
-    updateItem(val)
+    updateItem(parse(val))
     setEditing(false)
   }
   return editing ? (
     <ArrayVal>
       <ContentEditable
-        text={item.value}
+        text={_.isArray(item.value) ? JSON.stringify(item.value) : item.value}
         onChange={updateItem}
         onFinish={onFinish}
       />
@@ -32,7 +40,7 @@ export default function ArrayValue ({ item, updateItem, pictureData }) {
         ))}
       </Evaluated>
       <Value>
-        {evalStuff.generateValueMarkup(item, updateItem, pictureData)}
+        {evalStuff.generateValueMarkup(item, updateItem, pictureData, parse)}
       </Value>
     </ArrayVal>
   )
