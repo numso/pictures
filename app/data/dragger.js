@@ -1,58 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-var originalNum, originalX, step, curNum
+var originalNum, originalX
 
-export default class Dragger extends React.Component {
-  state = { number: 0, isDragging: false }
+export default function Dragger ({ number, prefix, suffix, onChange, parse }) {
+  const [myNumber, setMyNumber] = React.useState(0)
+  const [isDragging, setIsDragging] = React.useState(false)
+  useEffect(() => {
+    if (!isDragging) setMyNumber(number)
+  })
 
-  componentWillReceiveProps (nextProps) {
-    if (!this.state.isDragging) {
-      this.setState({ number: nextProps.number })
-    }
-  }
-
-  componentDidMount () {
-    this.setState({ number: this.props.number })
-  }
-
-  onDragStart = e => {
-    this.setState({ isDragging: true })
-    originalNum = parseFloat(this.state.number)
+  const onDragStart = e => {
+    setIsDragging(true)
+    originalNum = parseFloat(myNumber)
     originalX = e.clientX
-    step = 10
     // e.dataTransfer.setDragImage(document.getElementById('blank'), 0, 0);
   }
 
-  onDrag = e => {
+  const onDrag = e => {
     if (e.clientX === 0) return
-    var delta = e.clientX - originalX
-    var num = Math.floor(originalNum + (delta / 20) * step)
-    if (num !== curNum) {
-      curNum = num
-      this.setNum(curNum)
-    }
+    const delta = e.clientX - originalX
+    const num = Math.floor(originalNum + (delta / 20) * 10)
+    if (num !== myNumber) setNum(num)
   }
 
-  setNum = num => {
-    var newVal = [this.props.firstChunk, num, this.props.secondChunk]
-      .join(' ')
-      .trim()
-    this.props.updateItem(this.props.parse(newVal))
-    this.setState({ number: num })
+  const setNum = num => {
+    const newVal = [prefix, num, suffix].join(' ').trim()
+    onChange(parse(newVal))
+    setMyNumber(num)
   }
 
-  onDragEnd = e => this.setState({ isDragging: false })
-
-  render () {
-    return (
-      <span
-        draggable='true'
-        onDrag={this.onDrag}
-        onDragStart={this.onDragStart}
-        onDragEnd={this.onDragEnd}
-      >
-        {this.state.number}
-      </span>
-    )
-  }
+  return (
+    <span
+      draggable='true'
+      onDrag={onDrag}
+      onDragStart={onDragStart}
+      onDragEnd={() => setIsDragging(false)}
+    >
+      {myNumber}
+    </span>
+  )
 }

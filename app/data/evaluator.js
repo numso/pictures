@@ -6,7 +6,7 @@
 import _ from 'lodash'
 
 // maybe use something like this to stop people from messing up?
-var PREAMBLE = 'var window={}; var document={}; var alert = function() {};'
+const PREAMBLE = 'var window={}; var document={}; var alert = function() {};'
 // still need to protect users from: this
 // update: meh, giving up. let the user mess up if they want. I'll shove this code in a webworker later
 
@@ -38,7 +38,7 @@ function simple (ctx, data) {
   _.forEach(ctx, (val, key) => {
     try {
       if (/\{[as]:.*?\}/.test(val)) throw new Error()
-      var result = window.dangerEval(PREAMBLE, val, data)
+      const result = window.dangerEval(PREAMBLE, val, data)
       if (key.startsWith('{a') && !_.isArray(result)) {
         // ahhh, didn't work
       } else {
@@ -55,7 +55,7 @@ function injected (ctx, data, max) {
     try {
       val = val.replace(/\{[as]:[a-zA-Z0-9_-]*?(:[^\d]+)?\}/g, 'data["$&"]')
       val = val.replace(/(\{[as]:[a-zA-Z0-9_-]*):(\d+)\}/g, 'data["$1}"][$2]')
-      var result = window.dangerEval(PREAMBLE, val, data)
+      let result = window.dangerEval(PREAMBLE, val, data)
       if (key.startsWith('{a') && !_.isArray(result)) {
         result = evaluateArray(data, val, max)
         if (_.isArray(result)) data[key] = result
@@ -70,9 +70,9 @@ function injected (ctx, data, max) {
 }
 
 function evaluateArray (data, expr, max) {
-  var arr = []
-  for (var i = 0; i < max; i++) {
-    var newExpr = expr.replace(/({a:[a-zA-Z0-9_-]*?}"])/g, '$1[' + i + ']')
+  const arr = []
+  for (let i = 0; i < max; i++) {
+    const newExpr = expr.replace(/({a:[a-zA-Z0-9_-]*?}"])/g, '$1[' + i + ']')
     arr[i] = window.dangerEval(PREAMBLE, newExpr, data)
   }
   return !max ? null : arr
@@ -90,7 +90,7 @@ const round = num => Math.round(num * 1000) / 1000
 
 // strip out the already evaluated expresions from the "to-evaluate" object
 function strip (obj1, obj2) {
-  var keys = _.keys(obj1)
+  const keys = _.keys(obj1)
   _.forEach(keys, key => {
     if (key in obj2) {
       delete obj1[key]
@@ -101,7 +101,7 @@ function strip (obj1, obj2) {
 }
 
 function addTransforms (obj, key) {
-  var key2 = key.replace('}', '')
+  const key2 = key.replace('}', '')
   obj[`${key2}:min}`] = Math.min.apply(null, obj[key])
   obj[`${key2}:sum}`] = obj[key].reduce((memo, num) => memo + num, 0)
   obj[`${key2}:avg}`] = obj[`${key2}:sum}`] / obj[key].length
@@ -110,8 +110,8 @@ function addTransforms (obj, key) {
 }
 
 // NOTE:: We expect expressions to be strings. If it is a number or an array it is assumed to be pre-evaluated.
-export function check (ctx) {
-  var data = {}
+export default function evaluate (ctx) {
+  let data = {}
   for (const key in ctx) {
     if (!_.isString(ctx[key])) data[key] = ctx[key]
   }
@@ -120,13 +120,13 @@ export function check (ctx) {
   data = simple(ctx, data)
   ctx = strip(ctx, data)
 
-  var working = true
+  let working = true
   while (working) {
-    var max = getArrayMax(data)
+    const max = getArrayMax(data)
     data = injected(ctx, data, max)
-    var len1 = _.keys(ctx).length
+    const len1 = _.keys(ctx).length
     ctx = strip(ctx, data)
-    var len2 = _.keys(ctx).length
+    const len2 = _.keys(ctx).length
     working = len1 !== len2
   }
 

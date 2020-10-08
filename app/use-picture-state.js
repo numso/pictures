@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import React from 'react'
 import { useImmer } from 'use-immer'
 
-import * as evaluator from './data/evaluator'
+import evaluate from './data/evaluator'
 
 export default function usePictureState () {
   const [selected, setSelected] = React.useState(0)
@@ -96,12 +96,12 @@ function newPicture () {
 // --- Evaluation --------------------------------------------------------------
 
 function resolve (picture) {
-  evaluate(picture)
+  doResolve(picture)
   return picture
 }
 
-function evaluate ({ data, steps }) {
-  var ctx = _.mapValues(
+function doResolve ({ data, steps }) {
+  const ctx = _.mapValues(
     _.keyBy([...data.scalars, ...data.arrays], i => `{${i.id}}`),
     'value'
   )
@@ -110,7 +110,7 @@ function evaluate ({ data, steps }) {
       ctx[`${id}:${key}`] = item[key].value
     }
   })
-  var resolved = evaluator.check(ctx)
+  const resolved = evaluate(ctx)
   _.forEach([...data.scalars, ...data.arrays], item => {
     item.evaluated = resolved[`{${item.id}}`]
   })

@@ -18,7 +18,7 @@ export default function Data ({ picture, updatePicture }) {
     updatePicture(picture => {
       picture.data.scalars.push({
         id: `s:${nanoid()}`,
-        label: 'item',
+        label: 'new scalar',
         value: 10
       })
     })
@@ -28,34 +28,22 @@ export default function Data ({ picture, updatePicture }) {
     updatePicture(picture => {
       picture.data.arrays.push({
         id: `a:${nanoid()}`,
-        label: 'item',
+        label: 'new array',
         value: [1, 2, 3]
       })
     })
   }
 
   function getArrayStats (item) {
-    var stats = [
-      {
-        name: 'min',
-        code: arr => Math.min.apply(null, arr)
-      },
+    const stats = [
+      { name: 'min', code: arr => Math.min.apply(null, arr) },
       {
         name: 'avg',
         code: arr => arr.reduce((memo, num) => memo + num, 0) / arr.length
       },
-      {
-        name: 'max',
-        code: arr => Math.max.apply(null, arr)
-      },
-      {
-        name: 'sum of',
-        code: arr => arr.reduce((memo, num) => memo + num, 0)
-      },
-      {
-        name: '# of',
-        code: arr => arr.length
-      }
+      { name: 'max', code: arr => Math.max.apply(null, arr) },
+      { name: 'sum of', code: arr => arr.reduce((memo, num) => memo + num, 0) },
+      { name: '# of', code: arr => arr.length }
     ]
     return (
       <TestBox>
@@ -71,74 +59,55 @@ export default function Data ({ picture, updatePicture }) {
     )
   }
 
-  var max = picture.data.arrays.reduce((memo, item) => {
+  const max = picture.data.arrays.reduce((memo, item) => {
     return Math.max(memo, getArr(item.evaluated).length)
   }, 0)
-  var indices = _.range(1, Math.max(max + 1, 6))
-
-  var scalarTags = picture.data.scalars.map((item, i) => (
-    <Tag
-      key={item.id}
-      item={item}
-      updateLabel={label => {
-        updatePicture(picture => {
-          picture.data.scalars[i].label = label
-        })
-      }}
-    />
-  ))
-
-  var arrayTags = picture.data.arrays.map((item, i) => (
-    <Tag
-      key={item.id}
-      item={item}
-      updateLabel={label => {
-        updatePicture(picture => {
-          picture.data.arrays[i].label = label
-        })
-      }}
-    >
-      {getArrayStats(item)}
-    </Tag>
-  ))
-
-  var scalarValues = picture.data.scalars.map((item, i) => (
-    <ScalarVal
-      key={item.id}
-      pictureData={picture.data}
-      item={item}
-      updateItem={newItem => {
-        updatePicture(picture => {
-          picture.data.scalars[i].value = newItem
-        })
-      }}
-    />
-  ))
-  var arrayValues = picture.data.arrays.map((item, i) => (
-    <ArrayVal
-      key={item.id}
-      pictureData={picture.data}
-      item={item}
-      updateItem={newItem => {
-        updatePicture(picture => {
-          picture.data.arrays[i].value = newItem
-        })
-      }}
-    />
-  ))
-
+  const indices = _.range(1, Math.max(max + 1, 6))
   return (
     <Panel title='Data'>
       <Wrapper>
         <div>
-          {scalarTags}
+          {picture.data.scalars.map((item, i) => (
+            <Tag
+              key={item.id}
+              item={item}
+              updateLabel={label => {
+                updatePicture(picture => {
+                  picture.data.scalars[i].label = label
+                })
+              }}
+            />
+          ))}
           <CreateTag onClick={createScalar}>+</CreateTag>
           <CreateTag>column</CreateTag>
-          {arrayTags}
+          {picture.data.arrays.map((item, i) => (
+            <Tag
+              key={item.id}
+              item={item}
+              updateLabel={label => {
+                updatePicture(picture => {
+                  picture.data.arrays[i].label = label
+                })
+              }}
+            >
+              {getArrayStats(item)}
+            </Tag>
+          ))}
           <CreateTag onClick={createArray}>+</CreateTag>
         </div>
         <Test1>
-          {scalarValues}
+          {picture.data.scalars.map((item, i) => (
+            <ScalarVal
+              key={item.id}
+              pictureData={picture.data}
+              item={item}
+              onChange={value => {
+                updatePicture(picture => {
+                  picture.data.scalars[i].value = value
+                })
+              }}
+            />
+          ))}
           <Spacer />
           <ArrSection>
             <div>
@@ -146,7 +115,18 @@ export default function Data ({ picture, updatePicture }) {
                 <DataIndiceHeader key={i}>{i}</DataIndiceHeader>
               ))}
             </div>
-            {arrayValues}
+            {picture.data.arrays.map((item, i) => (
+              <ArrayVal
+                key={item.id}
+                pictureData={picture.data}
+                item={item}
+                onChange={value => {
+                  updatePicture(picture => {
+                    picture.data.arrays[i].value = value
+                  })
+                }}
+              />
+            ))}
           </ArrSection>
         </Test1>
       </Wrapper>

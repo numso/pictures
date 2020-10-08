@@ -15,13 +15,13 @@ export default class ContentEditable extends React.Component {
   }
 
   onInput = () => {
-    var text = (this.ref.current.innerText || '').trim()
+    const text = (this.ref.current.innerText || '').trim()
     this.props.onChange && this.props.onChange(text)
   }
 
   onKeyDown = e => {
     if (e.keyCode === 13) {
-      var text = (this.ref.current.innerText || '').trim()
+      const text = (this.ref.current.innerText || '').trim()
       this.props.onFinish && this.props.onFinish(text)
     }
   }
@@ -40,9 +40,9 @@ export default class ContentEditable extends React.Component {
 }
 
 function selectElementContents (el) {
-  var range = document.createRange()
+  const range = document.createRange()
   range.selectNodeContents(el)
-  var sel = window.getSelection()
+  const sel = window.getSelection()
   sel.removeAllRanges()
   sel.addRange(range)
 }

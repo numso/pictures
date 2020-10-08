@@ -4,17 +4,17 @@ import styled from 'styled-components'
 import ContentEditable from '../common/content-editable'
 import * as evalStuff from '../common/eval-stuff'
 
-export default function ScalarValue ({ item, updateItem, pictureData }) {
+export default function ScalarValue ({ item, onChange, pictureData }) {
   const [editing, setEditing] = React.useState(false)
   const onFinish = val => {
-    updateItem(val)
+    onChange(val)
     setEditing(false)
   }
   return editing ? (
     <ScalarVal>
       <ContentEditable
         text={item.value}
-        onChange={updateItem}
+        onChange={onChange}
         onFinish={onFinish}
       />
     </ScalarVal>
@@ -22,7 +22,7 @@ export default function ScalarValue ({ item, updateItem, pictureData }) {
     <ScalarVal onClick={() => setEditing(true)}>
       <Evaluated>{item?.evaluated}</Evaluated>
       <Value>
-        {evalStuff.generateValueMarkup(item, updateItem, pictureData, item => {
+        {evalStuff.generateValueMarkup(item, onChange, pictureData, item => {
           const num = parseFloat(item)
           return isNaN(num) ? item : num
         })}

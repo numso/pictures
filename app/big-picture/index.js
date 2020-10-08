@@ -4,8 +4,8 @@ import styled from 'styled-components'
 
 import { generateParts, getDomMsg } from '../common/drawing'
 
-var startx = null
-var starty
+var x1 = null
+var y1
 
 export default function BigPicture ({
   mode,
@@ -13,76 +13,55 @@ export default function BigPicture ({
   selectedStep,
   updatePicture
 }) {
+  const [preview, setPreview] = React.useState(null)
   function mouseDown (e) {
-    startx = e.nativeEvent.offsetX
-    starty = e.nativeEvent.offsetY
+    x1 = e.nativeEvent.offsetX
+    y1 = e.nativeEvent.offsetY
   }
-
   function mouseMove (e) {
-    if (startx === null) return
-    var endx = e.nativeEvent.offsetX
-    var endy = e.nativeEvent.offsetY
+    if (x1 === null) return
+    const x2 = e.nativeEvent.offsetX
+    const y2 = e.nativeEvent.offsetY
     if (mode === 'circle') {
-      var dist = distance(startx, starty, endx, endy)
-      updatePreview('circle', { x1: startx, y1: starty, r: dist })
+      const r = distance(x1, y1, x2, y2)
+      updatePreview('circle', { x1, y1, r })
     } else if (mode === 'rect') {
-      updatePreview('rect', { x1: startx, y1: starty, x2: endx, y2: endy })
+      updatePreview('rect', { x1, y1, x2, y2 })
     } else if (mode === 'line') {
-      updatePreview('line', { x1: startx, y1: starty, x2: endx, y2: endy })
+      updatePreview('line', { x1, y1, x2, y2 })
     }
   }
-
   function mouseUp (e) {
-    var endx = e.nativeEvent.offsetX
-    var endy = e.nativeEvent.offsetY
+    const x2 = e.nativeEvent.offsetX
+    const y2 = e.nativeEvent.offsetY
     if (mode === 'circle') {
-      var dist = distance(startx, starty, endx, endy)
-      addStep('circle', { x1: startx, y1: starty, r: dist })
+      const r = distance(x1, y1, x2, y2)
+      addStep('circle', { x1, y1, r })
     } else if (mode === 'rect') {
-      addStep('rect', { x1: startx, y1: starty, x2: endx, y2: endy })
+      addStep('rect', { x1, y1, x2, y2 })
     } else if (mode === 'line') {
-      addStep('line', { x1: startx, y1: starty, x2: endx, y2: endy })
+      addStep('line', { x1, y1, x2, y2 })
     } else if (mode === 'text') {
-      addStep('text', { x1: endx, y1: endy })
+      addStep('text', { x1: x2, y1: y2 })
     }
     setPreview(null)
-    startx = null
+    x1 = null
   }
-
-  function distance (x, y, x2, y2) {
-    return Math.sqrt(Math.pow(x2 - x, 2) + Math.pow(y2 - y, 2))
-  }
-
-  function prep (step, name) {
-    for (var key in step) {
-      step[key] = { [name]: step[key] }
-    }
-  }
-
   function addStep (type, step) {
     prep(step, 'value')
     updatePicture(picture => {
       picture.steps.push({ id: nanoid(), type, ...step })
     })
   }
-
-  const [preview, setPreview] = React.useState(null)
-
   function updatePreview (type, step) {
     prep(step, 'evaluated')
     setPreview({ id: 'preview', type, ...step })
   }
-
-  var svgParts = generateParts(picture.steps.slice(0, selectedStep + 1))
-  var previewParts = generateParts(preview && [preview])
-
-  var step = picture.steps[selectedStep]
-
+  const step = picture.steps[selectedStep]
   const updateStep = updater =>
     updatePicture(picture => {
       updater(picture.steps[selectedStep])
     })
-
   return (
     <Wrapper>
       <DomMessage>{getDomMsg(step, picture.data, updateStep)}</DomMessage>
@@ -94,8 +73,8 @@ export default function BigPicture ({
           onMouseUp={mouseUp}
           onMouseMove={mouseMove}
         >
-          {svgParts}
-          {previewParts}
+          {generateParts(picture.steps.slice(0, selectedStep + 1))}
+          {generateParts(preview && [preview])}
         </svg>
       </Container>
     </Wrapper>
@@ -118,3 +97,12 @@ const DomMessage = styled.div`
   text-align: center;
   height: 18px;
 `
+
+const distance = (x1, y1, x2, y2) =>
+  Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
+
+const prep = (step, name) => {
+  for (const key in step) {
+    step[key] = { [name]: step[key] }
+  }
+}

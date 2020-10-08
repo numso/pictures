@@ -10,7 +10,7 @@ function getArr (item) {
   return []
 }
 
-export default function ArrayValue ({ item, updateItem, pictureData }) {
+export default function ArrayValue ({ item, onChange, pictureData }) {
   const [editing, setEditing] = React.useState(false)
   const parse = item => {
     try {
@@ -21,14 +21,14 @@ export default function ArrayValue ({ item, updateItem, pictureData }) {
     return item
   }
   const onFinish = val => {
-    updateItem(parse(val))
+    onChange(parse(val))
     setEditing(false)
   }
   return editing ? (
     <ArrayVal>
       <ContentEditable
         text={_.isArray(item.value) ? JSON.stringify(item.value) : item.value}
-        onChange={updateItem}
+        onChange={onChange}
         onFinish={onFinish}
       />
     </ArrayVal>
@@ -40,7 +40,7 @@ export default function ArrayValue ({ item, updateItem, pictureData }) {
         ))}
       </Evaluated>
       <Value>
-        {evalStuff.generateValueMarkup(item, updateItem, pictureData, parse)}
+        {evalStuff.generateValueMarkup(item, onChange, pictureData, parse)}
       </Value>
     </ArrayVal>
   )

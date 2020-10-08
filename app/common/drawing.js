@@ -4,72 +4,73 @@ import React from 'react'
 import ScalarVal from '../data/scalar-val'
 
 export function generateParts (steps, scale = 1, fontSize = 16) {
-  return _.map(steps, s => {
-    switch (s.type) {
-      case 'circle':
+  return _.map(steps, ({ type, x1, y1, x2, y2, r }) => {
+    switch (type) {
+      case 'circle': {
         return (
           <circle
-            cx={scale * s.x1.evaluated}
-            cy={scale * s.y1.evaluated}
-            r={scale * s.r.evaluated}
-            fill='#cacaca'
+            cx={scale * x1.evaluated}
+            cy={scale * y1.evaluated}
+            r={scale * r.evaluated}
+            fill='#ccc'
           />
         )
-      case 'rect':
-        var x = Math.min(s.x1.evaluated, s.x2.evaluated)
-        var y = Math.min(s.y1.evaluated, s.y2.evaluated)
-        var w = Math.abs(s.x1.evaluated - s.x2.evaluated)
-        var h = Math.abs(s.y1.evaluated - s.y2.evaluated)
+      }
+      case 'rect': {
+        const x = Math.min(x1.evaluated, x2.evaluated)
+        const y = Math.min(y1.evaluated, y2.evaluated)
+        const w = Math.abs(x1.evaluated - x2.evaluated)
+        const h = Math.abs(y1.evaluated - y2.evaluated)
         return (
           <rect
             x={scale * x}
             y={scale * y}
             width={scale * w}
             height={scale * h}
-            fill='#cacaca'
+            fill='#ccc'
           />
         )
-      case 'line':
+      }
+      case 'line': {
         return (
           <line
-            x1={scale * s.x1.evaluated}
-            y1={scale * s.y1.evaluated}
-            x2={scale * s.x2.evaluated}
-            y2={scale * s.y2.evaluated}
-            stroke='#cacaca'
+            x1={scale * x1.evaluated}
+            y1={scale * y1.evaluated}
+            x2={scale * x2.evaluated}
+            y2={scale * y2.evaluated}
+            stroke='#ccc'
           />
         )
-      case 'text':
+      }
+      case 'text': {
         return (
           <text
             fontSize={fontSize}
-            x={scale * s.x1.evaluated}
-            y={scale * s.y1.evaluated}
-            fill='#cacaca'
+            x={scale * x1.evaluated}
+            y={scale * y1.evaluated}
+            fill='#ccc'
           >
             Hi!
           </text>
         )
+      }
     }
   })
 }
 
-function getMsgInner (val, s) {
-  if (!s) return ''
-  var x1 = s.x1
-  var x2 = s.x2
-  var y1 = s.y1
-  var y2 = s.y2
-  var r = s.r
-  switch (s.type) {
-    case 'circle':
+function getMsgInner (val, step) {
+  if (!step) return ''
+  const { x1, x2, y1, y2, r } = step
+  switch (step.type) {
+    case 'circle': {
       return (
         <span>
           Draw circle around ( {val(x1, 'x1')} , {val(y1, 'y1')} ),{' '}
           {val(r, 'r')} px in radius.
         </span>
       )
-    case 'rect':
+    }
+    case 'rect': {
       return (
         <span>
           Draw rect from ( {val(x1, 'x1')} , {val(y1, 'y1')} ),{' '}
@@ -77,7 +78,8 @@ function getMsgInner (val, s) {
           px vertically.
         </span>
       )
-    case 'line':
+    }
+    case 'line': {
       return (
         <span>
           Draw line from ( {val(x1, 'x1')} , {val(y1, 'y1')} ),{' '}
@@ -85,42 +87,38 @@ function getMsgInner (val, s) {
           px vertically.
         </span>
       )
-    case 'text':
+    }
+    case 'text': {
       return (
         <span>
           Draw text at ( {val(x1, 'x1')} , {val(y1, 'y1')} )
         </span>
       )
+    }
   }
   return ''
 }
 
-function getVal (item) {
-  return round(item.evaluated)
-}
+const getVal = item => Math.floor(item.evaluated * 10) / 10
 
 function getDom (pictureData, updateStep) {
   return (item, key) => (
     <ScalarVal
       pictureData={pictureData}
       item={item}
-      updateItem={newItem =>
+      onChange={value =>
         updateStep(step => {
-          step[key].value = newItem
+          step[key].value = value
         })
       }
     />
   )
 }
 
-function round (num, mult = 10) {
-  return Math.floor(num * mult) / mult
+export function getMsg (step) {
+  return getMsgInner(getVal, step)
 }
 
-export function getMsg (s) {
-  return getMsgInner(getVal, s)
-}
-
-export function getDomMsg (s, pictureData, updateStep) {
-  return getMsgInner(getDom(pictureData, updateStep), s)
+export function getDomMsg (step, pictureData, updateStep) {
+  return getMsgInner(getDom(pictureData, updateStep), step)
 }
