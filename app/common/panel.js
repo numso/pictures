@@ -24,4 +24,5 @@ const Header = styled.div`
 const Contents = styled.div`
   background-color: #e4e8ef;
   overflow: auto;
+  height: calc(100% - 26px);
 `

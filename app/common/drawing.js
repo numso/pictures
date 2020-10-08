@@ -74,8 +74,8 @@ function getMsgInner (val, step) {
       return (
         <span>
           Draw rect from ( {val(x1, 'x1')} , {val(y1, 'y1')} ),{' '}
-          {getVal(x2) - getVal(x1)} px horizontally, {getVal(y2) - getVal(y1)}{' '}
-          px vertically.
+          {round(x2.evaluated - x1.evaluated)} px horizontally,{' '}
+          {round(y2.evaluated - y1.evaluated)} px vertically.
         </span>
       )
     }
@@ -83,8 +83,8 @@ function getMsgInner (val, step) {
       return (
         <span>
           Draw line from ( {val(x1, 'x1')} , {val(y1, 'y1')} ),{' '}
-          {getVal(x2) - getVal(x1)} px horizontally, {getVal(y2) - getVal(y1)}{' '}
-          px vertically.
+          {round(x2.evaluated - x1.evaluated)} px horizontally,{' '}
+          {round(y2.evaluated - y1.evaluated)} px vertically.
         </span>
       )
     }
@@ -99,7 +99,8 @@ function getMsgInner (val, step) {
   return ''
 }
 
-const getVal = item => Math.floor(item.evaluated * 10) / 10
+const round = num => Math.round(num * 10) / 10
+const getVal = item => round(item.evaluated)
 
 function getDom (pictureData, updateStep) {
   return (item, key) => (

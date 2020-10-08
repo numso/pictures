@@ -12,6 +12,5 @@ export default function Measurements () {
 }
 
 const Wrapper = styled.div`
-  min-height: 300px;
-  max-height: 420px;
+  height: 0;
 `

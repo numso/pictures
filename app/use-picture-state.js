@@ -5,6 +5,8 @@ import { useImmer } from 'use-immer'
 
 import evaluate from './data/evaluator'
 
+const HEIGHT = window.innerHeight - 191
+
 export default function usePictureState () {
   const [selected, setSelected] = React.useState(0)
   const [pictures, updatePictures] = useImmer(() => [
@@ -16,8 +18,8 @@ export default function usePictureState () {
         type: 'rect',
         x1: { value: i * 60 + 4 },
         x2: { value: (i + 1) * 60 - 4 }, // TODO:: get columns worksing so i can just be a column num
-        y1: { value: `900 - {a:3:${i}} / {a:3:max} * 900` },
-        y2: { value: 900 }
+        y1: { value: `${HEIGHT} - {a:3:${i}} / {a:3:max} * ${HEIGHT}` },
+        y2: { value: HEIGHT }
       })),
       data: {
         scalars: [
@@ -50,7 +52,7 @@ export default function usePictureState () {
       ],
       data: {
         scalars: [
-          { id: 's:1', label: 'drag me', value: 60 },
+          { id: 's:1', label: 'drag this number ->', value: 60 },
           { id: 's:2', label: 'x', value: '3 * {s:1}' },
           { id: 's:3', label: 'y', value: '400 + Math.sin( {s:1} / 10 ) * 100' }
         ],

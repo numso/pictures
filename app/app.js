@@ -68,14 +68,23 @@ export default function App () {
 
 const Flex = styled.div`
   display: flex;
+  height: calc(100vh - 191px);
 `
 
 const Sidebar = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  > * {
+    transition: flex 200ms;
+    flex: 1;
+  }
+  > *:hover {
+    flex: 3;
+  }
   width: 400px;
 `
 
 const MainArea = styled.div`
-  flex: 1;
-  padding-top: 16px;
   position: relative;
 `

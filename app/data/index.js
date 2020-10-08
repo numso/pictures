@@ -11,7 +11,7 @@ import { Panel } from '../common/panel'
 import * as T from '../common/tag'
 
 const getArr = item => (_.isArray(item) ? item : [])
-const round = num => Math.round(num * 1000) / 1000
+const round = num => Math.round(num * 10) / 10
 
 export default function Data ({ picture, updatePicture }) {
   function createScalar () {
@@ -48,12 +48,12 @@ export default function Data ({ picture, updatePicture }) {
     return (
       <TestBox>
         {stats.map((stat, i) => (
-          <div key={i}>
+          <TestBoxRow key={i}>
             <T.Basic draggable='true'>
               {stat.name} {item.label}
             </T.Basic>
             <span>{round(stat.code(item.evaluated || []))}</span>
-          </div>
+          </TestBoxRow>
         ))}
       </TestBox>
     )
@@ -140,18 +140,25 @@ const Spacer = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  min-height: 300px;
-  max-height: 420px;
+  height: 0;
 `
 
 const TestBox = styled.div`
   box-shadow: 0 0 20px 2px;
   display: inline-block;
-  padding: 6px;
+  padding: 4px;
   border-radius: 3px;
   position: absolute;
+  left: 30px;
+  top: 22px;
   background-color: white;
   z-index: 1;
+`
+
+const TestBoxRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `
 
 const Test1 = styled.div`

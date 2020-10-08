@@ -24,8 +24,7 @@ export default function Steps ({ picture, selectedStep, setSelectedStep }) {
 }
 
 const Wrapper = styled.ul`
-  min-height: 300px;
-  max-height: 420px;
+  height: 0;
 `
 
 const Item = styled.li`

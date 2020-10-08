@@ -41,7 +41,7 @@ function simple (ctx, data) {
       const result = window.dangerEval(PREAMBLE, val, data)
       if (key.startsWith('{a') && !_.isArray(result)) {
         // ahhh, didn't work
-      } else {
+      } else if (!isNaN(result)) {
         data[key] = result
       }
     } catch (error) {}
@@ -88,7 +88,7 @@ function getArrayMax (data) {
   )
 }
 
-const round = num => Math.round(num * 1000) / 1000
+const round = num => Math.round(num * 10) / 10
 
 // strip out the already evaluated expresions from the "to-evaluate" object
 function strip (obj1, obj2) {

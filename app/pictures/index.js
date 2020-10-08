@@ -13,24 +13,40 @@ export default function Pictures ({
 }) {
   return (
     <Panel title='Pictures'>
-      <Flex>
-        {pictures.map((picture, i) => (
-          <Picture
-            key={picture.id}
-            picture={picture}
-            selected={selected === i}
-            setSelected={() => setSelected(i)}
-            updateTitle={title => setTitle(i, title)}
-          />
-        ))}
-        <NewPicture onClick={addNew}>+</NewPicture>
-      </Flex>
+      <Outer>
+        <Flex>
+          <Spacer w='8px' />
+          {pictures.map((picture, i) => (
+            <Picture
+              key={picture.id}
+              picture={picture}
+              selected={selected === i}
+              setSelected={() => setSelected(i)}
+              updateTitle={title => setTitle(i, title)}
+            />
+          ))}
+          <Spacer w='8px' />
+          <NewPicture onClick={addNew}>+</NewPicture>
+          <Spacer w='16px' />
+        </Flex>
+      </Outer>
     </Panel>
   )
 }
 
-const Flex = styled.div`
+const Outer = styled.div`
   box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.3) inset;
+  overflow: auto;
+  height: 165px;
+`
+
+const Spacer = styled.div`
+  flex-shrink: 0;
+  height: 1px;
+  width: ${p => p.w};
+`
+
+const Flex = styled.div`
   display: flex;
   align-items: center;
 `

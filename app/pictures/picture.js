@@ -11,51 +11,40 @@ export default function Picture ({
   updateTitle
 }) {
   const [[editing, tempTitle], setState] = React.useState([false, ''])
-
-  function onMouseUp () {
-    setState([true, picture.title])
-  }
-
-  function onChange (title) {
-    setState([true, title])
-  }
-
-  function onFinish (title) {
+  const onFinish = title => {
     setState([false, ''])
     updateTitle(title)
   }
 
   return (
-    <div>
-      <Wrapper selected={selected} onClick={setSelected}>
-        <svg width={220}>{generateParts(picture.steps, 1 / 6, 5)}</svg>
-      </Wrapper>
-      <Label>
-        {editing ? (
-          <ContentEditable
-            text={tempTitle}
-            onChange={onChange}
-            onFinish={onFinish}
-          />
-        ) : (
-          <div onMouseUp={onMouseUp}>{picture.title}</div>
-        )}
-      </Label>
-    </div>
+    <Wrapper selected={selected} onClick={setSelected}>
+      <svg>{generateParts(picture.steps, 1 / 9, 4)}</svg>
+      {editing ? (
+        <ContentEditable
+          text={tempTitle}
+          onChange={title => setState([true, title])}
+          onFinish={onFinish}
+        />
+      ) : (
+        <div onMouseUp={() => setState([true, picture.title])}>
+          {picture.title}
+        </div>
+      )}
+    </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-  margin: 16px 16px 4px;
-  background-color: #fff;
-  width: 220px;
-  height: 150px;
-  box-shadow: 0 0 20px 2px
-    ${p => (p.selected ? 'rgb(30, 79, 234)' : 'rgba(0, 0, 0, 0.3)')};
-  cursor: pointer;
-`
-
-const Label = styled.div`
   text-align: center;
-  margin-bottom: 8px;
+  padding: 16px 8px 8px;
+  & > svg {
+    background: #fff;
+    margin-bottom: 4px;
+    cursor: pointer;
+    height: 100px;
+    width: 150px;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px 2px
+      ${p => (p.selected ? 'rgb(30, 79, 234)' : 'rgba(0, 0, 0, 0.3)')};
+  }
 `

@@ -1,42 +1,23 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export default class ContentEditable extends React.Component {
-  ref = React.createRef()
-
-  componentDidMount () {
-    setTimeout(() => {
-      selectElementContents(this.ref.current)
-    })
-  }
-
-  shouldComponentUpdate () {
-    return false
-  }
-
-  onInput = () => {
-    const text = (this.ref.current.innerText || '').trim()
-    this.props.onChange && this.props.onChange(text)
-  }
-
-  onKeyDown = e => {
-    if (e.keyCode === 13) {
-      const text = (this.ref.current.innerText || '').trim()
-      this.props.onFinish && this.props.onFinish(text)
-    }
-  }
-
-  render () {
-    return (
-      <EditableArea
-        ref={this.ref}
-        onInput={this.onInput}
-        onKeyDown={this.onKeyDown}
-        contentEditable={true}
-        dangerouslySetInnerHTML={{ __html: this.props.text }}
-      />
-    )
-  }
+export default function ContentEditable ({ onChange, onFinish, text }) {
+  const initialText = React.useRef(text)
+  const ref = React.useRef()
+  React.useEffect(() => {
+    setTimeout(() => selectElementContents(ref.current))
+  }, [])
+  const onKeyDown = e =>
+    e.keyCode === 13 && onFinish((ref.current.innerText || '').trim())
+  return (
+    <EditableArea
+      ref={ref}
+      onInput={() => onChange && onChange((ref.current.innerText || '').trim())}
+      onKeyDown={onFinish && onKeyDown}
+      contentEditable
+      dangerouslySetInnerHTML={{ __html: initialText.current }}
+    />
+  )
 }
 
 function selectElementContents (el) {
@@ -47,8 +28,7 @@ function selectElementContents (el) {
   sel.addRange(range)
 }
 
-const EditableArea = styled.span`
-  background-color: white;
+const EditableArea = styled.div`
+  background: #fff;
   min-width: 50px;
-  display: inline-block;
 `

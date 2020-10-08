@@ -32,10 +32,6 @@ export const Create = styled(Basic)`
   }
 `
 
-export const Array = styled(Basic)`
-  margin-right: 8px;
-`
-
 export const Arrow = styled.div`
   display: inline-block;
   border: 4px solid transparent;
@@ -43,7 +39,7 @@ export const Arrow = styled.div`
   height: 0;
   border-top: 4px solid white;
   position: relative;
-  left: -21px;
-  top: 2px;
+  left: -11px;
+  top: 3px;
   cursor: pointer;
 `

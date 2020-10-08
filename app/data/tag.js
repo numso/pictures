@@ -7,7 +7,6 @@ import * as T from '../common/tag'
 export default function Tag ({ updateLabel, item, children }) {
   const [editing, setEditing] = React.useState(false)
   const [showChildren, setShowChildren] = React.useState(false)
-  const TagComponent = children ? T.Array : T.Basic
   const onFinish = label => {
     updateLabel(label)
     setEditing(false)
@@ -21,20 +20,25 @@ export default function Tag ({ updateLabel, item, children }) {
       />
     </MyT>
   ) : (
-    <div>
-      <TagComponent
+    <Flex>
+      <T.Basic
         draggable='true'
         onDragStart={e => e.dataTransfer.setData('text/plain', `{${item.id}}`)}
         onMouseUp={() => setEditing(true)}
       >
         {item.label}
-      </TagComponent>
+      </T.Basic>
       {children && <T.Arrow onClick={() => setShowChildren(a => !a)} />}
       {showChildren && children}
-    </div>
+    </Flex>
   )
 }
 
 const MyT = styled(T.Basic)`
   color: black;
+`
+const Flex = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
 `

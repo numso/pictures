@@ -65,18 +65,10 @@ export default function BigPicture ({
   return (
     <Wrapper>
       <DomMessage>{getDomMsg(step, picture.data, updateStep)}</DomMessage>
-      <Container>
-        <svg
-          width={720}
-          height={900}
-          onMouseDown={mouseDown}
-          onMouseUp={mouseUp}
-          onMouseMove={mouseMove}
-        >
-          {generateParts(picture.steps.slice(0, selectedStep + 1))}
-          {generateParts(preview && [preview])}
-        </svg>
-      </Container>
+      <Svg onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}>
+        {generateParts(picture.steps.slice(0, selectedStep + 1))}
+        {generateParts(preview && [preview])}
+      </Svg>
     </Wrapper>
   )
 }
@@ -86,16 +78,22 @@ const Wrapper = styled.div`
   & .scalar-val {
     display: inline-block;
   }
-`
-
-const Container = styled.div`
-  width: 720px;
-  height: 900px;
+  height: calc(100vh - 191px);
+  width: calc(100vw - 400px);
+  position: relative;
 `
 
 const DomMessage = styled.div`
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 100%;
   text-align: center;
-  height: 18px;
+`
+
+const Svg = styled.svg`
+  width: 100%;
+  height: 100%;
 `
 
 const distance = (x1, y1, x2, y2) =>
