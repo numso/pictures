@@ -73,7 +73,9 @@ function evaluateArray (data, expr, max) {
   const arr = []
   for (let i = 0; i < max; i++) {
     const newExpr = expr.replace(/({a:[a-zA-Z0-9_-]*?}"])/g, '$1[' + i + ']')
+    // TODO;; what if max is higher than mah thing...
     arr[i] = window.dangerEval(PREAMBLE, newExpr, data)
+    if (isNaN(arr[i])) return null
   }
   return !max ? null : arr
 }

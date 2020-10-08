@@ -12,7 +12,7 @@ export function generateValueMarkup (item, onChange, pictureData, parse) {
   const keyMap = getKeyedData(pictureData)
   const re = /\{[as]:.*\}/
   return _.map(chunks, (chunk, i, arr) => {
-    if (re.test(chunk)) return <Tag.Basic>{keyMap[chunk]?.label}</Tag.Basic>
+    if (re.test(chunk)) return <Tag.Basic>{keyMap[chunk]}</Tag.Basic>
     if (!isNaN(parseFloat(chunk))) {
       return (
         <Dragger
@@ -29,5 +29,19 @@ export function generateValueMarkup (item, onChange, pictureData, parse) {
 }
 
 function getKeyedData ({ scalars, arrays }) {
-  return _.keyBy([...scalars, ...arrays], i => `{${i.id}}`)
+  const keyMap = _.mapValues(
+    _.keyBy([...scalars, ...arrays], i => `{${i.id}}`),
+    'label'
+  )
+  _.forEach(arrays, item => {
+    keyMap[`{${item.id}:min}`] = `min ${item.label}`
+    keyMap[`{${item.id}:avg}`] = `avg ${item.label}`
+    keyMap[`{${item.id}:max}`] = `max ${item.label}`
+    keyMap[`{${item.id}:sum}`] = `sum ${item.label}`
+    keyMap[`{${item.id}:len}`] = `# of ${item.label}`
+    _.forEach(item.evaluated, (_, i) => {
+      keyMap[`{${item.id}:${i}}`] = `${item.label} [${i}]`
+    })
+  })
+  return keyMap
 }
